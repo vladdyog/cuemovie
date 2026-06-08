@@ -170,3 +170,75 @@ export async function enrichAllMovies(
   await Promise.all(Array.from({ length: workerCount }, worker));
   return enriched;
 }
+
+// ---------------------------------------------------------------------------
+// Search & manual add
+//
+// Append this block to the bottom of your existing src/utils/tmdb.ts.
+// Do not replace the file — only add these exports.
+// ---------------------------------------------------------------------------
+
+export type MovieSearchResult = {
+  tmdbId: number;
+  title: string;
+  year?: number;
+  poster?: string;
+  overview?: string;
+  rating?: number;
+};
+
+type TMDbSearchRaw = {
+  id: number;
+  title: string;
+  release_date?: string;
+  poster_path: string | null;
+  overview: string;
+  vote_average: number;
+};
+
+// Returns up to 6 candidates for a query string. Uses the same tmdbFetch
+// and waitForRateLimit machinery as the bulk enrichment path.
+export async function searchMovies(
+  query: string,
+): Promise<MovieSearchResult[]> {
+  const params = new URLSearchParams({
+    query,
+    include_adult: 'false',
+    language: 'en-US',
+    page: '1',
+  });
+
+  const res = await tmdbFetch('/search/movie', params);
+  if (!res) return [];
+
+  const data = (await res.json()) as { results?: TMDbSearchRaw[] };
+  return (data.results ?? []).slice(0, 6).map((r) => ({
+    tmdbId: r.id,
+    title: r.title,
+    year: r.release_date
+      ? parseInt(r.release_date.slice(0, 4), 10) || undefined
+      : undefined,
+    poster: r.poster_path ? `${TMDB_IMAGE_BASE}${r.poster_path}` : undefined,
+    overview: r.overview || undefined,
+    rating: r.vote_average || undefined,
+  }));
+}
+
+// Fetches full details for a chosen search result and returns a Movie ready
+// to append to the watchlist. Skips re-searching since we already have the
+// TMDB id from the search step.
+export async function addMovieFromSearch(
+  result: MovieSearchResult,
+): Promise<Movie> {
+  const details = await fetchMovieDetails(result.tmdbId);
+  return {
+    title: result.title,
+    year: result.year,
+    poster: result.poster,
+    overview: result.overview,
+    rating: result.rating,
+    genres: details?.genres.map((g) => g.name) ?? undefined,
+    runtime: details?.runtime ?? undefined,
+    dateAdded: new Date().toISOString().slice(0, 10),
+  };
+}

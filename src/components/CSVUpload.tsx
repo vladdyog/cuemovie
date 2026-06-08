@@ -385,7 +385,7 @@ const CSVUpload: React.FC<Props> = ({
   if (movieCount > 0) {
     return (
       <div>
-        {/* Main card - clicking replaces the list */}
+        {/* Main card */}
         <div
           onClick={() => inputRef.current?.click()}
           onDrop={handleDrop}
@@ -462,7 +462,7 @@ const CSVUpload: React.FC<Props> = ({
           />
         </div>
 
-        {/* Download link - only shown when a handler is wired up */}
+        {/* Download link */}
         {onExport && (
           <div style={{ marginTop: '10px', textAlign: 'center' }}>
             <button

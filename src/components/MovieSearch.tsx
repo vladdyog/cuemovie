@@ -274,7 +274,7 @@ function MovieSearch({
                       marginTop: '2px',
                     }}
                   >
-                    {result.year ?? '—'}
+                    {result.year ?? '-'}
                     {result.rating ? ` · ★ ${result.rating.toFixed(1)}` : ''}
                   </p>
                 </div>

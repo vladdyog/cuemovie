@@ -24,7 +24,7 @@ type Props = {
   onClearError: () => void;
 };
 
-// ── Icon buttons ─────────────────────────────────────────────────────────────
+// Icon buttons
 
 const GridIcon: React.FC<{ active: boolean }> = ({ active }) => (
   <svg
@@ -165,7 +165,7 @@ const ActionBtn: React.FC<{
   </button>
 );
 
-// ── MyList ────────────────────────────────────────────────────────────────────
+// MyList
 
 const VIEW_MODE_KEY = 'cuemovie-view-mode';
 
@@ -225,7 +225,7 @@ const MyList: React.FC<Props> = ({
 
   return (
     <>
-      {/* ── Empty state ─────────────────────────────────────────────────── */}
+      {/* Empty state */}
       {isEmpty && !searchOpen && !importOpen && (
         <div
           style={{
@@ -269,7 +269,7 @@ const MyList: React.FC<Props> = ({
         </div>
       )}
 
-      {/* ── Search panel ────────────────────────────────────────────────── */}
+      {/* Search panel */}
       <AnimatePresence>
         {searchOpen && (
           <motion.div
@@ -289,7 +289,7 @@ const MyList: React.FC<Props> = ({
         )}
       </AnimatePresence>
 
-      {/* ── Import panel ────────────────────────────────────────────────── */}
+      {/* Import panel */}
       <AnimatePresence>
         {(importOpen || isEnriching) && !searchOpen && (
           <motion.div
@@ -304,7 +304,7 @@ const MyList: React.FC<Props> = ({
               overflow: 'hidden',
             }}
           >
-            {/* Merge / Replace toggle — only shown when list is not empty and not yet enriching */}
+            {/* Merge / Replace toggle - only shown when list is not empty and not yet enriching */}
             {movies.length > 0 && !isEnriching && (
               <div
                 style={{
@@ -397,7 +397,7 @@ const MyList: React.FC<Props> = ({
         )}
       </AnimatePresence>
 
-      {/* ── Error banner ─────────────────────────────────────────────────── */}
+      {/* Error banner */}
       {error && (
         <div
           style={{
@@ -436,7 +436,7 @@ const MyList: React.FC<Props> = ({
         </div>
       )}
 
-      {/* ── Loaded state ─────────────────────────────────────────────────── */}
+      {/* Loaded state */}
       {movies.length > 0 && (
         <>
           {/* Toolbar */}
@@ -512,7 +512,7 @@ const MyList: React.FC<Props> = ({
         </>
       )}
 
-      {/* ── Movie detail modal ───────────────────────────────────────────── */}
+      {/* Movie detail modal */}
       <AnimatePresence>
         {modalMovie && (
           <MovieModal movie={modalMovie} onClose={() => setModalMovie(null)} />

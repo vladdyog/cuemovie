@@ -175,7 +175,7 @@ export async function enrichAllMovies(
 // Search & manual add
 //
 // Append this block to the bottom of your existing src/utils/tmdb.ts.
-// Do not replace the file — only add these exports.
+// Do not replace the file - only add these exports.
 // ---------------------------------------------------------------------------
 
 export type MovieSearchResult = {

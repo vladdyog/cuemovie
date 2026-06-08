@@ -149,7 +149,7 @@ const App: React.FC = () => {
     >
       <Analytics />
 
-      {/* ── Header ── */}
+      {/* Header */}
       <header
         style={{
           borderBottom: '1px solid var(--color-border)',
@@ -217,7 +217,7 @@ const App: React.FC = () => {
         </div>
       </header>
 
-      {/* ── Main ── */}
+      {/* Main */}
       <main
         style={{
           flex: 1,
@@ -230,7 +230,7 @@ const App: React.FC = () => {
           gap: '44px',
         }}
       >
-        {/* ── My List tab ── */}
+        {/* My List tab */}
         {activeTab === 'list' && (
           <MyList
             movies={movies}
@@ -246,7 +246,7 @@ const App: React.FC = () => {
           />
         )}
 
-        {/* ── Pick tab ── */}
+        {/* Pick tab */}
         {activeTab === 'pick' && (
           <>
             {movies.length === 0 ? (
@@ -432,7 +432,7 @@ const App: React.FC = () => {
         <FeedbackButton />
       </div>
 
-      {/* ── Footer ── */}
+      {/* Footer */}
       <footer
         style={{
           borderTop: '1px solid var(--color-border)',
@@ -526,7 +526,7 @@ const SectionLabel: React.FC<{
   </h2>
 );
 
-/* Deck mode toggle - knob + label only, no surrounding border or background */
+/* Deck mode toggle knob and label */
 const DeckToggle: React.FC<{ enabled: boolean; onToggle: () => void }> = ({
   enabled,
   onToggle,

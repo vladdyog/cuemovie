@@ -122,7 +122,7 @@ const PosterCard: React.FC<{
         )}
       </div>
 
-      {/* Remove button — visible on hover */}
+      {/* Remove button - visible on hover */}
       <button
         onClick={(e) => {
           e.stopPropagation();

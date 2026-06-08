@@ -22,7 +22,7 @@ const TmdbAttribution: React.FC = () => {
 
   return (
     <>
-      {/* ── Footer trigger: TMDB logo ──────────────────────────────────── */}
+      {/* Footer TMDB logo */}
       <button
         onClick={() => setOpen(true)}
         aria-label="Data attribution - powered by TMDB"
@@ -52,7 +52,7 @@ const TmdbAttribution: React.FC = () => {
         />
       </button>
 
-      {/* ── About / Credits modal ──────────────────────────────────────── */}
+      {/* TMDB Attribution modal */}
       <AnimatePresence>
         {open && (
           <motion.div

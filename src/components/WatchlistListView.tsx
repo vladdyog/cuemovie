@@ -5,9 +5,16 @@ import GenrePill from './GenrePill';
 
 type Props = {
   movies: Movie[];
+  selectedKeys: Set<string>;
+  selectMode: boolean;
   onRemove: (movie: Movie) => void;
   onMovieClick: (movie: Movie) => void;
+  onToggleSelect: (key: string) => void;
 };
+
+function movieKey(m: Movie): string {
+  return `${m.title}::${m.year ?? ''}`;
+}
 
 function formatRuntime(min: number): string {
   const h = Math.floor(min / 60);
@@ -17,28 +24,77 @@ function formatRuntime(min: number): string {
 
 const MovieRow: React.FC<{
   movie: Movie;
+  selected: boolean;
+  selectMode: boolean;
   onRemove: (movie: Movie) => void;
   onClick: (movie: Movie) => void;
-}> = ({ movie, onRemove, onClick }) => {
+  onToggleSelect: (key: string) => void;
+}> = ({ movie, selected, selectMode, onRemove, onClick, onToggleSelect }) => {
   const [hovered, setHovered] = useState(false);
+  const key = movieKey(movie);
+
+  const handleClick = () => {
+    if (selectMode) onToggleSelect(key);
+    else onClick(movie);
+  };
 
   return (
     <div
       style={{
         display: 'flex',
         alignItems: 'center',
-        gap: '14px',
+        gap: '12px',
         padding: '10px 10px',
         borderBottom: '1px solid var(--color-border)',
         cursor: 'pointer',
         borderRadius: '6px',
         transition: 'background 0.1s',
-        background: hovered ? 'var(--color-surface-2)' : 'transparent',
+        background: selected
+          ? 'rgba(255,128,0,0.06)'
+          : hovered
+            ? 'var(--color-surface-2)'
+            : 'transparent',
       }}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
-      onClick={() => onClick(movie)}
+      onClick={handleClick}
     >
+      {/* Checkbox — visible in select mode or on hover */}
+      {selectMode && (
+        <div
+          onClick={(e) => {
+            e.stopPropagation();
+            onToggleSelect(key);
+          }}
+          style={{
+            flexShrink: 0,
+            width: '18px',
+            height: '18px',
+            borderRadius: '4px',
+            border: `2px solid ${selected ? 'var(--color-accent)' : 'var(--color-border-light)'}`,
+            background: selected ? 'var(--color-accent)' : 'transparent',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            transition: 'all 0.15s',
+          }}
+        >
+          {selected && (
+            <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
+              <path
+                d="M2 5L4 7.5L8 2.5"
+                stroke="white"
+                strokeWidth="1.8"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          )}
+        </div>
+      )}
+      {/* Spacer when checkbox is hidden to keep layout stable */}
+      {!selectMode && <div style={{ flexShrink: 0, width: '18px' }} />}
+
       {/* Poster thumbnail */}
       <div
         style={{
@@ -94,7 +150,6 @@ const MovieRow: React.FC<{
         >
           {movie.title}
         </p>
-
         <div
           style={{
             display: 'flex',
@@ -138,7 +193,6 @@ const MovieRow: React.FC<{
             </span>
           ) : null}
         </div>
-
         {movie.genres && movie.genres.length > 0 && (
           <div
             style={{
@@ -155,59 +209,67 @@ const MovieRow: React.FC<{
         )}
       </div>
 
-      {/* Remove button — text, appears on row hover */}
-      <button
-        onClick={(e) => {
-          e.stopPropagation();
-          onRemove(movie);
-        }}
-        style={{
-          flexShrink: 0,
-          padding: '5px 10px',
-          borderRadius: '6px',
-          border: '1px solid var(--color-border)',
-          background: 'transparent',
-          color: 'var(--color-muted)',
-          fontSize: '0.75rem',
-          fontWeight: 600,
-          fontFamily: 'var(--font-body)',
-          cursor: 'pointer',
-          letterSpacing: '0.01em',
-          opacity: hovered ? 1 : 0,
-          transition:
-            'opacity 0.15s, background 0.15s, border-color 0.15s, color 0.15s',
-          pointerEvents: hovered ? 'auto' : 'none',
-          whiteSpace: 'nowrap',
-        }}
-        onMouseEnter={(e) => {
-          e.currentTarget.style.background = 'rgba(229,83,83,0.1)';
-          e.currentTarget.style.borderColor = 'var(--color-danger)';
-          e.currentTarget.style.color = 'var(--color-danger)';
-        }}
-        onMouseLeave={(e) => {
-          e.currentTarget.style.background = 'transparent';
-          e.currentTarget.style.borderColor = 'var(--color-border)';
-          e.currentTarget.style.color = 'var(--color-muted)';
-        }}
-      >
-        Remove
-      </button>
+      {/* Remove button — only in non-select mode */}
+      {!selectMode && (
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+            onRemove(movie);
+          }}
+          style={{
+            flexShrink: 0,
+            padding: '5px 10px',
+            borderRadius: '6px',
+            border: '1px solid var(--color-border)',
+            background: 'transparent',
+            color: 'var(--color-muted)',
+            fontSize: '0.75rem',
+            fontWeight: 600,
+            fontFamily: 'var(--font-body)',
+            cursor: 'pointer',
+            letterSpacing: '0.01em',
+            opacity: hovered ? 1 : 0,
+            transition:
+              'opacity 0.15s, background 0.15s, border-color 0.15s, color 0.15s',
+            pointerEvents: hovered ? 'auto' : 'none',
+            whiteSpace: 'nowrap',
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.background = 'rgba(229,83,83,0.1)';
+            e.currentTarget.style.borderColor = 'var(--color-danger)';
+            e.currentTarget.style.color = 'var(--color-danger)';
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.background = 'transparent';
+            e.currentTarget.style.borderColor = 'var(--color-border)';
+            e.currentTarget.style.color = 'var(--color-muted)';
+          }}
+        >
+          Remove
+        </button>
+      )}
     </div>
   );
 };
 
 const WatchlistListView: React.FC<Props> = ({
   movies,
+  selectedKeys,
+  selectMode,
   onRemove,
   onMovieClick,
+  onToggleSelect,
 }) => (
   <div>
     {movies.map((movie) => (
       <MovieRow
-        key={`${movie.title}::${movie.year ?? ''}`}
+        key={movieKey(movie)}
         movie={movie}
+        selected={selectedKeys.has(movieKey(movie))}
+        selectMode={selectMode}
         onRemove={onRemove}
         onClick={onMovieClick}
+        onToggleSelect={onToggleSelect}
       />
     ))}
   </div>

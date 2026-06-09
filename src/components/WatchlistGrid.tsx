@@ -4,16 +4,35 @@ import type { Movie } from '../types';
 
 type Props = {
   movies: Movie[];
+  selectedKeys: Set<string>;
+  selectMode: boolean;
   onRemove: (movie: Movie) => void;
   onMovieClick: (movie: Movie) => void;
+  onToggleSelect: (key: string) => void;
 };
+
+function movieKey(m: Movie): string {
+  return `${m.title}::${m.year ?? ''}`;
+}
 
 const PosterCard: React.FC<{
   movie: Movie;
+  selected: boolean;
+  selectMode: boolean;
   onRemove: (movie: Movie) => void;
   onClick: (movie: Movie) => void;
-}> = ({ movie, onRemove, onClick }) => {
+  onToggleSelect: (key: string) => void;
+}> = ({ movie, selected, selectMode, onRemove, onClick, onToggleSelect }) => {
   const [hovered, setHovered] = useState(false);
+  const key = movieKey(movie);
+
+  const handleClick = () => {
+    if (selectMode) {
+      onToggleSelect(key);
+    } else {
+      onClick(movie);
+    }
+  };
 
   return (
     <div
@@ -25,15 +44,21 @@ const PosterCard: React.FC<{
         aspectRatio: '2/3',
         background: 'var(--color-surface-2)',
         border: '1px solid',
-        borderColor: hovered ? 'var(--color-accent)' : 'var(--color-border)',
-        boxShadow: hovered
-          ? '0 0 0 1px var(--color-accent), 0 4px 24px rgba(255,128,0,0.18)'
-          : 'none',
+        borderColor: selected
+          ? 'var(--color-accent)'
+          : hovered
+            ? 'var(--color-accent)'
+            : 'var(--color-border)',
+        boxShadow: selected
+          ? '0 0 0 1px var(--color-accent), 0 4px 24px rgba(255,128,0,0.2)'
+          : hovered
+            ? '0 0 0 1px var(--color-accent), 0 4px 24px rgba(255,128,0,0.18)'
+            : 'none',
         transition: 'border-color 0.18s, box-shadow 0.18s',
       }}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
-      onClick={() => onClick(movie)}
+      onClick={handleClick}
     >
       {/* Poster image */}
       {movie.poster ? (
@@ -46,7 +71,8 @@ const PosterCard: React.FC<{
             objectFit: 'cover',
             display: 'block',
             transition: 'transform 0.25s ease',
-            transform: hovered ? 'scale(1.05)' : 'scale(1)',
+            transform: hovered && !selectMode ? 'scale(1.05)' : 'scale(1)',
+            opacity: selected ? 0.7 : 1,
           }}
         />
       ) : (
@@ -78,7 +104,7 @@ const PosterCard: React.FC<{
         </div>
       )}
 
-      {/* Bottom gradient + title overlay */}
+      {/* Bottom gradient + title */}
       <div
         style={{
           position: 'absolute',
@@ -126,63 +152,111 @@ const PosterCard: React.FC<{
         )}
       </div>
 
-      {/* X remove button — visible on hover */}
-      <button
-        onClick={(e) => {
-          e.stopPropagation();
-          onRemove(movie);
-        }}
-        style={{
-          position: 'absolute',
-          top: '6px',
-          right: '6px',
-          width: '24px',
-          height: '24px',
-          borderRadius: '50%',
-          background: 'rgba(0,0,0,0.65)',
-          border: '1px solid rgba(255,255,255,0.12)',
-          color: 'rgba(255,255,255,0.75)',
-          fontSize: '0.65rem',
-          cursor: 'pointer',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          fontFamily: 'var(--font-body)',
-          transition: 'opacity 0.15s, background 0.15s, border-color 0.15s',
-          opacity: hovered ? 1 : 0,
-          pointerEvents: hovered ? 'auto' : 'none',
-        }}
-        onMouseEnter={(e) => {
-          e.currentTarget.style.background = 'rgba(229,83,83,0.85)';
-          e.currentTarget.style.borderColor = 'transparent';
-          e.currentTarget.style.color = 'white';
-        }}
-        onMouseLeave={(e) => {
-          e.currentTarget.style.background = 'rgba(0,0,0,0.65)';
-          e.currentTarget.style.borderColor = 'rgba(255,255,255,0.12)';
-          e.currentTarget.style.color = 'rgba(255,255,255,0.75)';
-        }}
-      >
-        ✕
-      </button>
+      {/* Checkbox — top-left, visible in select mode or on hover */}
+      {selectMode && (
+        <div
+          onClick={(e) => {
+            e.stopPropagation();
+            onToggleSelect(key);
+          }}
+          style={{
+            position: 'absolute',
+            top: '6px',
+            left: '6px',
+            width: '20px',
+            height: '20px',
+            borderRadius: '5px',
+            border: `2px solid ${selected ? 'var(--color-accent)' : 'rgba(255,255,255,0.6)'}`,
+            background: selected ? 'var(--color-accent)' : 'rgba(0,0,0,0.45)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            transition: 'all 0.15s',
+          }}
+        >
+          {selected && (
+            <svg width="11" height="11" viewBox="0 0 11 11" fill="none">
+              <path
+                d="M2 5.5L4.5 8L9 3"
+                stroke="white"
+                strokeWidth="1.8"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          )}
+        </div>
+      )}
+
+      {/* X remove button — only in non-select mode */}
+      {!selectMode && (
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+            onRemove(movie);
+          }}
+          style={{
+            position: 'absolute',
+            top: '6px',
+            right: '6px',
+            width: '24px',
+            height: '24px',
+            borderRadius: '50%',
+            background: 'rgba(0,0,0,0.65)',
+            border: '1px solid rgba(255,255,255,0.12)',
+            color: 'rgba(255,255,255,0.75)',
+            fontSize: '0.65rem',
+            cursor: 'pointer',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            fontFamily: 'var(--font-body)',
+            transition: 'opacity 0.15s, background 0.15s, border-color 0.15s',
+            opacity: hovered ? 1 : 0,
+            pointerEvents: hovered ? 'auto' : 'none',
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.background = 'rgba(229,83,83,0.85)';
+            e.currentTarget.style.borderColor = 'transparent';
+            e.currentTarget.style.color = 'white';
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.background = 'rgba(0,0,0,0.65)';
+            e.currentTarget.style.borderColor = 'rgba(255,255,255,0.12)';
+            e.currentTarget.style.color = 'rgba(255,255,255,0.75)';
+          }}
+        >
+          ✕
+        </button>
+      )}
     </div>
   );
 };
 
-const WatchlistGrid: React.FC<Props> = ({ movies, onRemove, onMovieClick }) => (
+const WatchlistGrid: React.FC<Props> = ({
+  movies,
+  selectedKeys,
+  selectMode,
+  onRemove,
+  onMovieClick,
+  onToggleSelect,
+}) => (
   <div
     style={{
       display: 'grid',
-      gridTemplateColumns: 'repeat(auto-fill, minmax(115px, 1fr))',
+      gridTemplateColumns: 'repeat(auto-fill, minmax(140px, 1fr))',
       gap: '10px',
     }}
   >
     {movies.map((movie) => (
       <PosterCard
-        key={`${movie.title}::${movie.year ?? ''}`}
+        key={movieKey(movie)}
         movie={movie}
+        selected={selectedKeys.has(movieKey(movie))}
+        selectMode={selectMode}
         onRemove={onRemove}
         onClick={onMovieClick}
+        onToggleSelect={onToggleSelect}
       />
     ))}
   </div>

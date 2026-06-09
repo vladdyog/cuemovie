@@ -24,16 +24,18 @@ type Props = {
   onClearError: () => void;
 };
 
-// ── Icon buttons ─────────────────────────────────────────────────────────────
+const PAGE_SIZE_OPTIONS = [20, 50, 100];
+const DEFAULT_PAGE_SIZE = 20;
+const VIEW_MODE_KEY = 'cuemovie-view-mode';
+
+function movieKey(m: Movie): string {
+  return `${m.title}::${m.year ?? ''}`;
+}
+
+// ── Icon buttons ──────────────────────────────────────────────────────────────
 
 const GridIcon: React.FC<{ active: boolean }> = ({ active }) => (
-  <svg
-    width="16"
-    height="16"
-    viewBox="0 0 16 16"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-  >
+  <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
     {[
       [0, 0],
       [6, 0],
@@ -59,13 +61,7 @@ const GridIcon: React.FC<{ active: boolean }> = ({ active }) => (
 );
 
 const ListIcon: React.FC<{ active: boolean }> = ({ active }) => (
-  <svg
-    width="16"
-    height="16"
-    viewBox="0 0 16 16"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-  >
+  <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
     {[2, 7, 12].map((y, i) => (
       <rect
         key={i}
@@ -80,7 +76,6 @@ const ListIcon: React.FC<{ active: boolean }> = ({ active }) => (
   </svg>
 );
 
-// Minimal icon-style button
 const IconBtn: React.FC<{
   onClick: () => void;
   active?: boolean;
@@ -120,54 +115,215 @@ const IconBtn: React.FC<{
   </button>
 );
 
-// Text action button (Import, Export, Add)
 const ActionBtn: React.FC<{
   onClick: () => void;
   accent?: boolean;
+  danger?: boolean;
   children: React.ReactNode;
-}> = ({ onClick, accent, children }) => (
-  <button
-    onClick={onClick}
-    style={{
-      padding: '5px 12px',
-      height: 32,
-      display: 'flex',
-      alignItems: 'center',
-      gap: '5px',
-      borderRadius: '7px',
-      border: '1px solid',
-      borderColor: accent ? 'var(--color-accent)' : 'var(--color-border)',
-      background: 'transparent',
-      color: accent ? 'var(--color-accent)' : 'var(--color-text-secondary)',
-      fontSize: '0.78rem',
-      fontWeight: 700,
-      fontFamily: 'var(--font-body)',
-      cursor: 'pointer',
-      whiteSpace: 'nowrap',
-      transition: 'background 0.15s, color 0.15s, border-color 0.15s',
-      letterSpacing: '0.01em',
-    }}
-    onMouseEnter={(e) => {
-      e.currentTarget.style.background = accent
-        ? 'rgba(255,128,0,0.08)'
-        : 'var(--color-surface-2)';
-      if (!accent)
-        e.currentTarget.style.borderColor = 'var(--color-border-light)';
-    }}
-    onMouseLeave={(e) => {
-      e.currentTarget.style.background = 'transparent';
-      e.currentTarget.style.borderColor = accent
-        ? 'var(--color-accent)'
-        : 'var(--color-border)';
-    }}
-  >
-    {children}
-  </button>
-);
+}> = ({ onClick, accent, danger, children }) => {
+  const borderColor = danger
+    ? 'var(--color-danger)'
+    : accent
+      ? 'var(--color-accent)'
+      : 'var(--color-border)';
+  const color = danger
+    ? 'var(--color-danger)'
+    : accent
+      ? 'var(--color-accent)'
+      : 'var(--color-text-secondary)';
+  const hoverBg = danger
+    ? 'rgba(229,83,83,0.1)'
+    : accent
+      ? 'rgba(255,128,0,0.08)'
+      : 'var(--color-surface-2)';
+  return (
+    <button
+      onClick={onClick}
+      style={{
+        padding: '5px 12px',
+        height: 32,
+        display: 'flex',
+        alignItems: 'center',
+        gap: '5px',
+        borderRadius: '7px',
+        border: `1px solid ${borderColor}`,
+        background: 'transparent',
+        color,
+        fontSize: '0.78rem',
+        fontWeight: 700,
+        fontFamily: 'var(--font-body)',
+        cursor: 'pointer',
+        whiteSpace: 'nowrap',
+        transition: 'background 0.15s, color 0.15s, border-color 0.15s',
+        letterSpacing: '0.01em',
+      }}
+      onMouseEnter={(e) => {
+        e.currentTarget.style.background = hoverBg;
+      }}
+      onMouseLeave={(e) => {
+        e.currentTarget.style.background = 'transparent';
+      }}
+    >
+      {children}
+    </button>
+  );
+};
+
+// ── Pagination ────────────────────────────────────────────────────────────────
+
+const Pagination: React.FC<{
+  page: number;
+  totalPages: number;
+  pageSize: number;
+  onPageChange: (p: number) => void;
+  onPageSizeChange: (n: number) => void;
+}> = ({ page, totalPages, pageSize, onPageChange, onPageSizeChange }) => {
+  if (totalPages <= 1 && pageSize === PAGE_SIZE_OPTIONS[0]) return null;
+
+  const pages: (number | '…')[] = [];
+  if (totalPages <= 7) {
+    for (let i = 1; i <= totalPages; i++) pages.push(i);
+  } else {
+    pages.push(1);
+    if (page > 3) pages.push('…');
+    for (
+      let i = Math.max(2, page - 1);
+      i <= Math.min(totalPages - 1, page + 1);
+      i++
+    )
+      pages.push(i);
+    if (page < totalPages - 2) pages.push('…');
+    pages.push(totalPages);
+  }
+
+  const btnBase: React.CSSProperties = {
+    minWidth: 32,
+    height: 32,
+    padding: '0 6px',
+    borderRadius: '6px',
+    border: '1px solid var(--color-border)',
+    background: 'transparent',
+    color: 'var(--color-text-secondary)',
+    fontSize: '0.8rem',
+    fontWeight: 600,
+    fontFamily: 'var(--font-body)',
+    cursor: 'pointer',
+    transition: 'all 0.15s',
+  };
+
+  return (
+    <div
+      style={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        flexWrap: 'wrap',
+        gap: '12px',
+      }}
+    >
+      {/* Page numbers */}
+      <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+        <button
+          onClick={() => onPageChange(page - 1)}
+          disabled={page === 1}
+          style={{
+            ...btnBase,
+            opacity: page === 1 ? 0.35 : 1,
+            cursor: page === 1 ? 'default' : 'pointer',
+          }}
+        >
+          ←
+        </button>
+        {pages.map((p, i) =>
+          p === '…' ? (
+            <span
+              key={`ellipsis-${i}`}
+              style={{
+                ...btnBase,
+                border: 'none',
+                cursor: 'default',
+                display: 'inline-flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              …
+            </span>
+          ) : (
+            <button
+              key={p}
+              onClick={() => onPageChange(p as number)}
+              style={{
+                ...btnBase,
+                borderColor:
+                  p === page ? 'var(--color-accent)' : 'var(--color-border)',
+                color:
+                  p === page
+                    ? 'var(--color-accent)'
+                    : 'var(--color-text-secondary)',
+                background: p === page ? 'rgba(255,128,0,0.08)' : 'transparent',
+                fontWeight: p === page ? 700 : 600,
+              }}
+            >
+              {p}
+            </button>
+          ),
+        )}
+        <button
+          onClick={() => onPageChange(page + 1)}
+          disabled={page === totalPages}
+          style={{
+            ...btnBase,
+            opacity: page === totalPages ? 0.35 : 1,
+            cursor: page === totalPages ? 'default' : 'pointer',
+          }}
+        >
+          →
+        </button>
+      </div>
+
+      {/* Per-page selector */}
+      <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+        <span
+          style={{
+            fontSize: '0.775rem',
+            color: 'var(--color-muted)',
+            fontWeight: 500,
+          }}
+        >
+          Per page
+        </span>
+        <div style={{ display: 'flex', gap: '4px' }}>
+          {PAGE_SIZE_OPTIONS.map((n) => (
+            <button
+              key={n}
+              onClick={() => onPageSizeChange(n)}
+              style={{
+                ...btnBase,
+                minWidth: 36,
+                borderColor:
+                  n === pageSize
+                    ? 'var(--color-accent)'
+                    : 'var(--color-border)',
+                color:
+                  n === pageSize
+                    ? 'var(--color-accent)'
+                    : 'var(--color-text-secondary)',
+                background:
+                  n === pageSize ? 'rgba(255,128,0,0.08)' : 'transparent',
+                fontWeight: n === pageSize ? 700 : 600,
+              }}
+            >
+              {n}
+            </button>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+};
 
 // ── MyList ────────────────────────────────────────────────────────────────────
-
-const VIEW_MODE_KEY = 'cuemovie-view-mode';
 
 const MyList: React.FC<Props> = ({
   movies,
@@ -190,13 +346,19 @@ const MyList: React.FC<Props> = ({
   const [modalMovie, setModalMovie] = useState<Movie | null>(null);
   const [confirmRemove, setConfirmRemove] = useState<Movie | null>(null);
 
+  // Pagination
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(DEFAULT_PAGE_SIZE);
+
+  // Selection
+  const [selectMode, setSelectMode] = useState(false);
+  const [selectedKeys, setSelectedKeys] = useState<Set<string>>(new Set());
+  const [confirmBulkRemove, setConfirmBulkRemove] = useState(false);
+
   const prevEnriching = useRef(isEnriching);
 
-  // Close the import panel when enrichment finishes
   useEffect(() => {
-    if (prevEnriching.current && !isEnriching) {
-      setImportOpen(false);
-    }
+    if (prevEnriching.current && !isEnriching) setImportOpen(false);
     prevEnriching.current = isEnriching;
   }, [isEnriching]);
 
@@ -204,12 +366,24 @@ const MyList: React.FC<Props> = ({
     localStorage.setItem(VIEW_MODE_KEY, viewMode);
   }, [viewMode]);
 
+  // Reset to page 1 when movies list or page size changes
+  useEffect(() => {
+    setPage(1);
+  }, [movies.length, pageSize]);
+
+  // Clear selection when leaving select mode
+  useEffect(() => {
+    if (!selectMode) setSelectedKeys(new Set());
+  }, [selectMode]);
+
+  const totalPages = Math.max(1, Math.ceil(movies.length / pageSize));
+  const pagedMovies = movies.slice((page - 1) * pageSize, page * pageSize);
+
   const openSearch = () => {
     setSearchOpen(true);
     setImportOpen(false);
     onClearError();
   };
-
   const openImport = () => {
     setImportOpen(true);
     setSearchOpen(false);
@@ -218,15 +392,36 @@ const MyList: React.FC<Props> = ({
   };
 
   const handleCSVLoaded = (rawMovies: Movie[]) => {
-    // If the list was empty when import was opened, always replace
     onMoviesLoaded(rawMovies, importMode);
   };
 
+  const handleToggleSelect = (key: string) => {
+    setSelectedKeys((prev) => {
+      const next = new Set(prev);
+      if (next.has(key)) {
+        next.delete(key);
+      } else {
+        next.add(key);
+      }
+      return next;
+    });
+  };
+
+  const handleBulkRemoveConfirm = () => {
+    movies
+      .filter((m) => selectedKeys.has(movieKey(m)))
+      .forEach((m) => onRemoveMovie(m));
+    setSelectedKeys(new Set());
+    setSelectMode(false);
+    setConfirmBulkRemove(false);
+  };
+
   const isEmpty = movies.length === 0 && !isEnriching;
+  const selectedCount = selectedKeys.size;
 
   return (
     <>
-      {/* ── Empty state ─────────────────────────────────────────────────── */}
+      {/* ── Empty state ── */}
       {isEmpty && !searchOpen && !importOpen && (
         <div
           style={{
@@ -270,7 +465,7 @@ const MyList: React.FC<Props> = ({
         </div>
       )}
 
-      {/* ── Search panel ────────────────────────────────────────────────── */}
+      {/* ── Search panel ── */}
       <AnimatePresence>
         {searchOpen && (
           <motion.div
@@ -281,16 +476,14 @@ const MyList: React.FC<Props> = ({
           >
             <MovieSearch
               movies={movies}
-              onAdd={(movie: Movie) => {
-                onAddMovie(movie);
-              }}
+              onAdd={onAddMovie}
               onClose={() => setSearchOpen(false)}
             />
           </motion.div>
         )}
       </AnimatePresence>
 
-      {/* ── Import panel ────────────────────────────────────────────────── */}
+      {/* ── Import panel ── */}
       <AnimatePresence>
         {(importOpen || isEnriching) && !searchOpen && (
           <motion.div
@@ -305,15 +498,14 @@ const MyList: React.FC<Props> = ({
               overflow: 'hidden',
             }}
           >
-            {/* Merge / Replace toggle — only shown when list is not empty and not yet enriching */}
             {movies.length > 0 && !isEnriching && (
               <div
                 style={{
                   display: 'flex',
+                  alignItems: 'center',
                   gap: '0',
                   padding: '12px 16px',
                   borderBottom: '1px solid var(--color-border)',
-                  alignItems: 'center',
                 }}
               >
                 <p
@@ -326,39 +518,45 @@ const MyList: React.FC<Props> = ({
                 >
                   Import mode
                 </p>
-                {(['merge', 'replace'] as ImportMode[]).map((mode) => (
-                  <button
-                    key={mode}
-                    onClick={() => setImportMode(mode)}
-                    style={{
-                      padding: '4px 12px',
-                      borderRadius:
-                        mode === 'merge' ? '6px 0 0 6px' : '0 6px 6px 0',
-                      border: '1px solid',
-                      borderColor:
-                        importMode === mode
-                          ? 'var(--color-accent)'
-                          : 'var(--color-border)',
-                      background:
-                        importMode === mode
-                          ? 'rgba(255,128,0,0.1)'
-                          : 'transparent',
-                      color:
-                        importMode === mode
-                          ? 'var(--color-accent)'
-                          : 'var(--color-text-secondary)',
-                      fontSize: '0.775rem',
-                      fontWeight: 700,
-                      fontFamily: 'var(--font-body)',
-                      cursor: 'pointer',
-                      transition: 'all 0.15s',
-                      // Remove double border between buttons
-                      marginLeft: mode === 'replace' ? '-1px' : 0,
-                    }}
-                  >
-                    {mode === 'merge' ? 'Add to list' : 'Replace list'}
-                  </button>
-                ))}
+                {/* Segmented control */}
+                <div
+                  style={{
+                    display: 'flex',
+                    borderRadius: '7px',
+                    border: '1px solid var(--color-border)',
+                    overflow: 'hidden',
+                  }}
+                >
+                  {(['merge', 'replace'] as ImportMode[]).map((mode) => (
+                    <button
+                      key={mode}
+                      onClick={() => setImportMode(mode)}
+                      style={{
+                        padding: '4px 14px',
+                        border: 'none',
+                        borderRight:
+                          mode === 'merge'
+                            ? '1px solid var(--color-border)'
+                            : 'none',
+                        background:
+                          importMode === mode
+                            ? 'rgba(255,128,0,0.12)'
+                            : 'transparent',
+                        color:
+                          importMode === mode
+                            ? 'var(--color-accent)'
+                            : 'var(--color-text-secondary)',
+                        fontSize: '0.775rem',
+                        fontWeight: 700,
+                        fontFamily: 'var(--font-body)',
+                        cursor: 'pointer',
+                        transition: 'all 0.15s',
+                      }}
+                    >
+                      {mode === 'merge' ? 'Add to list' : 'Replace list'}
+                    </button>
+                  ))}
+                </div>
                 <button
                   onClick={() => setImportOpen(false)}
                   style={{
@@ -398,7 +596,7 @@ const MyList: React.FC<Props> = ({
         )}
       </AnimatePresence>
 
-      {/* ── Error banner ─────────────────────────────────────────────────── */}
+      {/* ── Error banner ── */}
       {error && (
         <div
           style={{
@@ -437,83 +635,117 @@ const MyList: React.FC<Props> = ({
         </div>
       )}
 
-      {/* ── Loaded state ─────────────────────────────────────────────────── */}
+      {/* ── Loaded state ── */}
       {movies.length > 0 && (
         <>
           {/* Toolbar */}
-          <div
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '8px',
-            }}
-          >
-            {/* Count */}
-            <span
-              style={{
-                fontSize: '0.825rem',
-                fontWeight: 700,
-                color: 'var(--color-text-secondary)',
-                marginRight: 'auto',
-              }}
-            >
-              {movies.length}{' '}
-              <span style={{ fontWeight: 500 }}>
-                {movies.length === 1 ? 'Movie' : 'Movies'}
-              </span>
-            </span>
-
-            {/* View toggle */}
-            <IconBtn
-              onClick={() => setViewMode('grid')}
-              active={viewMode === 'grid'}
-              title="Grid view"
-            >
-              <GridIcon active={viewMode === 'grid'} />
-            </IconBtn>
-            <IconBtn
-              onClick={() => setViewMode('list')}
-              active={viewMode === 'list'}
-              title="List view"
-            >
-              <ListIcon active={viewMode === 'list'} />
-            </IconBtn>
-
-            <div
-              style={{
-                width: '1px',
-                height: '20px',
-                background: 'var(--color-border)',
-                margin: '0 2px',
-              }}
-            />
-
-            {/* Actions */}
-            <ActionBtn onClick={openSearch} accent>
-              + Add
-            </ActionBtn>
-            <ActionBtn onClick={openImport}>↑ Import</ActionBtn>
-            <ActionBtn onClick={onExport}>↓ Export</ActionBtn>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            {selectMode ? (
+              <>
+                <span
+                  style={{
+                    fontSize: '0.825rem',
+                    fontWeight: 700,
+                    color: 'var(--color-text-secondary)',
+                    marginRight: 'auto',
+                  }}
+                >
+                  {selectedCount} selected
+                </span>
+                {selectedCount > 0 && (
+                  <ActionBtn onClick={() => setConfirmBulkRemove(true)} danger>
+                    Remove ({selectedCount})
+                  </ActionBtn>
+                )}
+                <ActionBtn onClick={() => setSelectMode(false)}>
+                  Cancel
+                </ActionBtn>
+              </>
+            ) : (
+              <>
+                <span
+                  style={{
+                    fontSize: '0.825rem',
+                    fontWeight: 700,
+                    color: 'var(--color-text-secondary)',
+                    marginRight: 'auto',
+                  }}
+                >
+                  {movies.length}{' '}
+                  <span style={{ fontWeight: 500 }}>
+                    {movies.length === 1 ? 'film' : 'films'}
+                  </span>
+                </span>
+                <IconBtn
+                  onClick={() => setViewMode('grid')}
+                  active={viewMode === 'grid'}
+                  title="Grid view"
+                >
+                  <GridIcon active={viewMode === 'grid'} />
+                </IconBtn>
+                <IconBtn
+                  onClick={() => setViewMode('list')}
+                  active={viewMode === 'list'}
+                  title="List view"
+                >
+                  <ListIcon active={viewMode === 'list'} />
+                </IconBtn>
+                <div
+                  style={{
+                    width: '1px',
+                    height: '20px',
+                    background: 'var(--color-border)',
+                    margin: '0 2px',
+                  }}
+                />
+                <ActionBtn onClick={openSearch} accent>
+                  + Add
+                </ActionBtn>
+                <ActionBtn onClick={() => setSelectMode(true)}>
+                  Select
+                </ActionBtn>
+                <ActionBtn onClick={openImport}>↑ Import</ActionBtn>
+                <ActionBtn onClick={onExport}>↓ Export</ActionBtn>
+              </>
+            )}
           </div>
 
           {/* Watchlist view */}
           {viewMode === 'grid' ? (
             <WatchlistGrid
-              movies={movies}
-              onRemove={(movie) => setConfirmRemove(movie)}
+              movies={pagedMovies}
+              selectedKeys={selectedKeys}
+              selectMode={selectMode}
+              onRemove={(m) => setConfirmRemove(m)}
               onMovieClick={setModalMovie}
+              onToggleSelect={handleToggleSelect}
             />
           ) : (
             <WatchlistListView
-              movies={movies}
-              onRemove={(movie) => setConfirmRemove(movie)}
+              movies={pagedMovies}
+              selectedKeys={selectedKeys}
+              selectMode={selectMode}
+              onRemove={(m) => setConfirmRemove(m)}
               onMovieClick={setModalMovie}
+              onToggleSelect={handleToggleSelect}
             />
           )}
+
+          {/* Pagination */}
+          <Pagination
+            page={page}
+            totalPages={totalPages}
+            pageSize={pageSize}
+            onPageChange={setPage}
+            onPageSizeChange={(n) => {
+              setPageSize(n);
+              setPage(1);
+            }}
+          />
         </>
       )}
 
-      {/* ── Confirm remove modal ─────────────────────────────────────────── */}
+      {/* ── Confirm single remove ── */}
       <AnimatePresence>
         {confirmRemove && (
           <motion.div
@@ -621,7 +853,112 @@ const MyList: React.FC<Props> = ({
         )}
       </AnimatePresence>
 
-      {/* ── Movie detail modal ───────────────────────────────────────────── */}
+      {/* ── Confirm bulk remove ── */}
+      <AnimatePresence>
+        {confirmBulkRemove && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.15 }}
+            style={{
+              position: 'fixed',
+              inset: 0,
+              background: 'rgba(0,0,0,0.6)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              zIndex: 50,
+              padding: '24px',
+            }}
+            onClick={() => setConfirmBulkRemove(false)}
+          >
+            <motion.div
+              initial={{ scale: 0.96, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.96, opacity: 0 }}
+              transition={{ duration: 0.15 }}
+              style={{
+                background: 'var(--color-surface)',
+                border: '1px solid var(--color-border)',
+                borderRadius: '14px',
+                padding: '24px',
+                maxWidth: '360px',
+                width: '100%',
+              }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <p
+                style={{
+                  fontSize: '1rem',
+                  fontWeight: 700,
+                  color: 'var(--color-text)',
+                }}
+              >
+                Remove movies
+              </p>
+              <p
+                style={{
+                  fontSize: '0.875rem',
+                  color: 'var(--color-text-secondary)',
+                  fontWeight: 500,
+                  marginTop: '8px',
+                  lineHeight: 1.5,
+                }}
+              >
+                Remove{' '}
+                <strong style={{ color: 'var(--color-text)' }}>
+                  {selectedCount} {selectedCount === 1 ? 'movie' : 'movies'}
+                </strong>{' '}
+                from your watchlist?
+              </p>
+              <div
+                style={{
+                  display: 'flex',
+                  gap: '10px',
+                  marginTop: '20px',
+                  justifyContent: 'flex-end',
+                }}
+              >
+                <button
+                  onClick={() => setConfirmBulkRemove(false)}
+                  style={{
+                    padding: '8px 16px',
+                    borderRadius: '8px',
+                    border: '1px solid var(--color-border)',
+                    background: 'transparent',
+                    color: 'var(--color-text-secondary)',
+                    fontSize: '0.875rem',
+                    fontWeight: 600,
+                    fontFamily: 'var(--font-body)',
+                    cursor: 'pointer',
+                  }}
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handleBulkRemoveConfirm}
+                  style={{
+                    padding: '8px 16px',
+                    borderRadius: '8px',
+                    border: 'none',
+                    background: 'var(--color-danger)',
+                    color: 'white',
+                    fontSize: '0.875rem',
+                    fontWeight: 700,
+                    fontFamily: 'var(--font-body)',
+                    cursor: 'pointer',
+                  }}
+                >
+                  Remove {selectedCount}
+                </button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* ── Movie detail modal ── */}
       <AnimatePresence>
         {modalMovie && (
           <MovieModal movie={modalMovie} onClose={() => setModalMovie(null)} />

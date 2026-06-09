@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 
 import type { Movie } from '../types';
+import GenrePill from './GenrePill';
 
 type Props = {
   movies: Movie[];
@@ -94,7 +95,6 @@ const MovieRow: React.FC<{
           {movie.title}
         </p>
 
-        {/* Metadata row */}
         <div
           style={{
             display: 'flex',
@@ -139,7 +139,6 @@ const MovieRow: React.FC<{
           ) : null}
         </div>
 
-        {/* Genre pills */}
         {movie.genres && movie.genres.length > 0 && (
           <div
             style={{
@@ -150,28 +149,13 @@ const MovieRow: React.FC<{
             }}
           >
             {movie.genres.slice(0, 3).map((g) => (
-              <span
-                key={g}
-                style={{
-                  fontSize: '0.67rem',
-                  fontWeight: 600,
-                  color: 'var(--color-muted)',
-                  background: 'var(--color-surface-2)',
-                  border: '1px solid var(--color-border)',
-                  borderRadius: '4px',
-                  padding: '1px 6px',
-                  whiteSpace: 'nowrap',
-                  letterSpacing: '0.01em',
-                }}
-              >
-                {g}
-              </span>
+              <GenrePill key={g} genre={g} />
             ))}
           </div>
         )}
       </div>
 
-      {/* Remove button */}
+      {/* Remove button — text, appears on row hover */}
       <button
         onClick={(e) => {
           e.stopPropagation();
@@ -179,22 +163,21 @@ const MovieRow: React.FC<{
         }}
         style={{
           flexShrink: 0,
-          width: 28,
-          height: 28,
+          padding: '5px 10px',
           borderRadius: '6px',
           border: '1px solid var(--color-border)',
           background: 'transparent',
           color: 'var(--color-muted)',
-          fontSize: '0.7rem',
-          cursor: 'pointer',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
+          fontSize: '0.75rem',
+          fontWeight: 600,
           fontFamily: 'var(--font-body)',
+          cursor: 'pointer',
+          letterSpacing: '0.01em',
           opacity: hovered ? 1 : 0,
           transition:
             'opacity 0.15s, background 0.15s, border-color 0.15s, color 0.15s',
           pointerEvents: hovered ? 'auto' : 'none',
+          whiteSpace: 'nowrap',
         }}
         onMouseEnter={(e) => {
           e.currentTarget.style.background = 'rgba(229,83,83,0.1)';
@@ -207,7 +190,7 @@ const MovieRow: React.FC<{
           e.currentTarget.style.color = 'var(--color-muted)';
         }}
       >
-        ✕
+        Remove
       </button>
     </div>
   );

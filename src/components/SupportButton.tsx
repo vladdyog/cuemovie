@@ -178,7 +178,7 @@ const SupportButton: React.FC = () => {
                     fontWeight: 500,
                   }}
                 >
-                  If we've helped you pick a film or two, please consider
+                  If we've helped you pick a movie or two, please consider
                   supporting us - it really helps cover the costs and keep the
                   project alive.
                 </p>

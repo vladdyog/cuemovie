@@ -1,6 +1,7 @@
 import React from 'react';
 
 import type { Movie } from '../types';
+import GenrePill from './GenrePill';
 
 type Props = {
   movie: Movie;
@@ -39,47 +40,6 @@ const RatingBadge: React.FC<{ rating: number }> = ({ rating }) => (
     ★ {rating.toFixed(1)}
   </span>
 );
-
-const GenrePill: React.FC<{ label: string; index: number }> = ({
-  label,
-  index,
-}) => {
-  // Cycle through accent colors for visual interest
-  const colors = [
-    {
-      bg: 'rgba(255,128,0,0.12)',
-      border: 'rgba(255,128,0,0.35)',
-      text: '#FF8000',
-    },
-    {
-      bg: 'rgba(64,188,244,0.12)',
-      border: 'rgba(64,188,244,0.35)',
-      text: '#40BCF4',
-    },
-    {
-      bg: 'rgba(0,224,84,0.10)',
-      border: 'rgba(0,224,84,0.3)',
-      text: '#00E054',
-    },
-  ];
-  const c = colors[index % colors.length];
-  return (
-    <span
-      style={{
-        fontSize: '0.75rem',
-        fontWeight: 600,
-        padding: '3px 10px',
-        borderRadius: '20px',
-        background: c.bg,
-        border: `1px solid ${c.border}`,
-        color: c.text,
-        letterSpacing: '0.02em',
-      }}
-    >
-      {label}
-    </span>
-  );
-};
 
 const MovieCard: React.FC<Props> = ({ movie, compact = false }) => {
   if (compact) {
@@ -180,8 +140,8 @@ const MovieCard: React.FC<Props> = ({ movie, compact = false }) => {
           </div>
           {movie.genres && movie.genres.length > 0 && (
             <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
-              {movie.genres.slice(0, 2).map((g, i) => (
-                <GenrePill key={g} label={g} index={i} />
+              {movie.genres.slice(0, 2).map((g) => (
+                <GenrePill key={g} genre={g} />
               ))}
             </div>
           )}
@@ -291,8 +251,8 @@ const MovieCard: React.FC<Props> = ({ movie, compact = false }) => {
         {/* Genre pills */}
         {movie.genres && movie.genres.length > 0 && (
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
-            {movie.genres.map((g, i) => (
-              <GenrePill key={g} label={g} index={i} />
+            {movie.genres.map((g) => (
+              <GenrePill key={g} genre={g} />
             ))}
           </div>
         )}

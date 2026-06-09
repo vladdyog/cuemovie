@@ -436,7 +436,7 @@ const CSVUpload: React.FC<Props> = ({
                   fontWeight: 500,
                 }}
               >
-                {movieCount} films
+                {movieCount} Movies
                 {enrichmentTime != null
                   ? ` · enriched in ${enrichmentTime.toFixed(1)}s`
                   : ''}

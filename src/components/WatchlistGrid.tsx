@@ -24,8 +24,12 @@ const PosterCard: React.FC<{
         cursor: 'pointer',
         aspectRatio: '2/3',
         background: 'var(--color-surface-2)',
-        border: '1px solid var(--color-border)',
-        transition: 'border-color 0.15s',
+        border: '1px solid',
+        borderColor: hovered ? 'var(--color-accent)' : 'var(--color-border)',
+        boxShadow: hovered
+          ? '0 0 0 1px var(--color-accent), 0 4px 24px rgba(255,128,0,0.18)'
+          : 'none',
+        transition: 'border-color 0.18s, box-shadow 0.18s',
       }}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
@@ -122,7 +126,7 @@ const PosterCard: React.FC<{
         )}
       </div>
 
-      {/* Remove button - visible on hover */}
+      {/* X remove button — visible on hover */}
       <button
         onClick={(e) => {
           e.stopPropagation();

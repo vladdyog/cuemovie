@@ -24,7 +24,7 @@ type Props = {
   onClearError: () => void;
 };
 
-// Icon buttons
+// ── Icon buttons ─────────────────────────────────────────────────────────────
 
 const GridIcon: React.FC<{ active: boolean }> = ({ active }) => (
   <svg
@@ -165,7 +165,7 @@ const ActionBtn: React.FC<{
   </button>
 );
 
-// MyList
+// ── MyList ────────────────────────────────────────────────────────────────────
 
 const VIEW_MODE_KEY = 'cuemovie-view-mode';
 
@@ -188,6 +188,7 @@ const MyList: React.FC<Props> = ({
   const [importOpen, setImportOpen] = useState(false);
   const [importMode, setImportMode] = useState<ImportMode>('merge');
   const [modalMovie, setModalMovie] = useState<Movie | null>(null);
+  const [confirmRemove, setConfirmRemove] = useState<Movie | null>(null);
 
   const prevEnriching = useRef(isEnriching);
 
@@ -225,7 +226,7 @@ const MyList: React.FC<Props> = ({
 
   return (
     <>
-      {/* Empty state */}
+      {/* ── Empty state ─────────────────────────────────────────────────── */}
       {isEmpty && !searchOpen && !importOpen && (
         <div
           style={{
@@ -269,7 +270,7 @@ const MyList: React.FC<Props> = ({
         </div>
       )}
 
-      {/* Search panel */}
+      {/* ── Search panel ────────────────────────────────────────────────── */}
       <AnimatePresence>
         {searchOpen && (
           <motion.div
@@ -289,7 +290,7 @@ const MyList: React.FC<Props> = ({
         )}
       </AnimatePresence>
 
-      {/* Import panel */}
+      {/* ── Import panel ────────────────────────────────────────────────── */}
       <AnimatePresence>
         {(importOpen || isEnriching) && !searchOpen && (
           <motion.div
@@ -304,7 +305,7 @@ const MyList: React.FC<Props> = ({
               overflow: 'hidden',
             }}
           >
-            {/* Merge / Replace toggle - only shown when list is not empty and not yet enriching */}
+            {/* Merge / Replace toggle — only shown when list is not empty and not yet enriching */}
             {movies.length > 0 && !isEnriching && (
               <div
                 style={{
@@ -397,7 +398,7 @@ const MyList: React.FC<Props> = ({
         )}
       </AnimatePresence>
 
-      {/* Error banner */}
+      {/* ── Error banner ─────────────────────────────────────────────────── */}
       {error && (
         <div
           style={{
@@ -436,7 +437,7 @@ const MyList: React.FC<Props> = ({
         </div>
       )}
 
-      {/* Loaded state */}
+      {/* ── Loaded state ─────────────────────────────────────────────────── */}
       {movies.length > 0 && (
         <>
           {/* Toolbar */}
@@ -458,7 +459,7 @@ const MyList: React.FC<Props> = ({
             >
               {movies.length}{' '}
               <span style={{ fontWeight: 500 }}>
-                {movies.length === 1 ? 'film' : 'films'}
+                {movies.length === 1 ? 'Movie' : 'Movies'}
               </span>
             </span>
 
@@ -499,20 +500,128 @@ const MyList: React.FC<Props> = ({
           {viewMode === 'grid' ? (
             <WatchlistGrid
               movies={movies}
-              onRemove={onRemoveMovie}
+              onRemove={(movie) => setConfirmRemove(movie)}
               onMovieClick={setModalMovie}
             />
           ) : (
             <WatchlistListView
               movies={movies}
-              onRemove={onRemoveMovie}
+              onRemove={(movie) => setConfirmRemove(movie)}
               onMovieClick={setModalMovie}
             />
           )}
         </>
       )}
 
-      {/* Movie detail modal */}
+      {/* ── Confirm remove modal ─────────────────────────────────────────── */}
+      <AnimatePresence>
+        {confirmRemove && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.15 }}
+            style={{
+              position: 'fixed',
+              inset: 0,
+              background: 'rgba(0,0,0,0.6)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              zIndex: 50,
+              padding: '24px',
+            }}
+            onClick={() => setConfirmRemove(null)}
+          >
+            <motion.div
+              initial={{ scale: 0.96, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.96, opacity: 0 }}
+              transition={{ duration: 0.15 }}
+              style={{
+                background: 'var(--color-surface)',
+                border: '1px solid var(--color-border)',
+                borderRadius: '14px',
+                padding: '24px',
+                maxWidth: '360px',
+                width: '100%',
+              }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <p
+                style={{
+                  fontSize: '1rem',
+                  fontWeight: 700,
+                  color: 'var(--color-text)',
+                }}
+              >
+                Remove from list
+              </p>
+              <p
+                style={{
+                  fontSize: '0.875rem',
+                  color: 'var(--color-text-secondary)',
+                  fontWeight: 500,
+                  marginTop: '8px',
+                  lineHeight: 1.5,
+                }}
+              >
+                Remove{' '}
+                <strong style={{ color: 'var(--color-text)' }}>
+                  {confirmRemove.title}
+                </strong>{' '}
+                from your watchlist?
+              </p>
+              <div
+                style={{
+                  display: 'flex',
+                  gap: '10px',
+                  marginTop: '20px',
+                  justifyContent: 'flex-end',
+                }}
+              >
+                <button
+                  onClick={() => setConfirmRemove(null)}
+                  style={{
+                    padding: '8px 16px',
+                    borderRadius: '8px',
+                    border: '1px solid var(--color-border)',
+                    background: 'transparent',
+                    color: 'var(--color-text-secondary)',
+                    fontSize: '0.875rem',
+                    fontWeight: 600,
+                    fontFamily: 'var(--font-body)',
+                    cursor: 'pointer',
+                  }}
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={() => {
+                    onRemoveMovie(confirmRemove);
+                    setConfirmRemove(null);
+                  }}
+                  style={{
+                    padding: '8px 16px',
+                    borderRadius: '8px',
+                    border: 'none',
+                    background: 'var(--color-danger)',
+                    color: 'white',
+                    fontSize: '0.875rem',
+                    fontWeight: 700,
+                    fontFamily: 'var(--font-body)',
+                    cursor: 'pointer',
+                  }}
+                >
+                  Remove
+                </button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* ── Movie detail modal ───────────────────────────────────────────── */}
       <AnimatePresence>
         {modalMovie && (
           <MovieModal movie={modalMovie} onClose={() => setModalMovie(null)} />

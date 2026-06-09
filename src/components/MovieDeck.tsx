@@ -517,7 +517,7 @@ const MovieDeck: React.FC<Props> = ({
                   color: 'var(--color-text-secondary)',
                 }}
               >
-                No films in the deck yet.
+                No movies in the deck yet.
               </p>
               <p
                 style={{
@@ -602,7 +602,7 @@ const MovieDeck: React.FC<Props> = ({
                 fontWeight: 500,
               }}
             >
-              Add at least one more film to shuffle.
+              Add at least one more movie to shuffle.
             </p>
           )}
         </>

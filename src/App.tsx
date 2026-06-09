@@ -332,7 +332,10 @@ const App: React.FC = () => {
                         {filteredMovies.length}
                       </span>
                       {' / '}
-                      <span>{movies.length} films</span>
+                      <span>
+                        {movies.length}{' '}
+                        {movies.length === 1 ? 'Movie' : 'Movies'}
+                      </span>
                     </span>
                   </div>
 
@@ -353,7 +356,7 @@ const App: React.FC = () => {
                       marginBottom: '28px',
                     }}
                   >
-                    <SectionLabel noMargin>Pick a Film</SectionLabel>
+                    <SectionLabel noMargin>Pick a Movie</SectionLabel>
 
                     <DeckToggle
                       enabled={deckEnabled}

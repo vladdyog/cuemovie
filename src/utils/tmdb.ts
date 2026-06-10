@@ -175,7 +175,7 @@ export async function enrichAllMovies(
 // Search & manual add
 //
 // Append this block to the bottom of your existing src/utils/tmdb.ts.
-// Do not replace the file - only add these exports.
+// Do not replace the file — only add these exports.
 // ---------------------------------------------------------------------------
 
 export type MovieSearchResult = {
@@ -212,7 +212,7 @@ export async function searchMovies(
   if (!res) return [];
 
   const data = (await res.json()) as { results?: TMDbSearchRaw[] };
-  return (data.results ?? []).slice(0, 6).map((r) => ({
+  return (data.results ?? []).slice(0, 5).map((r) => ({
     tmdbId: r.id,
     title: r.title,
     year: r.release_date

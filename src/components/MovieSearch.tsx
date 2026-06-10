@@ -10,25 +10,15 @@ type SearchResult = Awaited<ReturnType<typeof searchMovies>>[number];
 interface MovieSearchProps {
   movies: Movie[];
   onAdd: (movie: Movie) => void;
-  onClose: () => void;
 }
 
-function MovieSearch({
-  movies,
-  onAdd,
-  onClose,
-}: MovieSearchProps): React.ReactElement {
+function MovieSearch({ movies, onAdd }: MovieSearchProps): React.ReactElement {
   const [query, setQuery] = useState('');
   const [results, setResults] = useState<SearchResult[]>([]);
   const [loading, setLoading] = useState(false);
   const [addingId, setAddingId] = useState<number | null>(null);
   const [addedIds, setAddedIds] = useState<Set<number>>(new Set());
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const inputRef = useRef<HTMLInputElement>(null);
-
-  useEffect(() => {
-    setTimeout(() => inputRef.current?.focus(), 50);
-  }, []);
 
   useEffect(() => {
     if (debounceRef.current) clearTimeout(debounceRef.current);
@@ -109,7 +99,6 @@ function MovieSearch({
           <line x1="21" y1="21" x2="16.65" y2="16.65" />
         </svg>
         <input
-          ref={inputRef}
           type="text"
           placeholder="Search for a movie to add..."
           value={query}
@@ -125,29 +114,6 @@ function MovieSearch({
             fontFamily: 'var(--font-body)',
           }}
         />
-        <button
-          onClick={onClose}
-          style={{
-            background: 'transparent',
-            border: 'none',
-            cursor: 'pointer',
-            color: 'var(--color-muted)',
-            padding: '2px 4px',
-            flexShrink: 0,
-            fontFamily: 'var(--font-body)',
-            fontSize: '1rem',
-            lineHeight: 1,
-            transition: 'color 0.15s',
-          }}
-          onMouseEnter={(e) =>
-            (e.currentTarget.style.color = 'var(--color-text)')
-          }
-          onMouseLeave={(e) =>
-            (e.currentTarget.style.color = 'var(--color-muted)')
-          }
-        >
-          ✕
-        </button>
       </div>
 
       {/* Loading */}
@@ -274,7 +240,7 @@ function MovieSearch({
                       marginTop: '2px',
                     }}
                   >
-                    {result.year ?? '-'}
+                    {result.year ?? '—'}
                     {result.rating ? ` · ★ ${result.rating.toFixed(1)}` : ''}
                   </p>
                 </div>

@@ -700,6 +700,9 @@ const MyList: React.FC<Props> = ({
         </div>
       )}
 
+      {/* ── Search bar — always visible ── */}
+      {!selectMode && <MovieSearch movies={movies} onAdd={onAddMovie} />}
+
       {/* ── Empty state (no movies yet, not enriching) ── */}
       {movies.length === 0 && !isEnriching && !importOpen && (
         <div
@@ -731,8 +734,8 @@ const MyList: React.FC<Props> = ({
                 marginTop: '4px',
               }}
             >
-              Import a CSV from IMDb or Letterboxd, or search above to add
-              movies one by one.
+              Import a CSV from IMDb or Letterboxd, or use the search bar above
+              to add movies one by one.
             </p>
           </div>
           <ActionBtn onClick={openImport}>↑ Import CSV</ActionBtn>
@@ -872,13 +875,6 @@ const MyList: React.FC<Props> = ({
                 <ListIcon active={viewMode === 'list'} />
               </IconBtn>
             </div>
-
-            {/* Row 2 — search bar spans both columns, hidden in select mode */}
-            {!selectMode && (
-              <div style={{ gridColumn: '1 / -1' }}>
-                <MovieSearch movies={movies} onAdd={onAddMovie} />
-              </div>
-            )}
           </div>
 
           {/* Watchlist view */}
@@ -906,10 +902,7 @@ const MyList: React.FC<Props> = ({
           <Pagination
             page={page}
             totalPages={totalPages}
-            onPageChange={(p) => {
-              window.scrollTo({ top: 0, behavior: 'smooth' });
-              setPage(p);
-            }}
+            onPageChange={setPage}
           />
         </>
       )}

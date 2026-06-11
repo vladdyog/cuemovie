@@ -554,7 +554,7 @@ const CSVUpload: React.FC<Props> = ({
             fontWeight: 500,
           }}
         >
-          or click to browse
+          ...or click to browse
         </p>
         <p
           style={{
@@ -564,7 +564,7 @@ const CSVUpload: React.FC<Props> = ({
             fontWeight: 500,
           }}
         >
-          Supports IMDb and Letterboxd exports
+          We support both IMDb and Letterboxd exports!
         </p>
         <input
           ref={inputRef}

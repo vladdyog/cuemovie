@@ -517,7 +517,7 @@ const MovieDeck: React.FC<Props> = ({
                   color: 'var(--color-text-secondary)',
                 }}
               >
-                No movies in the deck yet.
+                No movies in the deck yet...
               </p>
               <p
                 style={{

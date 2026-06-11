@@ -56,7 +56,7 @@ const App: React.FC = () => {
   const [shuffleActive, setShuffleActive] = useState(false);
   const [showDeckWinnerModal, setShowDeckWinnerModal] = useState(false);
   const [activeTab, setActiveTab] = useState<'list' | 'pick'>(
-    () => loadFromStorage<'list' | 'pick'>(TAB_KEY) ?? 'list',
+    () => loadFromStorage<'list' | 'pick'>(TAB_KEY) ?? 'pick',
   );
 
   useEffect(() => {
@@ -83,7 +83,7 @@ const App: React.FC = () => {
       const existingKeys = new Set(movies.map(key));
       moviesToEnrich = rawMovies.filter((m) => !existingKeys.has(key(m)));
       if (moviesToEnrich.length === 0) {
-        setError('All movies in this CSV are already in your list.');
+        setError('All movies in this CSV are already in your list!');
         return;
       }
     }
@@ -183,6 +183,12 @@ const App: React.FC = () => {
           </p>
           <nav style={{ display: 'flex', marginTop: '16px' }}>
             <TabButton
+              active={activeTab === 'pick'}
+              onClick={() => setActiveTab('pick')}
+            >
+              Pick a Movie
+            </TabButton>
+            <TabButton
               active={activeTab === 'list'}
               onClick={() => setActiveTab('list')}
             >
@@ -206,12 +212,6 @@ const App: React.FC = () => {
                   {movies.length}
                 </span>
               )}
-            </TabButton>
-            <TabButton
-              active={activeTab === 'pick'}
-              onClick={() => setActiveTab('pick')}
-            >
-              Pick
             </TabButton>
           </nav>
         </div>
@@ -270,7 +270,7 @@ const App: React.FC = () => {
                       color: 'var(--color-text)',
                     }}
                   >
-                    Nothing to pick from yet
+                    Nothing to pick from yet...
                   </p>
 
                   <p
@@ -281,7 +281,7 @@ const App: React.FC = () => {
                       marginTop: '4px',
                     }}
                   >
-                    Go to My List to import a CSV or search for movies to add.
+                    Go to 'My List' to import a CSV or search for movies to add.
                   </p>
                 </div>
 

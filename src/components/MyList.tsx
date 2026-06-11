@@ -50,15 +50,15 @@ type RemoveModalProps =
     };
 
 const RemoveModal: React.FC<RemoveModalProps> = (props) => {
-  const title = 'Remove from list';
+  const title = 'You sure about that?';
   const body =
     props.kind === 'single' || (props.kind === 'bulk' && props.count === 1) ? (
       <>
         Remove{' '}
         <strong style={{ color: 'var(--color-text)' }}>
-          {props.kind === 'single' ? props.movie.title : props.singleTitle}
+          '{props.kind === 'single' ? props.movie.title : props.singleTitle}'
         </strong>{' '}
-        from your watchlist?
+        from your list?
       </>
     ) : (
       <>
@@ -66,13 +66,10 @@ const RemoveModal: React.FC<RemoveModalProps> = (props) => {
         <strong style={{ color: 'var(--color-text)' }}>
           {props.count} movies
         </strong>{' '}
-        from your watchlist?
+        from your list?
       </>
     );
-  const confirmLabel =
-    props.kind === 'single' || (props.kind === 'bulk' && props.count === 1)
-      ? 'Remove'
-      : `Remove ${props.count}`;
+  const confirmLabel = 'Remove';
 
   return (
     <motion.div
@@ -356,18 +353,24 @@ const Pagination: React.FC<{
 
   const slots = getPageSlots(page, totalPages);
 
-  const navStyle = (disabled: boolean): React.CSSProperties => ({
+  const changePage = (p: number) => {
+    if (p < 1 || p > totalPages) return;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    onPageChange(p);
+  };
+
+  const navStyle = (atBoundary: boolean): React.CSSProperties => ({
     padding: '0 12px',
     height: 32,
     borderRadius: '6px',
     border: '1px solid var(--color-border)',
     background: 'transparent',
-    color: disabled ? 'var(--color-muted)' : 'var(--color-text-secondary)',
+    color: atBoundary ? 'var(--color-muted)' : 'var(--color-text-secondary)',
     fontSize: '0.78rem',
     fontWeight: 600,
     fontFamily: 'var(--font-body)',
-    cursor: disabled ? 'default' : 'pointer',
-    opacity: disabled ? 0.4 : 1,
+    cursor: atBoundary ? 'default' : 'pointer',
+    opacity: atBoundary ? 0.4 : 1,
     transition: 'background 0.15s',
   });
 
@@ -397,8 +400,7 @@ const Pagination: React.FC<{
       }}
     >
       <button
-        onClick={() => onPageChange(page - 1)}
-        disabled={page === 1}
+        onClick={() => changePage(page - 1)}
         style={navStyle(page === 1)}
         onMouseEnter={(e) => {
           if (page !== 1)
@@ -429,7 +431,7 @@ const Pagination: React.FC<{
         ) : (
           <button
             key={slot}
-            onClick={() => slot !== page && onPageChange(slot as number)}
+            onClick={() => changePage(slot as number)}
             style={slotStyle(slot === page)}
             onMouseEnter={(e) => {
               if (slot !== page)
@@ -445,8 +447,7 @@ const Pagination: React.FC<{
         ),
       )}
       <button
-        onClick={() => onPageChange(page + 1)}
-        disabled={page === totalPages}
+        onClick={() => changePage(page + 1)}
         style={navStyle(page === totalPages)}
         onMouseEnter={(e) => {
           if (page !== totalPages)
@@ -565,7 +566,7 @@ const MyList: React.FC<Props> = ({
               overflow: 'hidden',
             }}
           >
-            {movies.length > 0 && !isEnriching && (
+            {!isEnriching && (
               <div
                 style={{
                   display: 'flex',
@@ -574,54 +575,61 @@ const MyList: React.FC<Props> = ({
                   borderBottom: '1px solid var(--color-border)',
                 }}
               >
-                <p
-                  style={{
-                    fontSize: '0.78rem',
-                    fontWeight: 600,
-                    color: 'var(--color-text-secondary)',
-                    marginRight: '12px',
-                  }}
-                >
-                  Import mode
-                </p>
-                <div
-                  style={{
-                    display: 'flex',
-                    borderRadius: '7px',
-                    border: '1px solid var(--color-border)',
-                    overflow: 'hidden',
-                  }}
-                >
-                  {(['merge', 'replace'] as ImportMode[]).map((mode) => (
-                    <button
-                      key={mode}
-                      onClick={() => setImportMode(mode)}
-                      style={{
-                        padding: '4px 14px',
-                        border: 'none',
-                        borderRight:
-                          mode === 'merge'
-                            ? '1px solid var(--color-border)'
-                            : 'none',
-                        background:
-                          importMode === mode
-                            ? 'rgba(255,128,0,0.12)'
-                            : 'transparent',
-                        color:
-                          importMode === mode
-                            ? 'var(--color-accent)'
-                            : 'var(--color-text-secondary)',
-                        fontSize: '0.775rem',
-                        fontWeight: 700,
-                        fontFamily: 'var(--font-body)',
-                        cursor: 'pointer',
-                        transition: 'all 0.15s',
-                      }}
-                    >
-                      {mode === 'merge' ? 'Add to list' : 'Replace list'}
-                    </button>
-                  ))}
-                </div>
+                <>
+                  <p
+                    style={{
+                      fontSize: '0.78rem',
+                      fontWeight: 600,
+                      color: 'var(--color-text-secondary)',
+                      marginRight: '12px',
+                    }}
+                  >
+                    Import mode
+                  </p>
+                  <div
+                    style={{
+                      display: 'flex',
+                      borderRadius: '7px',
+                      border: '1px solid var(--color-border)',
+                      overflow: 'hidden',
+                    }}
+                  >
+                    {(['merge', 'replace'] as ImportMode[]).map((mode) => {
+                      const isMerge = mode === 'merge';
+                      const isActive = importMode === mode;
+                      const activeColor = isMerge
+                        ? '#42A5F5'
+                        : 'var(--color-danger)';
+                      const activeBg = isMerge
+                        ? 'rgba(66,165,245,0.12)'
+                        : 'rgba(229,83,83,0.12)';
+                      return (
+                        <button
+                          key={mode}
+                          onClick={() => setImportMode(mode)}
+                          style={{
+                            padding: '4px 14px',
+                            border: 'none',
+                            borderRight: isMerge
+                              ? '1px solid var(--color-border)'
+                              : 'none',
+                            background: isActive ? activeBg : 'transparent',
+                            color: isActive
+                              ? activeColor
+                              : 'var(--color-text-secondary)',
+                            fontSize: '0.775rem',
+                            fontWeight: 700,
+                            fontFamily: 'var(--font-body)',
+                            cursor: 'pointer',
+                            transition: 'all 0.15s',
+                          }}
+                        >
+                          {isMerge ? 'Add to List' : 'Replace List'}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </>
                 <button
                   onClick={() => setImportOpen(false)}
                   style={{
@@ -726,7 +734,7 @@ const MyList: React.FC<Props> = ({
                 color: 'var(--color-text)',
               }}
             >
-              Your watchlist is empty
+              Your watchlist is empty!
             </p>
             <p
               style={{
@@ -736,13 +744,25 @@ const MyList: React.FC<Props> = ({
                 marginTop: '4px',
               }}
             >
-              Import a CSV from IMDb or Letterboxd, or use the search bar above
-              to add movies one by one.
+              Import a CSV file, or use the search bar above to add some movies.
             </p>
           </div>
-          <ActionBtn onClick={openImport} accent>
-            ↑ Import CSV
-          </ActionBtn>
+          <button
+            onClick={openImport}
+            style={{
+              padding: '10px 24px',
+              background: 'transparent',
+              border: '1px solid var(--color-accent)',
+              borderRadius: '10px',
+              color: 'var(--color-accent)',
+              fontSize: '0.875rem',
+              fontWeight: 700,
+              fontFamily: 'var(--font-body)',
+              cursor: 'pointer',
+            }}
+          >
+            Import CSV
+          </button>
         </div>
       )}
 
@@ -804,7 +824,7 @@ const MyList: React.FC<Props> = ({
                   >
                     {movies.length}{' '}
                     <span style={{ fontWeight: 500 }}>
-                      {movies.length === 1 ? 'movie' : 'movies'}
+                      {movies.length === 1 ? 'Movie' : 'Movies'}
                     </span>
                   </span>
                   <div

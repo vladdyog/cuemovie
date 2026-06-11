@@ -173,6 +173,9 @@ export async function enrichAllMovies(
 
 // ---------------------------------------------------------------------------
 // Search & manual add
+//
+// Append this block to the bottom of your existing src/utils/tmdb.ts.
+// Do not replace the file — only add these exports.
 // ---------------------------------------------------------------------------
 
 export type MovieSearchResult = {
@@ -193,8 +196,8 @@ type TMDbSearchRaw = {
   vote_average: number;
 };
 
-// Returns up to 5 candidates for a query string. Uses the same tmdbFetch
-// and waitForRateLimit machinery as the bulk enrichment path.
+// Returns up to 5 lightweight candidates. No detail calls — those happen
+// on demand when the user clicks preview or add.
 export async function searchMovies(
   query: string,
 ): Promise<MovieSearchResult[]> {
@@ -209,7 +212,7 @@ export async function searchMovies(
   if (!res) return [];
 
   const data = (await res.json()) as { results?: TMDbSearchRaw[] };
-  return (data.results ?? []).slice(0, 5).map((r) => ({
+  return (data.results ?? []).slice(0, 10).map((r) => ({
     tmdbId: r.id,
     title: r.title,
     year: r.release_date
@@ -221,10 +224,10 @@ export async function searchMovies(
   }));
 }
 
-// Fetches full details for a chosen search result and returns a Movie ready
-// to append to the watchlist. Skips re-searching since we already have the
-// TMDB id from the search step.
-export async function addMovieFromSearch(
+// Fetches full details for a result and returns a Movie ready to append.
+// Called both when the user clicks Add and when they click to preview —
+// result is cached in the component to avoid a second call if they do both.
+export async function enrichSearchResult(
   result: MovieSearchResult,
 ): Promise<Movie> {
   const details = await fetchMovieDetails(result.tmdbId);
@@ -239,3 +242,6 @@ export async function addMovieFromSearch(
     dateAdded: new Date().toISOString().slice(0, 10),
   };
 }
+
+// Keep the original name as an alias so existing call sites don't break.
+export const addMovieFromSearch = enrichSearchResult;

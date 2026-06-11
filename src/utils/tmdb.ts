@@ -173,9 +173,6 @@ export async function enrichAllMovies(
 
 // ---------------------------------------------------------------------------
 // Search & manual add
-//
-// Append this block to the bottom of your existing src/utils/tmdb.ts.
-// Do not replace the file — only add these exports.
 // ---------------------------------------------------------------------------
 
 export type MovieSearchResult = {
@@ -196,7 +193,7 @@ type TMDbSearchRaw = {
   vote_average: number;
 };
 
-// Returns up to 6 candidates for a query string. Uses the same tmdbFetch
+// Returns up to 5 candidates for a query string. Uses the same tmdbFetch
 // and waitForRateLimit machinery as the bulk enrichment path.
 export async function searchMovies(
   query: string,

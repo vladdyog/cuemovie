@@ -18,7 +18,9 @@ function MovieSearch({ movies, onAdd }: MovieSearchProps): React.ReactElement {
   const [loading, setLoading] = useState(false);
   const [addingId, setAddingId] = useState<number | null>(null);
   const [addedIds, setAddedIds] = useState<Set<number>>(new Set());
+  const [focused, setFocused] = useState(false);
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (debounceRef.current) clearTimeout(debounceRef.current);
@@ -38,6 +40,20 @@ function MovieSearch({ movies, onAdd }: MovieSearchProps): React.ReactElement {
       if (debounceRef.current) clearTimeout(debounceRef.current);
     };
   }, [query]);
+
+  // Unfocus when clicking outside — hides dropdown without clearing query
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (
+        containerRef.current &&
+        !containerRef.current.contains(e.target as Node)
+      ) {
+        setFocused(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   const isInList = useCallback(
     (result: SearchResult) =>
@@ -61,12 +77,14 @@ function MovieSearch({ movies, onAdd }: MovieSearchProps): React.ReactElement {
     }
   };
 
-  const hasResults = results.length > 0;
-  const showEmpty = !loading && !hasResults && query.trim().length > 0;
-  const showBorder = loading || hasResults || showEmpty;
+  const hasResults = focused && results.length > 0;
+  const showEmpty =
+    focused && !loading && results.length === 0 && query.trim().length > 0;
+  const showBorder = focused && (loading || hasResults || showEmpty);
 
   return (
     <div
+      ref={containerRef}
       style={{
         background: 'var(--color-surface)',
         border: '1px solid var(--color-border)',
@@ -102,7 +120,11 @@ function MovieSearch({ movies, onAdd }: MovieSearchProps): React.ReactElement {
           type="text"
           placeholder="Search for a movie to add..."
           value={query}
-          onChange={(e) => setQuery(e.target.value)}
+          onFocus={() => setFocused(true)}
+          onChange={(e) => {
+            setFocused(true);
+            setQuery(e.target.value);
+          }}
           style={{
             flex: 1,
             background: 'transparent',

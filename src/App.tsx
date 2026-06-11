@@ -289,10 +289,10 @@ const App: React.FC = () => {
                   onClick={() => setActiveTab('list')}
                   style={{
                     padding: '10px 24px',
-                    background: 'var(--color-accent)',
-                    border: 'none',
+                    background: 'transparent',
+                    border: '1px solid var(--color-accent)',
                     borderRadius: '10px',
-                    color: 'white',
+                    color: 'var(--color-accent)',
                     fontSize: '0.875rem',
                     fontWeight: 700,
                     fontFamily: 'var(--font-body)',

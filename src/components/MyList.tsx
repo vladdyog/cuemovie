@@ -700,8 +700,10 @@ const MyList: React.FC<Props> = ({
         </div>
       )}
 
-      {/* ── Search bar — always visible ── */}
-      {!selectMode && <MovieSearch movies={movies} onAdd={onAddMovie} />}
+      {/* ── Search bar — hidden in select mode and while import panel is open ── */}
+      {!selectMode && !importOpen && !isEnriching && (
+        <MovieSearch movies={movies} onAdd={onAddMovie} />
+      )}
 
       {/* ── Empty state (no movies yet, not enriching) ── */}
       {movies.length === 0 && !isEnriching && !importOpen && (
@@ -738,7 +740,9 @@ const MyList: React.FC<Props> = ({
               to add movies one by one.
             </p>
           </div>
-          <ActionBtn onClick={openImport}>↑ Import CSV</ActionBtn>
+          <ActionBtn onClick={openImport} accent>
+            ↑ Import CSV
+          </ActionBtn>
         </div>
       )}
 

@@ -24,23 +24,19 @@ const ENRICHING_MESSAGES = [
 const EXPORT_GUIDES = [
   {
     source: 'IMDb',
+    link: 'https://www.imdb.com/watchlist/',
     steps: [
-      'Sign in to IMDb and open your profile menu',
-      'Select `Your Watchlist`',
-      'Click the `Export this list` button near the top-right corner',
-      'IMDb will generate a CSV file for download',
-      'If prompted, click `Open exports page` and download the CSV from there',
-      'Upload the downloaded CSV file here',
+      'Click `Export` near the top-right corner of the page.',
+      'If prompted, open the exports page and download the CSV from there.',
+      'Upload the downloaded CSV file here.',
     ],
   },
   {
     source: 'Letterboxd',
+    link: 'https://letterboxd.com/watchlist/',
     steps: [
-      'Sign in to Letterboxd and open your profile',
-      'Go to your `Watchlist`',
-      'Click the `Export Watchlist` button on the right side of the page',
-      'Choose where to save the CSV file and click `Save`',
-      'Upload the downloaded CSV file here',
+      'Click `Export Watchlist` top-right next to the movie list.',
+      'Upload the downloaded CSV file here.',
     ],
   },
 ];
@@ -59,18 +55,20 @@ const ExportGuide: React.FC = () => {
           margin: '0 auto',
           background: 'transparent',
           border: 'none',
-          color: 'var(--color-muted)',
+          color: open ? 'var(--color-text)' : 'var(--color-text-secondary)',
           fontSize: '0.8rem',
-          fontWeight: 500,
+          fontWeight: 550,
           fontFamily: 'var(--font-body)',
           cursor: 'pointer',
           transition: 'color 0.15s',
         }}
         onMouseEnter={(e) =>
-          (e.currentTarget.style.color = 'var(--color-text-secondary)')
+          (e.currentTarget.style.color = 'var(--color-text)')
         }
         onMouseLeave={(e) =>
-          (e.currentTarget.style.color = 'var(--color-muted)')
+          (e.currentTarget.style.color = open
+            ? 'var(--color-text)'
+            : 'var(--color-text-secondary)')
         }
       >
         <span
@@ -87,28 +85,15 @@ const ExportGuide: React.FC = () => {
       </button>
 
       {open && (
-        <div style={{ marginTop: '14px' }}>
-          <p
-            style={{
-              fontSize: '0.8rem',
-              color: 'var(--color-muted)',
-              textAlign: 'center',
-              marginBottom: '12px',
-              fontWeight: 500,
-            }}
-          >
-            Export your watchlist as a CSV from IMDb or Letterboxd, then upload
-            it here.
-          </p>
-
+        <div style={{ marginTop: '14px', paddingBottom: '24px' }}>
           <div
             style={{
               display: 'grid',
               gridTemplateColumns: '1fr 1fr',
-              gap: '12px',
+              gap: '8px',
             }}
           >
-            {EXPORT_GUIDES.map(({ source, steps }) => (
+            {EXPORT_GUIDES.map(({ source, link, steps }) => (
               <div
                 key={source}
                 style={{
@@ -116,21 +101,40 @@ const ExportGuide: React.FC = () => {
                   border: '1px solid var(--color-border)',
                   borderRadius: '10px',
                   padding: '14px 16px',
-                  textAlign: 'left',
                 }}
               >
                 <p
                   style={{
-                    fontSize: '0.7rem',
+                    fontSize: '0.9rem',
                     fontWeight: 700,
                     letterSpacing: '0.1em',
                     textTransform: 'uppercase',
                     color: 'var(--color-accent)',
-                    marginBottom: '10px',
+                    textAlign: 'center',
+                    marginBottom: '3px',
                   }}
                 >
                   {source}
                 </p>
+                <a
+                  href={link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{
+                    display: 'block',
+                    textAlign: 'center',
+                    fontSize: '0.78rem',
+                    fontWeight: 500,
+                    color: 'var(--color-accent)',
+                    opacity: 0.7,
+                    textDecoration: 'underline',
+                    textUnderlineOffset: '3px',
+                    marginBottom: '12px',
+                  }}
+                >
+                  Open your watchlist ↗
+                </a>
+
                 <ol
                   style={{
                     listStyle: 'none',
@@ -146,17 +150,17 @@ const ExportGuide: React.FC = () => {
                       key={i}
                       style={{
                         display: 'flex',
-                        gap: '8px',
-                        fontSize: '0.78rem',
+                        gap: '7px',
+                        fontSize: '0.80rem',
                         color: 'var(--color-text-secondary)',
                         lineHeight: 1.5,
                       }}
                     >
                       <span
                         style={{
-                          color: 'var(--color-muted)',
+                          color: 'var(--color-accent)',
                           flexShrink: 0,
-                          fontWeight: 600,
+                          fontWeight: 700,
                         }}
                       >
                         {i + 1}.
@@ -167,6 +171,31 @@ const ExportGuide: React.FC = () => {
                 </ol>
               </div>
             ))}
+          </div>
+
+          <div style={{ marginTop: '24px', textAlign: 'center' }}>
+            <p
+              style={{
+                fontSize: '0.80rem',
+                color: 'var(--color-text-secondary)',
+                lineHeight: 1.7,
+                marginBottom: '10px',
+              }}
+            >
+              As the most popular options, IMDb and Letterboxd are fully
+              supported out of the box.
+            </p>
+            <p
+              style={{
+                fontSize: '0.80rem',
+                color: 'var(--color-text-secondary)',
+                lineHeight: 1.7,
+              }}
+            >
+              But don't worry! Any CSV with a 'Title' and 'Year' columns will
+              work - Trakt, MovieBase, a personal spreadsheet, or whatever else
+              you use to keep track of your lists.
+            </p>
           </div>
         </div>
       )}

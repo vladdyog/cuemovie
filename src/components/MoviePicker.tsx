@@ -40,7 +40,7 @@ const MoviePicker: React.FC<Props> = ({
       : 'Add to Deck'
     : lastPick
       ? 'Pick Again'
-      : 'Pick a Film';
+      : 'Pick a Movie';
 
   return (
     <div
@@ -60,7 +60,7 @@ const MoviePicker: React.FC<Props> = ({
               color: 'var(--color-text-secondary)',
             }}
           >
-            No films match your filters
+            No movies match your filters
           </p>
           <p
             style={{

@@ -1,0 +1,278 @@
+import React, { useState } from 'react';
+
+import type { Movie } from '../types';
+import GenrePill from './GenrePill';
+
+type Props = {
+  movies: Movie[];
+  selectedKeys: Set<string>;
+  selectMode: boolean;
+  onRemove: (movie: Movie) => void;
+  onMovieClick: (movie: Movie) => void;
+  onToggleSelect: (key: string) => void;
+};
+
+function movieKey(m: Movie): string {
+  return `${m.title}::${m.year ?? ''}`;
+}
+
+function formatRuntime(min: number): string {
+  const h = Math.floor(min / 60);
+  const m = min % 60;
+  return h > 0 ? `${h}h ${m}m` : `${m}m`;
+}
+
+const MovieRow: React.FC<{
+  movie: Movie;
+  selected: boolean;
+  selectMode: boolean;
+  onRemove: (movie: Movie) => void;
+  onClick: (movie: Movie) => void;
+  onToggleSelect: (key: string) => void;
+}> = ({ movie, selected, selectMode, onRemove, onClick, onToggleSelect }) => {
+  const [hovered, setHovered] = useState(false);
+  const key = movieKey(movie);
+
+  const handleClick = () => {
+    if (selectMode) onToggleSelect(key);
+    else onClick(movie);
+  };
+
+  return (
+    <div
+      style={{
+        display: 'flex',
+        alignItems: 'center',
+        gap: '12px',
+        padding: '10px 10px',
+        borderBottom: '1px solid var(--color-border)',
+        cursor: 'pointer',
+        borderRadius: '6px',
+        transition: 'background 0.1s',
+        background: selected
+          ? 'rgba(255,128,0,0.06)'
+          : hovered
+            ? 'var(--color-surface-2)'
+            : 'transparent',
+      }}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      onClick={handleClick}
+    >
+      {/* Checkbox — visible in select mode or on hover */}
+      {selectMode && (
+        <div
+          onClick={(e) => {
+            e.stopPropagation();
+            onToggleSelect(key);
+          }}
+          style={{
+            flexShrink: 0,
+            width: '18px',
+            height: '18px',
+            borderRadius: '4px',
+            border: `2px solid ${selected ? 'var(--color-accent)' : 'var(--color-border-light)'}`,
+            background: selected ? 'var(--color-accent)' : 'transparent',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            transition: 'all 0.15s',
+          }}
+        >
+          {selected && (
+            <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
+              <path
+                d="M2 5L4 7.5L8 2.5"
+                stroke="white"
+                strokeWidth="1.8"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          )}
+        </div>
+      )}
+      {/* Spacer when checkbox is hidden to keep layout stable */}
+      {!selectMode && <div style={{ flexShrink: 0, width: '18px' }} />}
+
+      {/* Poster thumbnail */}
+      <div
+        style={{
+          width: 42,
+          height: 63,
+          flexShrink: 0,
+          borderRadius: '4px',
+          overflow: 'hidden',
+          background: 'var(--color-surface-2)',
+          border: '1px solid var(--color-border)',
+        }}
+      >
+        {movie.poster ? (
+          <img
+            src={movie.poster}
+            alt={movie.title}
+            style={{
+              width: '100%',
+              height: '100%',
+              objectFit: 'cover',
+              display: 'block',
+            }}
+          />
+        ) : (
+          <div
+            style={{
+              width: '100%',
+              height: '100%',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              fontSize: '1rem',
+              opacity: 0.4,
+            }}
+          >
+            🎬
+          </div>
+        )}
+      </div>
+
+      {/* Details */}
+      <div style={{ flex: 1, minWidth: 0 }}>
+        <p
+          style={{
+            fontSize: '0.875rem',
+            fontWeight: 700,
+            color: 'var(--color-text)',
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+            whiteSpace: 'nowrap',
+            lineHeight: 1.3,
+          }}
+        >
+          {movie.title}
+        </p>
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '10px',
+            marginTop: '3px',
+            flexWrap: 'wrap',
+          }}
+        >
+          {movie.year && (
+            <span
+              style={{
+                fontSize: '0.775rem',
+                color: 'var(--color-text-secondary)',
+                fontWeight: 500,
+              }}
+            >
+              {movie.year}
+            </span>
+          )}
+          {movie.rating !== undefined && (
+            <span
+              style={{
+                fontSize: '0.775rem',
+                color: 'var(--color-text-secondary)',
+                fontWeight: 500,
+              }}
+            >
+              ★ {movie.rating.toFixed(1)}
+            </span>
+          )}
+          {movie.runtime ? (
+            <span
+              style={{
+                fontSize: '0.775rem',
+                color: 'var(--color-muted)',
+                fontWeight: 500,
+              }}
+            >
+              {formatRuntime(movie.runtime)}
+            </span>
+          ) : null}
+        </div>
+        {movie.genres && movie.genres.length > 0 && (
+          <div
+            style={{
+              display: 'flex',
+              gap: '4px',
+              marginTop: '5px',
+              overflow: 'hidden',
+            }}
+          >
+            {movie.genres.slice(0, 3).map((g) => (
+              <GenrePill key={g} genre={g} />
+            ))}
+          </div>
+        )}
+      </div>
+
+      {/* Remove button — only in non-select mode */}
+      {!selectMode && (
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+            onRemove(movie);
+          }}
+          style={{
+            flexShrink: 0,
+            padding: '5px 10px',
+            borderRadius: '6px',
+            border: '1px solid var(--color-border)',
+            background: 'transparent',
+            color: 'var(--color-muted)',
+            fontSize: '0.75rem',
+            fontWeight: 600,
+            fontFamily: 'var(--font-body)',
+            cursor: 'pointer',
+            letterSpacing: '0.01em',
+            opacity: hovered ? 1 : 0,
+            transition:
+              'opacity 0.15s, background 0.15s, border-color 0.15s, color 0.15s',
+            pointerEvents: hovered ? 'auto' : 'none',
+            whiteSpace: 'nowrap',
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.background = 'rgba(229,83,83,0.1)';
+            e.currentTarget.style.borderColor = 'var(--color-danger)';
+            e.currentTarget.style.color = 'var(--color-danger)';
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.background = 'transparent';
+            e.currentTarget.style.borderColor = 'var(--color-border)';
+            e.currentTarget.style.color = 'var(--color-muted)';
+          }}
+        >
+          Remove
+        </button>
+      )}
+    </div>
+  );
+};
+
+const WatchlistListView: React.FC<Props> = ({
+  movies,
+  selectedKeys,
+  selectMode,
+  onRemove,
+  onMovieClick,
+  onToggleSelect,
+}) => (
+  <div>
+    {movies.map((movie) => (
+      <MovieRow
+        key={movieKey(movie)}
+        movie={movie}
+        selected={selectedKeys.has(movieKey(movie))}
+        selectMode={selectMode}
+        onRemove={onRemove}
+        onClick={onMovieClick}
+        onToggleSelect={onToggleSelect}
+      />
+    ))}
+  </div>
+);
+
+export default WatchlistListView;

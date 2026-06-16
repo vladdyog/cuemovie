@@ -106,7 +106,7 @@ const PosterCard: React.FC<{
         animate={{ rotateY: isFlipped ? 180 : 0 }}
         transition={{ duration: 0.45, ease: 'easeInOut' }}
       >
-        {/* ── Front ── */}
+        {/* Front */}
         <div
           style={{
             position: 'absolute',
@@ -258,7 +258,7 @@ const PosterCard: React.FC<{
           </AnimatePresence>
         </div>
 
-        {/* ── Back - opaque ── */}
+        {/* Back - opaque */}
         <div
           style={{
             position: 'absolute',
@@ -517,7 +517,7 @@ const MovieDeck: React.FC<Props> = ({
                   color: 'var(--color-text-secondary)',
                 }}
               >
-                No films in the deck yet.
+                No movies in the deck yet...
               </p>
               <p
                 style={{
@@ -602,13 +602,13 @@ const MovieDeck: React.FC<Props> = ({
                 fontWeight: 500,
               }}
             >
-              Add at least one more film to shuffle.
+              Add at least one more movie to shuffle.
             </p>
           )}
         </>
       )}
 
-      {/* ── Fullscreen shuffle overlay ── */}
+      {/* Fullscreen shuffle overlay */}
       <AnimatePresence>
         {shuffleActive && (
           <motion.div
@@ -672,7 +672,7 @@ const MovieDeck: React.FC<Props> = ({
 
             <AnimatePresence mode="wait">
               {watchAccepted && winnerMovie ? (
-                /* ── Winner reveal - same max-width as MovieModal (380px) ── */
+                /* Winner reveal - same width as MovieModal */
                 <motion.div
                   key="reveal"
                   initial={{ opacity: 0, scale: 0.9, y: 20 }}
@@ -736,7 +736,7 @@ const MovieDeck: React.FC<Props> = ({
                   </p>
                 </motion.div>
               ) : (
-                /* ── Shuffle / winner decision ── */
+                /* Shuffle / Watch decision */
                 <motion.div
                   key="shuffle"
                   initial={{ opacity: 0 }}

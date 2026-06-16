@@ -83,7 +83,7 @@ Then open [http://localhost:5173](http://localhost:5173) in your browser.
 1. **Upload** - Select a CSV file exported from IMDb or Letterboxd
 2. **Enrich** - The app fetches metadata for each movie from TMDb (rating, genres, runtime, poster, overview)
 3. **Filter** - Narrow your list by rating, runtime, release year, genre, or date added
-4. **Pick** - Click "Pick a film" to get a random movie from your filtered list
+4. **Pick** - Click "Pick a Movie" to get a random movie from your filtered list
 5. **Deck mode** - Optionally queue multiple picks and run a shuffle to crown a winner
 6. **Export** - Download your updated list as a CSV
 7. **Persist** - Your enriched list is saved in localStorage so it survives page refreshes

@@ -385,7 +385,7 @@ const CSVUpload: React.FC<Props> = ({
   if (movieCount > 0) {
     return (
       <div>
-        {/* Main card - clicking replaces the list */}
+        {/* Main card */}
         <div
           onClick={() => inputRef.current?.click()}
           onDrop={handleDrop}
@@ -436,7 +436,7 @@ const CSVUpload: React.FC<Props> = ({
                   fontWeight: 500,
                 }}
               >
-                {movieCount} films
+                {movieCount} Movies
                 {enrichmentTime != null
                   ? ` · enriched in ${enrichmentTime.toFixed(1)}s`
                   : ''}
@@ -462,7 +462,7 @@ const CSVUpload: React.FC<Props> = ({
           />
         </div>
 
-        {/* Download link - only shown when a handler is wired up */}
+        {/* Download link */}
         {onExport && (
           <div style={{ marginTop: '10px', textAlign: 'center' }}>
             <button
@@ -554,7 +554,7 @@ const CSVUpload: React.FC<Props> = ({
             fontWeight: 500,
           }}
         >
-          or click to browse
+          ...or click to browse
         </p>
         <p
           style={{
@@ -564,7 +564,7 @@ const CSVUpload: React.FC<Props> = ({
             fontWeight: 500,
           }}
         >
-          Supports IMDb and Letterboxd exports
+          We support both IMDb and Letterboxd exports!
         </p>
         <input
           ref={inputRef}

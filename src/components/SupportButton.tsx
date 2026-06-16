@@ -21,7 +21,7 @@ const SupportButton: React.FC = () => {
 
   return (
     <>
-      {/* ── Footer trigger ── */}
+      {/* Footer trigger */}
       <button
         onClick={() => setOpen(true)}
         aria-label="Support CueMovie"
@@ -58,7 +58,7 @@ const SupportButton: React.FC = () => {
         Support CueMovie
       </button>
 
-      {/* ── Modal ── */}
+      {/* Modal */}
       <AnimatePresence>
         {open && (
           <motion.div
@@ -178,7 +178,7 @@ const SupportButton: React.FC = () => {
                     fontWeight: 500,
                   }}
                 >
-                  If we've helped you pick a film or two, please consider
+                  If we've helped you pick a movie or two, please consider
                   supporting us - it really helps cover the costs and keep the
                   project alive.
                 </p>

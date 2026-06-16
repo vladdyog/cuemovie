@@ -112,7 +112,7 @@ const Label: React.FC<{ children: React.ReactNode }> = ({ children }) => (
   </p>
 );
 
-// ── Main component ────────────────────────────────────────────────────────────
+// Main component
 
 const FeedbackButton: React.FC = () => {
   const [open, setOpen] = useState(false);
@@ -174,7 +174,7 @@ const FeedbackButton: React.FC = () => {
 
   return (
     <>
-      {/* ── Floating trigger button ─────────────────────────────────────── */}
+      {/* Floating trigger button */}
       <motion.button
         onClick={() => setOpen(true)}
         aria-label="Share feedback"
@@ -216,7 +216,7 @@ const FeedbackButton: React.FC = () => {
         Got some feedback?
       </motion.button>
 
-      {/* ── Modal ───────────────────────────────────────────────────────── */}
+      {/* Modal */}
       <AnimatePresence>
         {open && (
           <motion.div
@@ -245,7 +245,7 @@ const FeedbackButton: React.FC = () => {
             }}
             transition={{ duration: 0.2 }}
           >
-            {/* Backdrop - catches outside clicks */}
+            {/* Backdrop catches outside clicks */}
             <div
               onClick={handleClose}
               style={{ position: 'absolute', inset: 0, cursor: 'default' }}
@@ -305,7 +305,7 @@ const FeedbackButton: React.FC = () => {
 
               <AnimatePresence mode="wait">
                 {status === 'success' ? (
-                  /* ── Success state ── */
+                  /* Success state */
                   <motion.div
                     key="success"
                     initial={{ opacity: 0, y: 8 }}
@@ -350,7 +350,7 @@ const FeedbackButton: React.FC = () => {
                     </p>
                   </motion.div>
                 ) : (
-                  /* ── Form state ── */
+                  /* Form state */
                   <motion.div
                     key="form"
                     initial={{ opacity: 0 }}

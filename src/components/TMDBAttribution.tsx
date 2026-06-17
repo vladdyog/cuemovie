@@ -1,6 +1,8 @@
 import { AnimatePresence, motion } from 'framer-motion';
 import React, { useEffect, useState } from 'react';
 
+import CloseButton from './ui/CloseButton';
+
 const TMDB_LOGO_URL =
   'https://www.themoviedb.org/assets/2/v4/logos/v2/blue_short-8e7b30f73a4020692ccca9c88bafe5dcb6f8a62a4c6bc55cd9ba82bb2cd95f6c.svg';
 
@@ -97,40 +99,7 @@ const TmdbAttribution: React.FC = () => {
               onClick={(e) => e.stopPropagation()}
             >
               {/* Close button */}
-              <button
-                onClick={() => setOpen(false)}
-                aria-label="Close"
-                style={{
-                  position: 'absolute',
-                  top: '14px',
-                  right: '14px',
-                  width: '28px',
-                  height: '28px',
-                  borderRadius: '50%',
-                  background: 'var(--color-surface-2)',
-                  border: '1px solid var(--color-border)',
-                  color: 'var(--color-text-secondary)',
-                  fontSize: 'var(--text-xs)',
-                  cursor: 'pointer',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  fontFamily: 'var(--font-body)',
-                  transition: COLOR_TRANSITION,
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.background = 'var(--color-danger)';
-                  e.currentTarget.style.color = 'white';
-                  e.currentTarget.style.borderColor = 'var(--color-danger)';
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.background = 'var(--color-surface-2)';
-                  e.currentTarget.style.color = 'var(--color-text-secondary)';
-                  e.currentTarget.style.borderColor = 'var(--color-border)';
-                }}
-              >
-                ✕
-              </button>
+              <CloseButton onClick={() => setOpen(false)} />
 
               {/* Heading */}
               <p

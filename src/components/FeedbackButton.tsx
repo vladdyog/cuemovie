@@ -4,6 +4,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import logo from '/CueMovie_transparent.png';
 
 import Button from './ui/Button';
+import CloseButton from './ui/CloseButton';
 
 type Category = 'Bug Report' | 'Feature Idea' | 'General';
 type Status = 'idle' | 'submitting' | 'success' | 'error';
@@ -264,39 +265,7 @@ const FeedbackButton: React.FC = () => {
               onClick={(e) => e.stopPropagation()}
             >
               {/* Close */}
-              <button
-                onClick={handleClose}
-                style={{
-                  position: 'absolute',
-                  top: '14px',
-                  right: '14px',
-                  width: '28px',
-                  height: '28px',
-                  borderRadius: '50%',
-                  background: 'var(--color-surface-2)',
-                  border: '1px solid var(--color-border)',
-                  color: 'var(--color-text-secondary)',
-                  fontSize: 'var(--text-xs)',
-                  cursor: 'pointer',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  fontFamily: 'var(--font-body)',
-                  transition: 'all 0.15s',
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.background = 'var(--color-danger)';
-                  e.currentTarget.style.color = 'white';
-                  e.currentTarget.style.borderColor = 'var(--color-danger)';
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.background = 'var(--color-surface-2)';
-                  e.currentTarget.style.color = 'var(--color-text-secondary)';
-                  e.currentTarget.style.borderColor = 'var(--color-border)';
-                }}
-              >
-                ✕
-              </button>
+              <CloseButton onClick={handleClose} />
 
               <AnimatePresence mode="wait">
                 {status === 'success' ? (

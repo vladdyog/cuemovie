@@ -3,6 +3,8 @@ import React, { useEffect, useState } from 'react';
 
 import logo from '/CueMovie_transparent.png';
 
+import CloseButton from './ui/CloseButton';
+
 const BMAC_URL = 'https://buymeacoffee.com/cuemovie';
 
 const COLOR_TRANSITION =
@@ -111,40 +113,7 @@ const SupportButton: React.FC = () => {
               transition={{ duration: 0.25, ease: [0.34, 1.2, 0.64, 1] }}
             >
               {/* Close */}
-              <button
-                onClick={() => setOpen(false)}
-                aria-label="Close"
-                style={{
-                  position: 'absolute',
-                  top: '14px',
-                  right: '14px',
-                  width: '28px',
-                  height: '28px',
-                  borderRadius: '50%',
-                  background: 'var(--color-surface-2)',
-                  border: '1px solid var(--color-border)',
-                  color: 'var(--color-text-secondary)',
-                  fontSize: 'var(--text-xs)',
-                  cursor: 'pointer',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  fontFamily: 'var(--font-body)',
-                  transition: COLOR_TRANSITION,
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.background = 'var(--color-danger)';
-                  e.currentTarget.style.color = 'white';
-                  e.currentTarget.style.borderColor = 'var(--color-danger)';
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.background = 'var(--color-surface-2)';
-                  e.currentTarget.style.color = 'var(--color-text-secondary)';
-                  e.currentTarget.style.borderColor = 'var(--color-border)';
-                }}
-              >
-                ✕
-              </button>
+              <CloseButton onClick={() => setOpen(false)} />
 
               {/* Logo */}
               <img

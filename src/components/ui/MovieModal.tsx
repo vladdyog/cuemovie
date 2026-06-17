@@ -2,6 +2,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import React, { useEffect } from 'react';
 
 import type { Movie } from '../../types';
+import CloseButton from './CloseButton';
 import MovieCard from './MovieCard';
 
 type Props = {
@@ -58,40 +59,7 @@ const MovieModal: React.FC<Props> = ({ movie, onClose }) => {
           onClick={(e) => e.stopPropagation()}
         >
           {/* Close button */}
-          <button
-            onClick={onClose}
-            style={{
-              position: 'absolute',
-              top: '-14px',
-              right: '-14px',
-              zIndex: 10,
-              width: '36px',
-              height: '36px',
-              borderRadius: '50%',
-              background: 'var(--color-surface-2)',
-              border: '1px solid var(--color-border-light)',
-              color: 'var(--color-text-secondary)',
-              fontSize: 'var(--text-base)',
-              cursor: 'pointer',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              fontFamily: 'var(--font-body)',
-              transition: 'all 0.15s',
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.background = 'var(--color-danger)';
-              e.currentTarget.style.color = 'white';
-              e.currentTarget.style.borderColor = 'var(--color-danger)';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.background = 'var(--color-surface-2)';
-              e.currentTarget.style.color = 'var(--color-text-secondary)';
-              e.currentTarget.style.borderColor = 'var(--color-border-light)';
-            }}
-          >
-            ✕
-          </button>
+          <CloseButton onClick={onClose} variant="floating" />
 
           {/* Card */}
           <div style={{ overflowY: 'auto', borderRadius: 'var(--radius-lg)' }}>

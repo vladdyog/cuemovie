@@ -1,10 +1,8 @@
 import React from 'react';
 
 import type { FilterOptions, Movie } from '../types';
+import Button from './Button';
 
-// Extend FilterOptions locally to support excludedGenres.
-// Also update your types.ts to add `excludedGenres?: string[]`
-// and update filterMovies() to filter out movies whose genres intersect excludedGenres.
 type ExtendedFilters = FilterOptions & { excludedGenres?: string[] };
 
 type Props = {
@@ -25,30 +23,29 @@ function nextState(current: GenreState): GenreState {
   return 'neutral';
 }
 
-// Only transition color-related properties - never layout - to avoid size-change jank on reset
 const COLOR_TRANSITION =
   'background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease';
 
 const pillStyle = (state: GenreState): React.CSSProperties => {
   if (state === 'include')
     return {
-      background: 'rgba(64,188,244,0.12)',
+      background: 'var(--color-blue-subtle)',
       borderColor: 'rgba(64,188,244,0.55)',
-      color: '#40BCF4',
-      fontWeight: 700,
+      color: 'var(--color-blue)',
+      fontWeight: 'var(--weight-bold)' as React.CSSProperties['fontWeight'],
     };
   if (state === 'exclude')
     return {
-      background: 'rgba(229,83,83,0.12)',
+      background: 'var(--color-danger-subtle)',
       borderColor: 'rgba(229,83,83,0.55)',
       color: 'var(--color-danger)',
-      fontWeight: 700,
+      fontWeight: 'var(--weight-bold)' as React.CSSProperties['fontWeight'],
     };
   return {
     background: 'var(--color-surface-2)',
     borderColor: 'var(--color-border-light)',
     color: 'var(--color-text-secondary)',
-    fontWeight: 500,
+    fontWeight: 'var(--weight-medium)' as React.CSSProperties['fontWeight'],
   };
 };
 
@@ -57,10 +54,10 @@ const inputStyle: React.CSSProperties = {
   padding: '10px 14px',
   background: 'var(--color-surface-2)',
   border: '1px solid var(--color-border)',
-  borderRadius: '8px',
+  borderRadius: 'var(--radius-md)',
   color: 'var(--color-text)',
-  fontSize: '0.9rem',
-  fontWeight: 500,
+  fontSize: 'var(--text-base)',
+  fontWeight: 'var(--weight-medium)' as React.CSSProperties['fontWeight'],
   fontFamily: 'var(--font-body)',
   outline: 'none',
   transition: 'border-color 0.15s, box-shadow 0.15s',
@@ -74,7 +71,7 @@ const StyledInput: React.FC<React.InputHTMLAttributes<HTMLInputElement>> = (
     style={inputStyle}
     onFocus={(e) => {
       e.currentTarget.style.borderColor = 'var(--color-accent)';
-      e.currentTarget.style.boxShadow = '0 0 0 3px rgba(255,128,0,0.08)';
+      e.currentTarget.style.boxShadow = '0 0 0 3px var(--color-accent-subtle)';
       props.onFocus?.(e);
     }}
     onBlur={(e) => {
@@ -91,8 +88,8 @@ const FieldLabel: React.FC<{
 }> = ({ children, noMargin }) => (
   <p
     style={{
-      fontSize: '0.75rem',
-      fontWeight: 700,
+      fontSize: 'var(--text-xs)',
+      fontWeight: 'var(--weight-bold)' as React.CSSProperties['fontWeight'],
       letterSpacing: '0.08em',
       textTransform: 'uppercase',
       color: 'var(--color-text-secondary)',
@@ -215,7 +212,7 @@ const MovieFilters: React.FC<Props> = ({ movies, filters, onChange }) => {
         </div>
       </div>
 
-      {/* Genre pills - tri-state, color-only transitions (no layout shift on reset) */}
+      {/* Genre pills */}
       {genres.length > 0 && (
         <div>
           <div
@@ -237,9 +234,10 @@ const MovieFilters: React.FC<Props> = ({ movies, filters, onChange }) => {
                       display: 'flex',
                       alignItems: 'center',
                       gap: '5px',
-                      fontSize: '0.71rem',
+                      fontSize: 'var(--text-xs)',
                       color: ps.color as string,
-                      fontWeight: 600,
+                      fontWeight:
+                        'var(--weight-medium)' as React.CSSProperties['fontWeight'],
                     }}
                   >
                     <span
@@ -273,11 +271,11 @@ const MovieFilters: React.FC<Props> = ({ movies, filters, onChange }) => {
                   onClick={() => cycleGenre(genre)}
                   style={{
                     padding: '7px 8px',
-                    borderRadius: '20px',
+                    borderRadius: 'var(--radius-pill)',
                     border: `1px solid ${ps.borderColor}`,
                     background: ps.background as string,
                     color: ps.color as string,
-                    fontSize: '0.825rem',
+                    fontSize: 'var(--text-sm)',
                     fontWeight: ps.fontWeight,
                     cursor: 'pointer',
                     transition: COLOR_TRANSITION,
@@ -300,31 +298,9 @@ const MovieFilters: React.FC<Props> = ({ movies, filters, onChange }) => {
       {/* Reset */}
       {isActive && (
         <div>
-          <button
-            onClick={() => onChange({})}
-            style={{
-              padding: '8px 18px',
-              border: '1px solid var(--color-border)',
-              borderRadius: '8px',
-              background: 'transparent',
-              color: 'var(--color-text-secondary)',
-              fontSize: '0.85rem',
-              fontWeight: 600,
-              cursor: 'pointer',
-              fontFamily: 'var(--font-body)',
-              transition: COLOR_TRANSITION,
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.borderColor = 'var(--color-accent)';
-              e.currentTarget.style.color = 'var(--color-accent)';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.borderColor = 'var(--color-border)';
-              e.currentTarget.style.color = 'var(--color-text-secondary)';
-            }}
-          >
+          <Button variant="surface" size="sm" onClick={() => onChange({})}>
             Reset filters
-          </button>
+          </Button>
         </div>
       )}
     </div>

@@ -3,6 +3,8 @@ import React, { useEffect, useRef, useState } from 'react';
 
 import logo from '/CueMovie_transparent.png';
 
+import Button from './Button';
+
 type Category = 'Bug Report' | 'Feature Idea' | 'General';
 type Status = 'idle' | 'submitting' | 'success' | 'error';
 
@@ -11,24 +13,23 @@ const CATEGORIES: Category[] = ['Bug Report', 'Feature Idea', 'General'];
 const COLOR_TRANSITION =
   'background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease, box-shadow 0.15s ease, opacity 0.15s ease';
 
-// Per-category colour tokens
 const CATEGORY_COLORS: Record<
   Category,
   { color: string; bg: string; border: string }
 > = {
   'Bug Report': {
     color: 'var(--color-danger)',
-    bg: 'rgba(229,83,83,0.1)',
+    bg: 'var(--color-danger-subtle)',
     border: 'var(--color-danger)',
   },
   'Feature Idea': {
     color: 'var(--color-blue)',
-    bg: 'rgba(64,188,244,0.1)',
+    bg: 'var(--color-blue-subtle)',
     border: 'var(--color-blue)',
   },
   General: {
     color: 'var(--color-accent)',
-    bg: 'rgba(255,128,0,0.1)',
+    bg: 'var(--color-accent-subtle)',
     border: 'var(--color-accent)',
   },
 };
@@ -37,10 +38,10 @@ const inputBase: React.CSSProperties = {
   width: '100%',
   background: 'var(--color-surface-2)',
   border: '1px solid var(--color-border)',
-  borderRadius: '8px',
+  borderRadius: 'var(--radius-md)',
   color: 'var(--color-text)',
-  fontSize: '0.82rem',
-  fontWeight: 400,
+  fontSize: 'var(--text-sm)',
+  fontWeight: 'var(--weight-normal)' as React.CSSProperties['fontWeight'],
   fontFamily: 'var(--font-body)',
   outline: 'none',
   transition: COLOR_TRANSITION,
@@ -100,8 +101,8 @@ FocusTextarea.displayName = 'FocusTextarea';
 const Label: React.FC<{ children: React.ReactNode }> = ({ children }) => (
   <p
     style={{
-      fontSize: '0.72rem',
-      fontWeight: 600,
+      fontSize: 'var(--text-xs)',
+      fontWeight: 'var(--weight-medium)' as React.CSSProperties['fontWeight'],
       letterSpacing: '0.08em',
       textTransform: 'uppercase',
       color: 'var(--color-text-secondary)',
@@ -112,8 +113,6 @@ const Label: React.FC<{ children: React.ReactNode }> = ({ children }) => (
   </p>
 );
 
-// Main component
-
 const FeedbackButton: React.FC = () => {
   const [open, setOpen] = useState(false);
   const [category, setCategory] = useState<Category>('General');
@@ -122,7 +121,6 @@ const FeedbackButton: React.FC = () => {
   const [status, setStatus] = useState<Status>('idle');
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
-  // Keyboard dismiss
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
       if (e.key === 'Escape') setOpen(false);
@@ -131,7 +129,6 @@ const FeedbackButton: React.FC = () => {
     return () => window.removeEventListener('keydown', handler);
   }, []);
 
-  // Focus textarea when modal opens
   useEffect(() => {
     if (open) {
       setTimeout(() => textareaRef.current?.focus(), 200);
@@ -141,7 +138,6 @@ const FeedbackButton: React.FC = () => {
   const handleClose = () => {
     if (status === 'submitting') return;
     setOpen(false);
-    // Reset after exit animation
     setTimeout(() => {
       setMessage('');
       setEmail('');
@@ -153,7 +149,6 @@ const FeedbackButton: React.FC = () => {
   const handleSubmit = async () => {
     if (!message.trim() || status === 'submitting') return;
     setStatus('submitting');
-
     try {
       const res = await fetch('/api/feedbackFunction', {
         method: 'POST',
@@ -185,12 +180,13 @@ const FeedbackButton: React.FC = () => {
           alignItems: 'center',
           gap: '7px',
           padding: '10px 18px',
-          borderRadius: '999px',
+          borderRadius: 'var(--radius-pill)',
           background: 'var(--color-surface)',
           border: '1px solid var(--color-border-light)',
           color: 'var(--color-text-secondary)',
-          fontSize: '0.85rem',
-          fontWeight: 600,
+          fontSize: 'var(--text-base)',
+          fontWeight:
+            'var(--weight-medium)' as React.CSSProperties['fontWeight'],
           fontFamily: 'var(--font-body)',
           cursor: 'pointer',
           transition: COLOR_TRANSITION,
@@ -245,7 +241,6 @@ const FeedbackButton: React.FC = () => {
             }}
             transition={{ duration: 0.2 }}
           >
-            {/* Backdrop catches outside clicks */}
             <div
               onClick={handleClose}
               style={{ position: 'absolute', inset: 0, cursor: 'default' }}
@@ -258,7 +253,7 @@ const FeedbackButton: React.FC = () => {
                 maxWidth: '380px',
                 background: 'var(--color-surface)',
                 border: '1px solid var(--color-border-light)',
-                borderRadius: '16px',
+                borderRadius: 'var(--radius-lg)',
                 padding: '24px',
                 boxShadow: '0 20px 60px rgba(0,0,0,0.6)',
               }}
@@ -281,7 +276,7 @@ const FeedbackButton: React.FC = () => {
                   background: 'var(--color-surface-2)',
                   border: '1px solid var(--color-border)',
                   color: 'var(--color-text-secondary)',
-                  fontSize: '0.75rem',
+                  fontSize: 'var(--text-xs)',
                   cursor: 'pointer',
                   display: 'flex',
                   alignItems: 'center',
@@ -305,7 +300,6 @@ const FeedbackButton: React.FC = () => {
 
               <AnimatePresence mode="wait">
                 {status === 'success' ? (
-                  /* Success state */
                   <motion.div
                     key="success"
                     initial={{ opacity: 0, y: 8 }}
@@ -332,8 +326,9 @@ const FeedbackButton: React.FC = () => {
                     />
                     <p
                       style={{
-                        fontSize: '1rem',
-                        fontWeight: 700,
+                        fontSize: 'var(--text-md)',
+                        fontWeight:
+                          'var(--weight-bold)' as React.CSSProperties['fontWeight'],
                         color: 'var(--color-text)',
                       }}
                     >
@@ -341,7 +336,7 @@ const FeedbackButton: React.FC = () => {
                     </p>
                     <p
                       style={{
-                        fontSize: '0.875rem',
+                        fontSize: 'var(--text-base)',
                         color: 'var(--color-text-secondary)',
                         lineHeight: 1.6,
                       }}
@@ -350,7 +345,6 @@ const FeedbackButton: React.FC = () => {
                     </p>
                   </motion.div>
                 ) : (
-                  /* Form state */
                   <motion.div
                     key="form"
                     initial={{ opacity: 0 }}
@@ -367,8 +361,9 @@ const FeedbackButton: React.FC = () => {
                     <div>
                       <p
                         style={{
-                          fontSize: '1rem',
-                          fontWeight: 700,
+                          fontSize: 'var(--text-md)',
+                          fontWeight:
+                            'var(--weight-bold)' as React.CSSProperties['fontWeight'],
                           color: 'var(--color-text)',
                         }}
                       >
@@ -376,7 +371,7 @@ const FeedbackButton: React.FC = () => {
                       </p>
                       <p
                         style={{
-                          fontSize: '0.8rem',
+                          fontSize: 'var(--text-sm)',
                           color: 'var(--color-text-secondary)',
                           marginTop: '2px',
                         }}
@@ -399,7 +394,7 @@ const FeedbackButton: React.FC = () => {
                               style={{
                                 flex: 1,
                                 padding: '7px 4px',
-                                borderRadius: '8px',
+                                borderRadius: 'var(--radius-md)',
                                 border: `1px solid ${active ? border : 'var(--color-border)'}`,
                                 background: active
                                   ? bg
@@ -407,8 +402,10 @@ const FeedbackButton: React.FC = () => {
                                 color: active
                                   ? color
                                   : 'var(--color-text-secondary)',
-                                fontSize: '0.78rem',
-                                fontWeight: active ? 700 : 500,
+                                fontSize: 'var(--text-sm)',
+                                fontWeight: active
+                                  ? ('var(--weight-bold)' as React.CSSProperties['fontWeight'])
+                                  : ('var(--weight-medium)' as React.CSSProperties['fontWeight']),
                                 cursor: 'pointer',
                                 fontFamily: 'var(--font-body)',
                                 transition: COLOR_TRANSITION,
@@ -434,8 +431,9 @@ const FeedbackButton: React.FC = () => {
                       />
                       <p
                         style={{
-                          fontSize: '0.72rem',
-                          fontWeight: 500,
+                          fontSize: 'var(--text-xs)',
+                          fontWeight:
+                            'var(--weight-medium)' as React.CSSProperties['fontWeight'],
                           marginTop: '5px',
                           color: 'var(--color-muted)',
                         }}
@@ -444,7 +442,7 @@ const FeedbackButton: React.FC = () => {
                       </p>
                     </div>
 
-                    {/* Email (optional) */}
+                    {/* Email */}
                     <div>
                       <Label>Email (optional)</Label>
                       <FocusInput
@@ -457,13 +455,14 @@ const FeedbackButton: React.FC = () => {
                       />
                     </div>
 
-                    {/* Error message */}
+                    {/* Error */}
                     {status === 'error' && (
                       <p
                         style={{
-                          fontSize: '0.8rem',
+                          fontSize: 'var(--text-sm)',
                           color: 'var(--color-danger)',
-                          fontWeight: 500,
+                          fontWeight:
+                            'var(--weight-medium)' as React.CSSProperties['fontWeight'],
                         }}
                       >
                         Something went wrong - please try again.
@@ -471,30 +470,22 @@ const FeedbackButton: React.FC = () => {
                     )}
 
                     {/* Submit */}
-                    <button
+                    <Button
+                      variant={canSubmit ? 'primary' : 'surface'}
+                      size="md"
                       onClick={handleSubmit}
                       disabled={!canSubmit}
                       style={{
-                        padding: '11px',
-                        borderRadius: '8px',
-                        border: 'none',
-                        background: canSubmit
-                          ? 'linear-gradient(135deg, var(--color-accent) 0%, var(--color-accent-hover) 100%)'
-                          : 'var(--color-surface-2)',
-                        color: canSubmit ? 'white' : 'var(--color-muted)',
-                        fontSize: '0.9rem',
-                        fontWeight: 700,
-                        cursor: canSubmit ? 'pointer' : 'not-allowed',
-                        fontFamily: 'var(--font-body)',
-                        letterSpacing: '-0.01em',
+                        width: '100%',
+                        borderRadius: 'var(--radius-md)',
+                        justifyContent: 'center',
                         boxShadow: canSubmit
                           ? '0 0 20px rgba(255,128,0,0.25)'
                           : 'none',
-                        transition: COLOR_TRANSITION,
                       }}
                     >
                       {status === 'submitting' ? 'Sending…' : 'Send Feedback'}
-                    </button>
+                    </Button>
                   </motion.div>
                 )}
               </AnimatePresence>

@@ -1,7 +1,6 @@
 import { AnimatePresence, motion } from 'framer-motion';
 import React, { useEffect, useState } from 'react';
 
-// TMDB short blue logo (approved attribution logo)
 const TMDB_LOGO_URL =
   'https://www.themoviedb.org/assets/2/v4/logos/v2/blue_short-8e7b30f73a4020692ccca9c88bafe5dcb6f8a62a4c6bc55cd9ba82bb2cd95f6c.svg';
 
@@ -11,7 +10,6 @@ const COLOR_TRANSITION =
 const TmdbAttribution: React.FC = () => {
   const [open, setOpen] = useState(false);
 
-  // Keyboard dismiss
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
       if (e.key === 'Escape') setOpen(false);
@@ -33,7 +31,7 @@ const TmdbAttribution: React.FC = () => {
           background: 'transparent',
           border: 'none',
           padding: '4px 6px',
-          borderRadius: '6px',
+          borderRadius: 'var(--radius-sm)',
           cursor: 'pointer',
           opacity: 0.55,
           transition: COLOR_TRANSITION,
@@ -88,7 +86,7 @@ const TmdbAttribution: React.FC = () => {
                 maxWidth: '400px',
                 background: 'var(--color-surface)',
                 border: '1px solid var(--color-border-light)',
-                borderRadius: '18px',
+                borderRadius: 'var(--radius-lg)',
                 padding: '32px 28px 28px',
                 boxShadow: '0 24px 80px rgba(0,0,0,0.7)',
               }}
@@ -112,7 +110,7 @@ const TmdbAttribution: React.FC = () => {
                   background: 'var(--color-surface-2)',
                   border: '1px solid var(--color-border)',
                   color: 'var(--color-text-secondary)',
-                  fontSize: '0.75rem',
+                  fontSize: 'var(--text-xs)',
                   cursor: 'pointer',
                   display: 'flex',
                   alignItems: 'center',
@@ -137,8 +135,9 @@ const TmdbAttribution: React.FC = () => {
               {/* Heading */}
               <p
                 style={{
-                  fontSize: '1rem',
-                  fontWeight: 700,
+                  fontSize: 'var(--text-md)',
+                  fontWeight:
+                    'var(--weight-bold)' as React.CSSProperties['fontWeight'],
                   letterSpacing: '0.1em',
                   textTransform: 'uppercase',
                   color: 'var(--color-accent)',
@@ -183,10 +182,11 @@ const TmdbAttribution: React.FC = () => {
 
                 <p
                   style={{
-                    fontSize: '0.85rem',
+                    fontSize: 'var(--text-base)',
                     lineHeight: 1.65,
                     color: 'var(--color-text-secondary)',
-                    fontWeight: 600,
+                    fontWeight:
+                      'var(--weight-medium)' as React.CSSProperties['fontWeight'],
                   }}
                 >
                   This website uses the The Movie Database (TMDB) API but is not
@@ -195,10 +195,11 @@ const TmdbAttribution: React.FC = () => {
 
                 <p
                   style={{
-                    fontSize: '0.80rem',
+                    fontSize: 'var(--text-sm)',
                     lineHeight: 1.6,
                     color: 'var(--color-muted)',
-                    fontWeight: 400,
+                    fontWeight:
+                      'var(--weight-normal)' as React.CSSProperties['fontWeight'],
                   }}
                 >
                   All additional movie metadata, posters, and ratings are

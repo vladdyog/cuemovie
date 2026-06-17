@@ -2,6 +2,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import React, { useEffect, useRef, useState } from 'react';
 
 import type { Movie } from '../types';
+import Button from './Button';
 import MovieCard from './MovieCard';
 import MovieModal from './MovieModal';
 
@@ -69,8 +70,6 @@ const PosterCard: React.FC<{
     glow = '0 0 16px rgba(255,128,0,0.25), 0 6px 20px rgba(0,0,0,0.4)';
   }
 
-  // Winner card: no info overlay - title/year are shown below the fan instead.
-  // Non-winner hovered card: show info overlay as usual.
   const showInfo = isHovered && !isShuffling && !isWinner;
 
   return (
@@ -111,7 +110,7 @@ const PosterCard: React.FC<{
           style={{
             position: 'absolute',
             inset: 0,
-            borderRadius: '10px',
+            borderRadius: 'var(--radius-md)',
             overflow: 'hidden',
             border: `2px solid ${borderColor}`,
             boxShadow: glow,
@@ -141,7 +140,7 @@ const PosterCard: React.FC<{
                   background: 'rgba(0,0,0,0.8)',
                   border: '1px solid rgba(255,255,255,0.15)',
                   color: 'white',
-                  fontSize: '0.65rem',
+                  fontSize: 'var(--text-xs)',
                   cursor: 'pointer',
                   display: 'flex',
                   alignItems: 'center',
@@ -181,14 +180,14 @@ const PosterCard: React.FC<{
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                fontSize: '2.5rem',
+                fontSize: 'var(--text-display)',
               }}
             >
               <span style={{ opacity: 0.25 }}>🎬</span>
             </div>
           )}
 
-          {/* Hover info overlay (non-winner cards only) */}
+          {/* Hover info overlay */}
           <AnimatePresence>
             {showInfo && (
               <motion.div
@@ -199,7 +198,7 @@ const PosterCard: React.FC<{
                 style={{
                   position: 'absolute',
                   inset: 0,
-                  borderRadius: '10px',
+                  borderRadius: 'var(--radius-md)',
                   display: 'flex',
                   flexDirection: 'column',
                   justifyContent: 'flex-end',
@@ -211,8 +210,9 @@ const PosterCard: React.FC<{
                 <p
                   style={{
                     color: 'white',
-                    fontSize: '0.78rem',
-                    fontWeight: 700,
+                    fontSize: 'var(--text-sm)',
+                    fontWeight:
+                      'var(--weight-bold)' as React.CSSProperties['fontWeight'],
                     lineHeight: 1.3,
                     WebkitLineClamp: 2,
                     overflow: 'hidden',
@@ -234,8 +234,9 @@ const PosterCard: React.FC<{
                     <span
                       style={{
                         color: 'rgba(255,255,255,0.55)',
-                        fontSize: '0.72rem',
-                        fontWeight: 500,
+                        fontSize: 'var(--text-xs)',
+                        fontWeight:
+                          'var(--weight-medium)' as React.CSSProperties['fontWeight'],
                       }}
                     >
                       {movie.year}
@@ -245,8 +246,9 @@ const PosterCard: React.FC<{
                     <span
                       style={{
                         color: 'var(--color-green)',
-                        fontSize: '0.72rem',
-                        fontWeight: 700,
+                        fontSize: 'var(--text-xs)',
+                        fontWeight:
+                          'var(--weight-bold)' as React.CSSProperties['fontWeight'],
                       }}
                     >
                       ★ {movie.rating.toFixed(1)}
@@ -258,14 +260,15 @@ const PosterCard: React.FC<{
           </AnimatePresence>
         </div>
 
-        {/* Back - opaque */}
+        {/* Back */}
         <div
           style={{
             position: 'absolute',
             inset: 0,
-            borderRadius: '10px',
+            borderRadius: 'var(--radius-md)',
             border: '2px solid var(--color-border-light)',
-            background: 'linear-gradient(145deg, #1C2228 0%, #252D35 100%)',
+            background:
+              'linear-gradient(145deg, var(--color-surface) 0%, var(--color-surface-2) 100%)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
@@ -282,7 +285,7 @@ const PosterCard: React.FC<{
               opacity: 0.18,
             }}
           >
-            <span style={{ fontSize: '2rem' }}>?</span>
+            <span style={{ fontSize: 'var(--text-lg)' }}>?</span>
             <div
               style={{
                 display: 'flex',
@@ -330,7 +333,6 @@ const MovieDeck: React.FC<Props> = ({
   const animRef = useRef<number | null>(null);
   const startTimeRef = useRef<number | null>(null);
 
-  // Escape key - works both in shuffle state and winner reveal state
   useEffect(() => {
     if (!shuffleActive) return;
     const handler = (e: KeyboardEvent) => {
@@ -449,7 +451,6 @@ const MovieDeck: React.FC<Props> = ({
   };
 
   const cardCount = Math.max(1, movies.length);
-  // 48px = 24px left + 24px right page padding
   const availableWidth = Math.min(672, viewportWidth - 48);
   const effectiveOffset =
     cardCount <= 1
@@ -483,15 +484,6 @@ const MovieDeck: React.FC<Props> = ({
       />
     ));
 
-  const btnBase: React.CSSProperties = {
-    fontFamily: 'var(--font-body)',
-    cursor: 'pointer',
-    transition: 'all 0.15s ease',
-    borderRadius: '50px',
-    fontWeight: 700,
-    fontSize: '0.9rem',
-  };
-
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
       {!shuffleActive && (
@@ -512,8 +504,9 @@ const MovieDeck: React.FC<Props> = ({
             <div style={{ textAlign: 'center', padding: '28px 0' }}>
               <p
                 style={{
-                  fontSize: '0.95rem',
-                  fontWeight: 600,
+                  fontSize: 'var(--text-md)',
+                  fontWeight:
+                    'var(--weight-medium)' as React.CSSProperties['fontWeight'],
                   color: 'var(--color-text-secondary)',
                 }}
               >
@@ -521,10 +514,11 @@ const MovieDeck: React.FC<Props> = ({
               </p>
               <p
                 style={{
-                  fontSize: '0.85rem',
+                  fontSize: 'var(--text-base)',
                   color: 'var(--color-muted)',
                   marginTop: '4px',
-                  fontWeight: 500,
+                  fontWeight:
+                    'var(--weight-medium)' as React.CSSProperties['fontWeight'],
                 }}
               >
                 Click the button above to add some!
@@ -540,56 +534,41 @@ const MovieDeck: React.FC<Props> = ({
               gap: '12px',
             }}
           >
-            <motion.button
-              onClick={handleShuffle}
-              disabled={movies.length < 2}
+            <motion.div
               whileHover={movies.length >= 2 ? { scale: 1.04 } : {}}
               whileTap={movies.length >= 2 ? { scale: 0.96 } : {}}
               transition={{ type: 'spring', stiffness: 380, damping: 22 }}
-              style={{
-                ...btnBase,
-                padding: '12px 28px',
-                background:
-                  movies.length < 2
-                    ? 'var(--color-surface-2)'
-                    : 'linear-gradient(135deg, var(--color-accent) 0%, var(--color-accent-hover) 100%)',
-                border:
-                  movies.length < 2 ? '1px solid var(--color-border)' : 'none',
-                color: movies.length < 2 ? 'var(--color-muted)' : 'white',
-                boxShadow:
-                  movies.length < 2 ? 'none' : '0 0 24px rgba(255,128,0,0.22)',
-                cursor: movies.length < 2 ? 'not-allowed' : 'pointer',
-              }}
             >
-              Shuffle
-            </motion.button>
+              <Button
+                variant={movies.length < 2 ? 'surface' : 'primary'}
+                size="md"
+                onClick={handleShuffle}
+                disabled={movies.length < 2}
+                style={{
+                  borderRadius: 'var(--radius-pill)',
+                  padding: '12px 28px',
+                  boxShadow:
+                    movies.length < 2
+                      ? 'none'
+                      : '0 0 24px rgba(255,128,0,0.22)',
+                }}
+              >
+                Shuffle
+              </Button>
+            </motion.div>
 
             {movies.length > 0 && (
-              <button
+              <Button
+                variant="surface"
+                size="md"
                 onClick={() => {
                   onClear();
                   setFlippedCards(new Set());
                 }}
-                style={{
-                  ...btnBase,
-                  padding: '11px 20px',
-                  background: 'transparent',
-                  border: '1px solid var(--color-border)',
-                  color: 'var(--color-text-secondary)',
-                  fontSize: '0.85rem',
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.borderColor =
-                    'var(--color-border-light)';
-                  e.currentTarget.style.color = 'var(--color-text)';
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.borderColor = 'var(--color-border)';
-                  e.currentTarget.style.color = 'var(--color-text-secondary)';
-                }}
+                style={{ borderRadius: 'var(--radius-pill)' }}
               >
                 Clear all
-              </button>
+              </Button>
             )}
           </div>
 
@@ -597,9 +576,10 @@ const MovieDeck: React.FC<Props> = ({
             <p
               style={{
                 textAlign: 'center',
-                fontSize: '0.85rem',
+                fontSize: 'var(--text-base)',
                 color: 'var(--color-muted)',
-                fontWeight: 500,
+                fontWeight:
+                  'var(--weight-medium)' as React.CSSProperties['fontWeight'],
               }}
             >
               Add at least one more movie to shuffle.
@@ -635,6 +615,7 @@ const MovieDeck: React.FC<Props> = ({
               }}
             />
 
+            {/* Close button */}
             <button
               onClick={onClose}
               style={{
@@ -648,7 +629,7 @@ const MovieDeck: React.FC<Props> = ({
                 background: 'var(--color-surface-2)',
                 border: '1px solid var(--color-border)',
                 color: 'var(--color-text-secondary)',
-                fontSize: '0.9rem',
+                fontSize: 'var(--text-base)',
                 cursor: 'pointer',
                 display: 'flex',
                 alignItems: 'center',
@@ -672,7 +653,6 @@ const MovieDeck: React.FC<Props> = ({
 
             <AnimatePresence mode="wait">
               {watchAccepted && winnerMovie ? (
-                /* Winner reveal - same width as MovieModal */
                 <motion.div
                   key="reveal"
                   initial={{ opacity: 0, scale: 0.9, y: 20 }}
@@ -690,8 +670,9 @@ const MovieDeck: React.FC<Props> = ({
                 >
                   <p
                     style={{
-                      fontSize: '0.75rem',
-                      fontWeight: 700,
+                      fontSize: 'var(--text-xs)',
+                      fontWeight:
+                        'var(--weight-bold)' as React.CSSProperties['fontWeight'],
                       letterSpacing: '0.12em',
                       textTransform: 'uppercase',
                       color: 'var(--color-accent)',
@@ -699,23 +680,23 @@ const MovieDeck: React.FC<Props> = ({
                   >
                     Tonight you're watching
                   </p>
-                  {/* Same width as MovieModal for consistency */}
                   <div
                     style={{
                       width: '380px',
                       maxWidth: '85vw',
                       maxHeight: '75svh',
                       overflowY: 'auto',
-                      borderRadius: '14px',
+                      borderRadius: 'var(--radius-lg)',
                     }}
                   >
                     <MovieCard movie={winnerMovie} />
                   </div>
                   <p
                     style={{
-                      fontSize: '0.78rem',
+                      fontSize: 'var(--text-sm)',
                       color: 'var(--color-muted)',
-                      fontWeight: 500,
+                      fontWeight:
+                        'var(--weight-medium)' as React.CSSProperties['fontWeight'],
                     }}
                   >
                     Press{' '}
@@ -724,8 +705,8 @@ const MovieDeck: React.FC<Props> = ({
                         padding: '2px 7px',
                         background: 'var(--color-surface-2)',
                         border: '1px solid var(--color-border-light)',
-                        borderRadius: '5px',
-                        fontSize: '0.75rem',
+                        borderRadius: 'var(--radius-sm)',
+                        fontSize: 'var(--text-xs)',
                         color: 'var(--color-text-secondary)',
                         fontFamily: 'var(--font-body)',
                       }}
@@ -736,7 +717,6 @@ const MovieDeck: React.FC<Props> = ({
                   </p>
                 </motion.div>
               ) : (
-                /* Shuffle / Watch decision */
                 <motion.div
                   key="shuffle"
                   initial={{ opacity: 0 }}
@@ -782,7 +762,7 @@ const MovieDeck: React.FC<Props> = ({
                     </div>
                   </div>
 
-                  {/* Winner title + year below the fan, then action buttons */}
+                  {/* Winner info + action buttons */}
                   <div
                     style={{
                       minHeight: 96,
@@ -807,12 +787,12 @@ const MovieDeck: React.FC<Props> = ({
                             gap: '16px',
                           }}
                         >
-                          {/* Title and year below the fan */}
                           <div style={{ textAlign: 'center' }}>
                             <p
                               style={{
-                                fontSize: '1.25rem',
-                                fontWeight: 800,
+                                fontSize: 'var(--text-lg)',
+                                fontWeight:
+                                  'var(--weight-display)' as React.CSSProperties['fontWeight'],
                                 color: 'var(--color-text)',
                                 letterSpacing: '-0.02em',
                                 lineHeight: 1.2,
@@ -833,9 +813,10 @@ const MovieDeck: React.FC<Props> = ({
                                 {winnerMovie.year && (
                                   <span
                                     style={{
-                                      fontSize: '0.9rem',
+                                      fontSize: 'var(--text-base)',
                                       color: 'var(--color-text-secondary)',
-                                      fontWeight: 500,
+                                      fontWeight:
+                                        'var(--weight-medium)' as React.CSSProperties['fontWeight'],
                                     }}
                                   >
                                     {winnerMovie.year}
@@ -844,9 +825,10 @@ const MovieDeck: React.FC<Props> = ({
                                 {winnerMovie.rating && (
                                   <span
                                     style={{
-                                      fontSize: '0.9rem',
+                                      fontSize: 'var(--text-base)',
                                       color: 'var(--color-green)',
-                                      fontWeight: 700,
+                                      fontWeight:
+                                        'var(--weight-bold)' as React.CSSProperties['fontWeight'],
                                     }}
                                   >
                                     ★ {winnerMovie.rating.toFixed(1)}
@@ -856,46 +838,30 @@ const MovieDeck: React.FC<Props> = ({
                             )}
                           </div>
 
-                          {/* Action buttons */}
                           <div style={{ display: 'flex', gap: '10px' }}>
-                            <button
+                            <Button
+                              variant="primary"
+                              size="md"
                               onClick={handleWatchThis}
                               style={{
-                                ...btnBase,
+                                borderRadius: 'var(--radius-pill)',
                                 padding: '13px 28px',
-                                background:
-                                  'linear-gradient(135deg, var(--color-accent) 0%, var(--color-accent-hover) 100%)',
-                                border: 'none',
-                                color: 'white',
                                 boxShadow: '0 0 24px rgba(255,128,0,0.3)',
                               }}
                             >
                               Watch This!
-                            </button>
-                            <button
+                            </Button>
+                            <Button
+                              variant="surface"
+                              size="md"
                               onClick={handleEliminate}
                               style={{
-                                ...btnBase,
+                                borderRadius: 'var(--radius-pill)',
                                 padding: '12px 20px',
-                                background: 'transparent',
-                                border: '1px solid var(--color-border)',
-                                color: 'var(--color-text-secondary)',
-                              }}
-                              onMouseEnter={(e) => {
-                                e.currentTarget.style.borderColor =
-                                  'var(--color-border-light)';
-                                e.currentTarget.style.color =
-                                  'var(--color-text)';
-                              }}
-                              onMouseLeave={(e) => {
-                                e.currentTarget.style.borderColor =
-                                  'var(--color-border)';
-                                e.currentTarget.style.color =
-                                  'var(--color-text-secondary)';
                               }}
                             >
-                              Eliminate & Shuffle Again
-                            </button>
+                              Eliminate &amp; Shuffle Again
+                            </Button>
                           </div>
                         </motion.div>
                       )}

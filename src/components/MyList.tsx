@@ -2,6 +2,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import React, { useEffect, useRef, useState } from 'react';
 
 import type { Movie } from '../types';
+import Button from './Button';
 import CSVUpload from './CSVUpload';
 import MovieModal from './MovieModal';
 import MovieSearch from './MovieSearch';
@@ -69,7 +70,6 @@ const RemoveModal: React.FC<RemoveModalProps> = (props) => {
         from your list?
       </>
     );
-  const confirmLabel = 'Remove';
 
   return (
     <motion.div
@@ -97,7 +97,7 @@ const RemoveModal: React.FC<RemoveModalProps> = (props) => {
         style={{
           background: 'var(--color-surface)',
           border: '1px solid var(--color-border)',
-          borderRadius: '14px',
+          borderRadius: 'var(--radius-lg)',
           padding: '24px',
           maxWidth: '360px',
           width: '100%',
@@ -106,8 +106,9 @@ const RemoveModal: React.FC<RemoveModalProps> = (props) => {
       >
         <p
           style={{
-            fontSize: '1rem',
-            fontWeight: 700,
+            fontSize: 'var(--text-md)',
+            fontWeight:
+              'var(--weight-bold)' as React.CSSProperties['fontWeight'],
             color: 'var(--color-text)',
           }}
         >
@@ -115,9 +116,10 @@ const RemoveModal: React.FC<RemoveModalProps> = (props) => {
         </p>
         <p
           style={{
-            fontSize: '0.875rem',
+            fontSize: 'var(--text-base)',
             color: 'var(--color-text-secondary)',
-            fontWeight: 500,
+            fontWeight:
+              'var(--weight-medium)' as React.CSSProperties['fontWeight'],
             marginTop: '8px',
             lineHeight: 1.5,
           }}
@@ -132,38 +134,12 @@ const RemoveModal: React.FC<RemoveModalProps> = (props) => {
             justifyContent: 'flex-end',
           }}
         >
-          <button
-            onClick={props.onCancel}
-            style={{
-              padding: '8px 16px',
-              borderRadius: '8px',
-              border: '1px solid var(--color-border)',
-              background: 'transparent',
-              color: 'var(--color-text-secondary)',
-              fontSize: '0.875rem',
-              fontWeight: 600,
-              fontFamily: 'var(--font-body)',
-              cursor: 'pointer',
-            }}
-          >
+          <Button variant="surface" size="sm" onClick={props.onCancel}>
             Cancel
-          </button>
-          <button
-            onClick={props.onConfirm}
-            style={{
-              padding: '8px 16px',
-              borderRadius: '8px',
-              border: 'none',
-              background: 'var(--color-danger)',
-              color: 'white',
-              fontSize: '0.875rem',
-              fontWeight: 700,
-              fontFamily: 'var(--font-body)',
-              cursor: 'pointer',
-            }}
-          >
-            {confirmLabel}
-          </button>
+          </Button>
+          <Button variant="danger" size="sm" onClick={props.onConfirm}>
+            Remove
+          </Button>
         </div>
       </motion.div>
     </motion.div>
@@ -253,87 +229,6 @@ const IconBtn: React.FC<{
   </button>
 );
 
-const ActionBtn: React.FC<{
-  onClick: () => void;
-  accent?: boolean;
-  danger?: boolean;
-  children: React.ReactNode;
-}> = ({ onClick, accent, danger, children }) => {
-  const borderColor = danger
-    ? 'var(--color-danger)'
-    : accent
-      ? 'var(--color-accent)'
-      : 'var(--color-border)';
-  const color = danger
-    ? 'var(--color-danger)'
-    : accent
-      ? 'var(--color-accent)'
-      : 'var(--color-text-secondary)';
-  const hoverBg = danger
-    ? 'rgba(229,83,83,0.1)'
-    : accent
-      ? 'rgba(255,128,0,0.08)'
-      : 'var(--color-surface-2)';
-  return (
-    <button
-      onClick={onClick}
-      style={{
-        padding: '5px 12px',
-        height: 32,
-        display: 'flex',
-        alignItems: 'center',
-        gap: '5px',
-        borderRadius: '7px',
-        border: `1px solid ${borderColor}`,
-        background: 'transparent',
-        color,
-        fontSize: '0.78rem',
-        fontWeight: 700,
-        fontFamily: 'var(--font-body)',
-        cursor: 'pointer',
-        whiteSpace: 'nowrap',
-        transition: 'background 0.15s',
-        letterSpacing: '0.01em',
-      }}
-      onMouseEnter={(e) => {
-        e.currentTarget.style.background = hoverBg;
-      }}
-      onMouseLeave={(e) => {
-        e.currentTarget.style.background = 'transparent';
-      }}
-    >
-      {children}
-    </button>
-  );
-};
-
-const PageSizeBtn: React.FC<{
-  n: number;
-  active: boolean;
-  onClick: () => void;
-}> = ({ n, active, onClick }) => (
-  <button
-    onClick={onClick}
-    style={{
-      minWidth: 36,
-      height: 32,
-      padding: '0 6px',
-      borderRadius: '6px',
-      border: '1px solid',
-      borderColor: active ? 'var(--color-accent)' : 'var(--color-border)',
-      background: active ? 'rgba(255,128,0,0.08)' : 'transparent',
-      color: active ? 'var(--color-accent)' : 'var(--color-text-secondary)',
-      fontSize: '0.78rem',
-      fontWeight: active ? 700 : 600,
-      fontFamily: 'var(--font-body)',
-      cursor: 'pointer',
-      transition: 'all 0.15s',
-    }}
-  >
-    {n}
-  </button>
-);
-
 // ── Pagination ────────────────────────────────────────────────────────────────
 
 function getPageSlots(current: number, total: number): (number | '…')[] {
@@ -359,37 +254,6 @@ const Pagination: React.FC<{
     onPageChange(p);
   };
 
-  const navStyle = (atBoundary: boolean): React.CSSProperties => ({
-    padding: '0 12px',
-    height: 32,
-    borderRadius: '6px',
-    border: '1px solid var(--color-border)',
-    background: 'transparent',
-    color: atBoundary ? 'var(--color-muted)' : 'var(--color-text-secondary)',
-    fontSize: '0.78rem',
-    fontWeight: 600,
-    fontFamily: 'var(--font-body)',
-    cursor: atBoundary ? 'default' : 'pointer',
-    opacity: atBoundary ? 0.4 : 1,
-    transition: 'background 0.15s',
-  });
-
-  const slotStyle = (isActive: boolean): React.CSSProperties => ({
-    minWidth: 32,
-    height: 32,
-    padding: '0 6px',
-    borderRadius: '6px',
-    border: '1px solid',
-    borderColor: isActive ? 'var(--color-accent)' : 'var(--color-border)',
-    background: isActive ? 'rgba(255,128,0,0.08)' : 'transparent',
-    color: isActive ? 'var(--color-accent)' : 'var(--color-text-secondary)',
-    fontSize: '0.8rem',
-    fontWeight: isActive ? 700 : 600,
-    fontFamily: 'var(--font-body)',
-    cursor: isActive ? 'default' : 'pointer',
-    transition: 'all 0.15s',
-  });
-
   return (
     <div
       style={{
@@ -399,19 +263,15 @@ const Pagination: React.FC<{
         gap: '4px',
       }}
     >
-      <button
+      <Button
+        variant="surface"
+        size="sm"
         onClick={() => changePage(page - 1)}
-        style={navStyle(page === 1)}
-        onMouseEnter={(e) => {
-          if (page !== 1)
-            e.currentTarget.style.background = 'var(--color-surface-2)';
-        }}
-        onMouseLeave={(e) => {
-          e.currentTarget.style.background = 'transparent';
-        }}
+        disabled={page === 1}
       >
         Previous
-      </button>
+      </Button>
+
       {slots.map((slot, i) =>
         slot === '…' ? (
           <span
@@ -422,43 +282,43 @@ const Pagination: React.FC<{
               display: 'inline-flex',
               alignItems: 'center',
               justifyContent: 'center',
-              fontSize: '0.8rem',
+              fontSize: 'var(--text-sm)',
               color: 'var(--color-muted)',
             }}
           >
             …
           </span>
         ) : (
-          <button
+          <Button
             key={slot}
+            variant="surface"
+            size="sm"
             onClick={() => changePage(slot as number)}
-            style={slotStyle(slot === page)}
-            onMouseEnter={(e) => {
-              if (slot !== page)
-                e.currentTarget.style.background = 'var(--color-surface-2)';
-            }}
-            onMouseLeave={(e) => {
-              if (slot !== page)
-                e.currentTarget.style.background = 'transparent';
-            }}
+            disabled={slot === page}
+            style={
+              slot === page
+                ? {
+                    borderColor: 'var(--color-accent)',
+                    color: 'var(--color-accent)',
+                    background: 'var(--color-accent-subtle)',
+                    cursor: 'default',
+                  }
+                : {}
+            }
           >
             {slot}
-          </button>
+          </Button>
         ),
       )}
-      <button
+
+      <Button
+        variant="surface"
+        size="sm"
         onClick={() => changePage(page + 1)}
-        style={navStyle(page === totalPages)}
-        onMouseEnter={(e) => {
-          if (page !== totalPages)
-            e.currentTarget.style.background = 'var(--color-surface-2)';
-        }}
-        onMouseLeave={(e) => {
-          e.currentTarget.style.background = 'transparent';
-        }}
+        disabled={page === totalPages}
       >
         Next
-      </button>
+      </Button>
     </div>
   );
 };
@@ -562,7 +422,7 @@ const MyList: React.FC<Props> = ({
             style={{
               background: 'var(--color-surface)',
               border: '1px solid var(--color-border)',
-              borderRadius: '12px',
+              borderRadius: 'var(--radius-lg)',
               overflow: 'hidden',
             }}
           >
@@ -578,8 +438,9 @@ const MyList: React.FC<Props> = ({
                 <>
                   <p
                     style={{
-                      fontSize: '0.78rem',
-                      fontWeight: 600,
+                      fontSize: 'var(--text-sm)',
+                      fontWeight:
+                        'var(--weight-medium)' as React.CSSProperties['fontWeight'],
                       color: 'var(--color-text-secondary)',
                       marginRight: '12px',
                     }}
@@ -589,7 +450,7 @@ const MyList: React.FC<Props> = ({
                   <div
                     style={{
                       display: 'flex',
-                      borderRadius: '7px',
+                      borderRadius: 'var(--radius-md)',
                       border: '1px solid var(--color-border)',
                       overflow: 'hidden',
                     }}
@@ -598,11 +459,11 @@ const MyList: React.FC<Props> = ({
                       const isMerge = mode === 'merge';
                       const isActive = importMode === mode;
                       const activeColor = isMerge
-                        ? '#42A5F5'
+                        ? 'var(--color-blue)'
                         : 'var(--color-danger)';
                       const activeBg = isMerge
-                        ? 'rgba(66,165,245,0.12)'
-                        : 'rgba(229,83,83,0.12)';
+                        ? 'var(--color-blue-subtle)'
+                        : 'var(--color-danger-subtle)';
                       return (
                         <button
                           key={mode}
@@ -617,8 +478,9 @@ const MyList: React.FC<Props> = ({
                             color: isActive
                               ? activeColor
                               : 'var(--color-text-secondary)',
-                            fontSize: '0.775rem',
-                            fontWeight: 700,
+                            fontSize: 'var(--text-sm)',
+                            fontWeight:
+                              'var(--weight-bold)' as React.CSSProperties['fontWeight'],
                             fontFamily: 'var(--font-body)',
                             cursor: 'pointer',
                             transition: 'all 0.15s',
@@ -637,7 +499,7 @@ const MyList: React.FC<Props> = ({
                     background: 'transparent',
                     border: 'none',
                     color: 'var(--color-muted)',
-                    fontSize: '0.9rem',
+                    fontSize: 'var(--text-base)',
                     cursor: 'pointer',
                     fontFamily: 'var(--font-body)',
                     padding: '2px 4px',
@@ -677,16 +539,17 @@ const MyList: React.FC<Props> = ({
             alignItems: 'center',
             justifyContent: 'space-between',
             padding: '10px 14px',
-            background: 'rgba(229,83,83,0.08)',
+            background: 'var(--color-danger-subtle)',
             border: '1px solid rgba(229,83,83,0.3)',
-            borderRadius: '8px',
+            borderRadius: 'var(--radius-md)',
           }}
         >
           <p
             style={{
-              fontSize: '0.825rem',
+              fontSize: 'var(--text-sm)',
               color: 'var(--color-danger)',
-              fontWeight: 600,
+              fontWeight:
+                'var(--weight-medium)' as React.CSSProperties['fontWeight'],
             }}
           >
             {error}
@@ -698,7 +561,7 @@ const MyList: React.FC<Props> = ({
               border: 'none',
               color: 'var(--color-danger)',
               cursor: 'pointer',
-              fontSize: '0.8rem',
+              fontSize: 'var(--text-sm)',
               fontFamily: 'var(--font-body)',
               opacity: 0.7,
             }}
@@ -729,8 +592,9 @@ const MyList: React.FC<Props> = ({
           <div>
             <p
               style={{
-                fontSize: '1rem',
-                fontWeight: 700,
+                fontSize: 'var(--text-md)',
+                fontWeight:
+                  'var(--weight-bold)' as React.CSSProperties['fontWeight'],
                 color: 'var(--color-text)',
               }}
             >
@@ -738,31 +602,19 @@ const MyList: React.FC<Props> = ({
             </p>
             <p
               style={{
-                fontSize: '0.85rem',
+                fontSize: 'var(--text-base)',
                 color: 'var(--color-text-secondary)',
-                fontWeight: 500,
+                fontWeight:
+                  'var(--weight-medium)' as React.CSSProperties['fontWeight'],
                 marginTop: '4px',
               }}
             >
               Import a CSV file, or use the search bar above to add some movies.
             </p>
           </div>
-          <button
-            onClick={openImport}
-            style={{
-              padding: '10px 24px',
-              background: 'transparent',
-              border: '1px solid var(--color-accent)',
-              borderRadius: '10px',
-              color: 'var(--color-accent)',
-              fontSize: '0.875rem',
-              fontWeight: 700,
-              fontFamily: 'var(--font-body)',
-              cursor: 'pointer',
-            }}
-          >
+          <Button variant="secondary" size="md" onClick={openImport}>
             Import CSV
-          </button>
+          </Button>
         </div>
       )}
 
@@ -791,8 +643,9 @@ const MyList: React.FC<Props> = ({
                 <>
                   <span
                     style={{
-                      fontSize: '0.825rem',
-                      fontWeight: 700,
+                      fontSize: 'var(--text-sm)',
+                      fontWeight:
+                        'var(--weight-bold)' as React.CSSProperties['fontWeight'],
                       color: 'var(--color-text-secondary)',
                       whiteSpace: 'nowrap',
                       minWidth: '90px',
@@ -800,30 +653,41 @@ const MyList: React.FC<Props> = ({
                   >
                     {selectedCount} selected
                   </span>
-                  <ActionBtn
+                  <Button
+                    variant="danger"
+                    size="sm"
                     onClick={() => {
                       if (selectedCount > 0) setConfirmBulkRemove(true);
                     }}
-                    danger
                   >
                     Remove
-                  </ActionBtn>
-                  <ActionBtn onClick={() => setSelectMode(false)}>
+                  </Button>
+                  <Button
+                    variant="surface"
+                    size="sm"
+                    onClick={() => setSelectMode(false)}
+                  >
                     Cancel
-                  </ActionBtn>
+                  </Button>
                 </>
               ) : (
                 <>
                   <span
                     style={{
-                      fontSize: '0.825rem',
-                      fontWeight: 700,
+                      fontSize: 'var(--text-sm)',
+                      fontWeight:
+                        'var(--weight-bold)' as React.CSSProperties['fontWeight'],
                       color: 'var(--color-text-secondary)',
                       whiteSpace: 'nowrap',
                     }}
                   >
                     {movies.length}{' '}
-                    <span style={{ fontWeight: 500 }}>
+                    <span
+                      style={{
+                        fontWeight:
+                          'var(--weight-medium)' as React.CSSProperties['fontWeight'],
+                      }}
+                    >
                       {movies.length === 1 ? 'Movie' : 'Movies'}
                     </span>
                   </span>
@@ -835,11 +699,19 @@ const MyList: React.FC<Props> = ({
                       flexShrink: 0,
                     }}
                   />
-                  <ActionBtn onClick={() => setSelectMode(true)}>
+                  <Button
+                    variant="surface"
+                    size="sm"
+                    onClick={() => setSelectMode(true)}
+                  >
                     Select
-                  </ActionBtn>
-                  <ActionBtn onClick={openImport}>↑ Import</ActionBtn>
-                  <ActionBtn onClick={onExport}>↓ Export</ActionBtn>
+                  </Button>
+                  <Button variant="surface" size="sm" onClick={openImport}>
+                    ↑ Import
+                  </Button>
+                  <Button variant="surface" size="sm" onClick={onExport}>
+                    ↓ Export
+                  </Button>
                 </>
               )}
             </div>
@@ -856,8 +728,9 @@ const MyList: React.FC<Props> = ({
             >
               <span
                 style={{
-                  fontSize: '0.75rem',
-                  fontWeight: 600,
+                  fontSize: 'var(--text-xs)',
+                  fontWeight:
+                    'var(--weight-medium)' as React.CSSProperties['fontWeight'],
                   color: 'var(--color-muted)',
                   whiteSpace: 'nowrap',
                   marginRight: '2px',
@@ -866,15 +739,26 @@ const MyList: React.FC<Props> = ({
                 Per page
               </span>
               {PAGE_SIZE_OPTIONS.map((n) => (
-                <PageSizeBtn
+                <Button
                   key={n}
-                  n={n}
-                  active={n === pageSize}
+                  variant="surface"
+                  size="sm"
                   onClick={() => {
                     setPageSize(n);
                     setPage(1);
                   }}
-                />
+                  style={
+                    n === pageSize
+                      ? {
+                          borderColor: 'var(--color-accent)',
+                          color: 'var(--color-accent)',
+                          background: 'var(--color-accent-subtle)',
+                        }
+                      : {}
+                  }
+                >
+                  {n}
+                </Button>
               ))}
               <div
                 style={{

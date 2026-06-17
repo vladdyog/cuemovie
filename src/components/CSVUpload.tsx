@@ -56,8 +56,9 @@ const ExportGuide: React.FC = () => {
           background: 'transparent',
           border: 'none',
           color: open ? 'var(--color-text)' : 'var(--color-text-secondary)',
-          fontSize: '0.8rem',
-          fontWeight: 550,
+          fontSize: 'var(--text-sm)',
+          fontWeight:
+            'var(--weight-medium)' as React.CSSProperties['fontWeight'],
           fontFamily: 'var(--font-body)',
           cursor: 'pointer',
           transition: 'color 0.15s',
@@ -76,7 +77,7 @@ const ExportGuide: React.FC = () => {
             display: 'inline-block',
             transition: 'transform 0.2s',
             transform: open ? 'rotate(90deg)' : 'rotate(0deg)',
-            fontSize: '0.6rem',
+            fontSize: 'var(--text-xs)',
           }}
         >
           ▶
@@ -99,14 +100,15 @@ const ExportGuide: React.FC = () => {
                 style={{
                   background: 'var(--color-surface-2)',
                   border: '1px solid var(--color-border)',
-                  borderRadius: '10px',
+                  borderRadius: 'var(--radius-md)',
                   padding: '14px 16px',
                 }}
               >
                 <p
                   style={{
-                    fontSize: '0.9rem',
-                    fontWeight: 700,
+                    fontSize: 'var(--text-base)',
+                    fontWeight:
+                      'var(--weight-bold)' as React.CSSProperties['fontWeight'],
                     letterSpacing: '0.1em',
                     textTransform: 'uppercase',
                     color: 'var(--color-accent)',
@@ -123,8 +125,9 @@ const ExportGuide: React.FC = () => {
                   style={{
                     display: 'block',
                     textAlign: 'center',
-                    fontSize: '0.78rem',
-                    fontWeight: 500,
+                    fontSize: 'var(--text-xs)',
+                    fontWeight:
+                      'var(--weight-medium)' as React.CSSProperties['fontWeight'],
                     color: 'var(--color-accent)',
                     opacity: 0.7,
                     textDecoration: 'underline',
@@ -151,7 +154,7 @@ const ExportGuide: React.FC = () => {
                       style={{
                         display: 'flex',
                         gap: '7px',
-                        fontSize: '0.80rem',
+                        fontSize: 'var(--text-sm)',
                         color: 'var(--color-text-secondary)',
                         lineHeight: 1.5,
                       }}
@@ -160,7 +163,8 @@ const ExportGuide: React.FC = () => {
                         style={{
                           color: 'var(--color-accent)',
                           flexShrink: 0,
-                          fontWeight: 700,
+                          fontWeight:
+                            'var(--weight-bold)' as React.CSSProperties['fontWeight'],
                         }}
                       >
                         {i + 1}.
@@ -176,7 +180,7 @@ const ExportGuide: React.FC = () => {
           <div style={{ marginTop: '24px', textAlign: 'center' }}>
             <p
               style={{
-                fontSize: '0.80rem',
+                fontSize: 'var(--text-sm)',
                 color: 'var(--color-text-secondary)',
                 lineHeight: 1.7,
                 marginBottom: '10px',
@@ -187,7 +191,7 @@ const ExportGuide: React.FC = () => {
             </p>
             <p
               style={{
-                fontSize: '0.80rem',
+                fontSize: 'var(--text-sm)',
                 color: 'var(--color-text-secondary)',
                 lineHeight: 1.7,
               }}
@@ -216,7 +220,6 @@ const CSVUpload: React.FC<Props> = ({
   const [isParsing, setIsParsing] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  // Smooth progress - RAF loop that chases the real value each frame.
   const [smoothPct, setSmoothPct] = useState(0);
   const targetPctRef = useRef(0);
 
@@ -282,7 +285,7 @@ const CSVUpload: React.FC<Props> = ({
   };
 
   const cardStyle: React.CSSProperties = {
-    borderRadius: '12px',
+    borderRadius: 'var(--radius-lg)',
     border: '1px solid var(--color-border)',
     background: 'var(--color-surface)',
   };
@@ -323,8 +326,9 @@ const CSVUpload: React.FC<Props> = ({
         <div>
           <p
             style={{
-              fontSize: '0.95rem',
-              fontWeight: 600,
+              fontSize: 'var(--text-md)',
+              fontWeight:
+                'var(--weight-medium)' as React.CSSProperties['fontWeight'],
               color: 'var(--color-text)',
             }}
           >
@@ -332,7 +336,7 @@ const CSVUpload: React.FC<Props> = ({
           </p>
           <p
             style={{
-              fontSize: '0.8rem',
+              fontSize: 'var(--text-sm)',
               color: 'var(--color-text-secondary)',
               marginTop: '2px',
             }}
@@ -360,17 +364,19 @@ const CSVUpload: React.FC<Props> = ({
         >
           <p
             style={{
-              fontSize: '0.9rem',
+              fontSize: 'var(--text-base)',
               color: 'var(--color-text-secondary)',
-              fontWeight: 500,
+              fontWeight:
+                'var(--weight-medium)' as React.CSSProperties['fontWeight'],
             }}
           >
             {msg}
           </p>
           <p
             style={{
-              fontSize: '0.9rem',
-              fontWeight: 700,
+              fontSize: 'var(--text-base)',
+              fontWeight:
+                'var(--weight-bold)' as React.CSSProperties['fontWeight'],
               color: 'var(--color-accent)',
               whiteSpace: 'nowrap',
             }}
@@ -381,7 +387,7 @@ const CSVUpload: React.FC<Props> = ({
         <div
           style={{
             height: '6px',
-            borderRadius: '3px',
+            borderRadius: 'var(--radius-sm)',
             background: 'var(--color-border)',
             overflow: 'hidden',
           }}
@@ -390,7 +396,7 @@ const CSVUpload: React.FC<Props> = ({
             style={{
               height: '100%',
               width: `${smoothPct}%`,
-              borderRadius: '3px',
+              borderRadius: 'var(--radius-sm)',
               background:
                 'linear-gradient(to right, var(--color-accent), var(--color-accent-hover))',
             }}
@@ -398,10 +404,11 @@ const CSVUpload: React.FC<Props> = ({
         </div>
         <p
           style={{
-            fontSize: '0.8rem',
+            fontSize: 'var(--text-sm)',
             color: 'var(--color-muted)',
             marginTop: '8px',
-            fontWeight: 600,
+            fontWeight:
+              'var(--weight-medium)' as React.CSSProperties['fontWeight'],
           }}
         >
           {Math.round(smoothPct)}% complete
@@ -414,7 +421,6 @@ const CSVUpload: React.FC<Props> = ({
   if (movieCount > 0) {
     return (
       <div>
-        {/* Main card */}
         <div
           onClick={() => inputRef.current?.click()}
           onDrop={handleDrop}
@@ -435,13 +441,13 @@ const CSVUpload: React.FC<Props> = ({
                 width: 36,
                 height: 36,
                 borderRadius: '50%',
-                background: 'rgba(255,128,0,0.12)',
+                background: 'var(--color-accent-subtle)',
                 border: '1px solid rgba(255,128,0,0.3)',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
                 color: 'var(--color-accent)',
-                fontSize: '1rem',
+                fontSize: 'var(--text-md)',
                 flexShrink: 0,
               }}
             >
@@ -450,8 +456,9 @@ const CSVUpload: React.FC<Props> = ({
             <div>
               <p
                 style={{
-                  fontSize: '0.95rem',
-                  fontWeight: 700,
+                  fontSize: 'var(--text-md)',
+                  fontWeight:
+                    'var(--weight-bold)' as React.CSSProperties['fontWeight'],
                   color: 'var(--color-text)',
                 }}
               >
@@ -459,10 +466,11 @@ const CSVUpload: React.FC<Props> = ({
               </p>
               <p
                 style={{
-                  fontSize: '0.8rem',
+                  fontSize: 'var(--text-sm)',
                   color: 'var(--color-text-secondary)',
                   marginTop: '2px',
-                  fontWeight: 500,
+                  fontWeight:
+                    'var(--weight-medium)' as React.CSSProperties['fontWeight'],
                 }}
               >
                 {movieCount} Movies
@@ -474,9 +482,10 @@ const CSVUpload: React.FC<Props> = ({
           </div>
           <span
             style={{
-              fontSize: '0.8rem',
+              fontSize: 'var(--text-sm)',
               color: 'var(--color-muted)',
-              fontWeight: 600,
+              fontWeight:
+                'var(--weight-medium)' as React.CSSProperties['fontWeight'],
               flexShrink: 0,
             }}
           >
@@ -491,7 +500,6 @@ const CSVUpload: React.FC<Props> = ({
           />
         </div>
 
-        {/* Download link */}
         {onExport && (
           <div style={{ marginTop: '10px', textAlign: 'center' }}>
             <button
@@ -504,8 +512,9 @@ const CSVUpload: React.FC<Props> = ({
                 display: 'inline-flex',
                 alignItems: 'center',
                 gap: '5px',
-                fontSize: '0.8rem',
-                fontWeight: 600,
+                fontSize: 'var(--text-sm)',
+                fontWeight:
+                  'var(--weight-medium)' as React.CSSProperties['fontWeight'],
                 fontFamily: 'var(--font-body)',
                 color: 'var(--color-muted)',
                 transition: 'color 0.15s',
@@ -517,7 +526,7 @@ const CSVUpload: React.FC<Props> = ({
                 (e.currentTarget.style.color = 'var(--color-muted)')
               }
             >
-              <span style={{ fontSize: '0.75rem' }}>↓</span>
+              <span style={{ fontSize: 'var(--text-xs)' }}>↓</span>
               Download Current List
             </button>
           </div>
@@ -526,7 +535,7 @@ const CSVUpload: React.FC<Props> = ({
     );
   }
 
-  // Empty dropzone + export guide
+  // Empty dropzone
   return (
     <>
       <div
@@ -535,10 +544,10 @@ const CSVUpload: React.FC<Props> = ({
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         style={{
-          borderRadius: '12px',
+          borderRadius: 'var(--radius-lg)',
           border: `2px dashed ${isDragging ? 'var(--color-accent)' : 'var(--color-border)'}`,
           background: isDragging
-            ? 'rgba(255,128,0,0.04)'
+            ? 'var(--color-accent-subtle)'
             : 'var(--color-surface)',
           padding: '48px 24px',
           textAlign: 'center',
@@ -556,7 +565,7 @@ const CSVUpload: React.FC<Props> = ({
       >
         <div
           style={{
-            fontSize: '2.5rem',
+            fontSize: 'var(--text-display)',
             marginBottom: '16px',
             filter: isDragging ? 'none' : 'grayscale(1)',
             opacity: isDragging ? 1 : 0.5,
@@ -568,8 +577,9 @@ const CSVUpload: React.FC<Props> = ({
         </div>
         <p
           style={{
-            fontSize: '1rem',
-            fontWeight: 700,
+            fontSize: 'var(--text-md)',
+            fontWeight:
+              'var(--weight-bold)' as React.CSSProperties['fontWeight'],
             color: 'var(--color-text)',
             marginBottom: '6px',
           }}
@@ -578,19 +588,21 @@ const CSVUpload: React.FC<Props> = ({
         </p>
         <p
           style={{
-            fontSize: '0.875rem',
+            fontSize: 'var(--text-base)',
             color: 'var(--color-text-secondary)',
-            fontWeight: 500,
+            fontWeight:
+              'var(--weight-medium)' as React.CSSProperties['fontWeight'],
           }}
         >
           ...or click to browse
         </p>
         <p
           style={{
-            fontSize: '0.8rem',
+            fontSize: 'var(--text-sm)',
             color: 'var(--color-muted)',
             marginTop: '8px',
-            fontWeight: 500,
+            fontWeight:
+              'var(--weight-medium)' as React.CSSProperties['fontWeight'],
           }}
         >
           We support both IMDb and Letterboxd exports!

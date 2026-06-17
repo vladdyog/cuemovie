@@ -2,12 +2,14 @@ import { Analytics } from '@vercel/analytics/react';
 import { AnimatePresence } from 'framer-motion';
 import React, { useEffect, useState } from 'react';
 
+import Button from './components/Button';
 import FeedbackButton from './components/FeedbackButton';
 import MovieDeck from './components/MovieDeck';
 import MovieFilters from './components/MovieFilters';
 import MovieModal from './components/MovieModal';
 import MoviePicker from './components/MoviePicker';
 import MyList from './components/MyList';
+import SectionLabel from './components/SectionLabel';
 import SupportButton from './components/SupportButton';
 import TMDBAttribution from './components/TMDBAttribution';
 import TonightsPick from './components/TonightsPick';
@@ -285,23 +287,14 @@ const App: React.FC = () => {
                   </p>
                 </div>
 
-                <button
+                <Button
+                  variant="secondary"
+                  size="md"
                   onClick={() => setActiveTab('list')}
-                  style={{
-                    padding: '10px 24px',
-                    background: 'transparent',
-                    border: '1px solid var(--color-accent)',
-                    borderRadius: '10px',
-                    color: 'var(--color-accent)',
-                    fontSize: '0.875rem',
-                    fontWeight: 700,
-                    fontFamily: 'var(--font-body)',
-                    cursor: 'pointer',
-                    marginTop: '4px',
-                  }}
+                  style={{ marginTop: '4px' }}
                 >
                   Go to My List
-                </button>
+                </Button>
               </div>
             ) : (
               <>
@@ -508,25 +501,6 @@ const TabButton: React.FC<{
   >
     {children}
   </button>
-);
-
-/* Section heading */
-const SectionLabel: React.FC<{
-  children: React.ReactNode;
-  noMargin?: boolean;
-}> = ({ children, noMargin }) => (
-  <h2
-    style={{
-      fontSize: '0.8rem',
-      fontWeight: 700,
-      letterSpacing: '0.12em',
-      textTransform: 'uppercase',
-      color: 'var(--color-accent)',
-      marginBottom: noMargin ? 0 : '18px',
-    }}
-  >
-    {children}
-  </h2>
 );
 
 /* Deck mode toggle knob and label */

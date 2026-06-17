@@ -71,7 +71,7 @@ const MovieModal: React.FC<Props> = ({ movie, onClose }) => {
               background: 'var(--color-surface-2)',
               border: '1px solid var(--color-border-light)',
               color: 'var(--color-text-secondary)',
-              fontSize: '0.875rem',
+              fontSize: 'var(--text-base)',
               cursor: 'pointer',
               display: 'flex',
               alignItems: 'center',
@@ -94,7 +94,7 @@ const MovieModal: React.FC<Props> = ({ movie, onClose }) => {
           </button>
 
           {/* Card */}
-          <div style={{ overflowY: 'auto', borderRadius: '14px' }}>
+          <div style={{ overflowY: 'auto', borderRadius: 'var(--radius-lg)' }}>
             <MovieCard movie={movie} />
           </div>
 
@@ -102,10 +102,11 @@ const MovieModal: React.FC<Props> = ({ movie, onClose }) => {
           <p
             style={{
               textAlign: 'center',
-              fontSize: '0.78rem',
+              fontSize: 'var(--text-sm)',
               color: 'var(--color-muted)',
               marginTop: '14px',
-              fontWeight: 500,
+              fontWeight:
+                'var(--weight-medium)' as React.CSSProperties['fontWeight'],
               flexShrink: 0,
             }}
           >
@@ -115,8 +116,8 @@ const MovieModal: React.FC<Props> = ({ movie, onClose }) => {
                 padding: '2px 7px',
                 background: 'var(--color-surface-2)',
                 border: '1px solid var(--color-border-light)',
-                borderRadius: '5px',
-                fontSize: '0.75rem',
+                borderRadius: 'var(--radius-sm)',
+                fontSize: 'var(--text-xs)',
                 color: 'var(--color-text-secondary)',
                 fontFamily: 'var(--font-body)',
               }}

@@ -2,7 +2,8 @@ import { motion } from 'framer-motion';
 import React from 'react';
 
 import type { Movie } from '../types';
-import MovieCard from './MovieCard';
+import Button from './ui/Button';
+import MovieCard from './ui/MovieCard';
 
 type Props = {
   movie: Movie;
@@ -33,8 +34,8 @@ const TonightsPick: React.FC<Props> = ({ movie, onCardClick, onRemove }) => (
       />
       <p
         style={{
-          fontSize: '0.75rem',
-          fontWeight: 700,
+          fontSize: 'var(--text-xs)',
+          fontWeight: 'var(--weight-bold)' as React.CSSProperties['fontWeight'],
           letterSpacing: '0.1em',
           textTransform: 'uppercase',
           color: 'var(--color-accent)',
@@ -56,10 +57,10 @@ const TonightsPick: React.FC<Props> = ({ movie, onCardClick, onRemove }) => (
     <p
       style={{
         textAlign: 'center',
-        fontSize: '0.8rem',
+        fontSize: 'var(--text-sm)',
         color: 'var(--color-muted)',
         marginTop: '10px',
-        fontWeight: 500,
+        fontWeight: 'var(--weight-medium)' as React.CSSProperties['fontWeight'],
       }}
     >
       Click to Expand
@@ -68,33 +69,32 @@ const TonightsPick: React.FC<Props> = ({ movie, onCardClick, onRemove }) => (
     {/* Watch & remove */}
     {onRemove && (
       <div style={{ textAlign: 'center', marginTop: '10px' }}>
-        <button
+        <Button
+          variant="surface"
+          size="sm"
           onClick={() => onRemove(movie)}
           style={{
-            background: 'transparent',
-            border: '1px solid var(--color-border)',
-            borderRadius: '8px',
-            padding: '6px 16px',
-            cursor: 'pointer',
-            fontSize: '0.78rem',
-            fontWeight: 600,
-            fontFamily: 'var(--font-body)',
-            color: 'var(--color-text-secondary)',
-            transition: 'all 0.15s',
+            borderRadius: 'var(--radius-md)',
           }}
           onMouseEnter={(e) => {
-            e.currentTarget.style.borderColor = 'var(--color-danger)';
-            e.currentTarget.style.color = 'var(--color-danger)';
-            e.currentTarget.style.background = 'rgba(239,68,68,0.06)';
+            (e.currentTarget as HTMLButtonElement).style.borderColor =
+              'var(--color-danger)';
+            (e.currentTarget as HTMLButtonElement).style.color =
+              'var(--color-danger)';
+            (e.currentTarget as HTMLButtonElement).style.background =
+              'var(--color-danger-subtle)';
           }}
           onMouseLeave={(e) => {
-            e.currentTarget.style.borderColor = 'var(--color-border)';
-            e.currentTarget.style.color = 'var(--color-text-secondary)';
-            e.currentTarget.style.background = 'transparent';
+            (e.currentTarget as HTMLButtonElement).style.borderColor =
+              'var(--color-border)';
+            (e.currentTarget as HTMLButtonElement).style.color =
+              'var(--color-text-secondary)';
+            (e.currentTarget as HTMLButtonElement).style.background =
+              'var(--color-surface-2)';
           }}
         >
           Watch &amp; Remove From List
-        </button>
+        </Button>
       </div>
     )}
   </motion.div>

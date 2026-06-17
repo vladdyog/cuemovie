@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 
 import type { Movie } from '../types';
-import GenrePill from './GenrePill';
+import Button from './ui/Button';
+import GenrePill from './ui/GenrePill';
 
 type Props = {
   movies: Movie[];
@@ -44,13 +45,13 @@ const MovieRow: React.FC<{
         display: 'flex',
         alignItems: 'center',
         gap: '12px',
-        padding: '10px 10px',
+        padding: '10px',
         borderBottom: '1px solid var(--color-border)',
         cursor: 'pointer',
-        borderRadius: '6px',
+        borderRadius: 'var(--radius-md)',
         transition: 'background 0.1s',
         background: selected
-          ? 'rgba(255,128,0,0.06)'
+          ? 'var(--color-accent-subtle)'
           : hovered
             ? 'var(--color-surface-2)'
             : 'transparent',
@@ -59,7 +60,7 @@ const MovieRow: React.FC<{
       onMouseLeave={() => setHovered(false)}
       onClick={handleClick}
     >
-      {/* Checkbox — visible in select mode or on hover */}
+      {/* Checkbox — visible in select mode */}
       {selectMode && (
         <div
           onClick={(e) => {
@@ -70,7 +71,7 @@ const MovieRow: React.FC<{
             flexShrink: 0,
             width: '18px',
             height: '18px',
-            borderRadius: '4px',
+            borderRadius: 'var(--radius-sm)',
             border: `2px solid ${selected ? 'var(--color-accent)' : 'var(--color-border-light)'}`,
             background: selected ? 'var(--color-accent)' : 'transparent',
             display: 'flex',
@@ -92,7 +93,7 @@ const MovieRow: React.FC<{
           )}
         </div>
       )}
-      {/* Spacer when checkbox is hidden to keep layout stable */}
+      {/* Spacer when checkbox hidden to keep layout stable */}
       {!selectMode && <div style={{ flexShrink: 0, width: '18px' }} />}
 
       {/* Poster thumbnail */}
@@ -101,7 +102,7 @@ const MovieRow: React.FC<{
           width: 42,
           height: 63,
           flexShrink: 0,
-          borderRadius: '4px',
+          borderRadius: 'var(--radius-sm)',
           overflow: 'hidden',
           background: 'var(--color-surface-2)',
           border: '1px solid var(--color-border)',
@@ -126,7 +127,7 @@ const MovieRow: React.FC<{
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              fontSize: '1rem',
+              fontSize: 'var(--text-md)',
               opacity: 0.4,
             }}
           >
@@ -139,8 +140,9 @@ const MovieRow: React.FC<{
       <div style={{ flex: 1, minWidth: 0 }}>
         <p
           style={{
-            fontSize: '0.875rem',
-            fontWeight: 700,
+            fontSize: 'var(--text-base)',
+            fontWeight:
+              'var(--weight-bold)' as React.CSSProperties['fontWeight'],
             color: 'var(--color-text)',
             overflow: 'hidden',
             textOverflow: 'ellipsis',
@@ -162,9 +164,10 @@ const MovieRow: React.FC<{
           {movie.year && (
             <span
               style={{
-                fontSize: '0.775rem',
+                fontSize: 'var(--text-xs)',
                 color: 'var(--color-text-secondary)',
-                fontWeight: 500,
+                fontWeight:
+                  'var(--weight-medium)' as React.CSSProperties['fontWeight'],
               }}
             >
               {movie.year}
@@ -173,9 +176,10 @@ const MovieRow: React.FC<{
           {movie.rating !== undefined && (
             <span
               style={{
-                fontSize: '0.775rem',
-                color: 'var(--color-text-secondary)',
-                fontWeight: 500,
+                fontSize: 'var(--text-xs)',
+                color: 'var(--color-green)',
+                fontWeight:
+                  'var(--weight-bold)' as React.CSSProperties['fontWeight'],
               }}
             >
               ★ {movie.rating.toFixed(1)}
@@ -184,9 +188,10 @@ const MovieRow: React.FC<{
           {movie.runtime ? (
             <span
               style={{
-                fontSize: '0.775rem',
+                fontSize: 'var(--text-xs)',
                 color: 'var(--color-muted)',
-                fontWeight: 500,
+                fontWeight:
+                  'var(--weight-medium)' as React.CSSProperties['fontWeight'],
               }}
             >
               {formatRuntime(movie.runtime)}
@@ -211,42 +216,37 @@ const MovieRow: React.FC<{
 
       {/* Remove button — only in non-select mode */}
       {!selectMode && (
-        <button
+        <Button
+          variant="surface"
+          size="sm"
           onClick={(e) => {
             e.stopPropagation();
             onRemove(movie);
           }}
           style={{
             flexShrink: 0,
-            padding: '5px 10px',
-            borderRadius: '6px',
-            border: '1px solid var(--color-border)',
-            background: 'transparent',
-            color: 'var(--color-muted)',
-            fontSize: '0.75rem',
-            fontWeight: 600,
-            fontFamily: 'var(--font-body)',
-            cursor: 'pointer',
-            letterSpacing: '0.01em',
             opacity: hovered ? 1 : 0,
-            transition:
-              'opacity 0.15s, background 0.15s, border-color 0.15s, color 0.15s',
             pointerEvents: hovered ? 'auto' : 'none',
-            whiteSpace: 'nowrap',
           }}
           onMouseEnter={(e) => {
-            e.currentTarget.style.background = 'rgba(229,83,83,0.1)';
-            e.currentTarget.style.borderColor = 'var(--color-danger)';
-            e.currentTarget.style.color = 'var(--color-danger)';
+            (e.currentTarget as HTMLButtonElement).style.background =
+              'var(--color-danger-subtle)';
+            (e.currentTarget as HTMLButtonElement).style.borderColor =
+              'var(--color-danger)';
+            (e.currentTarget as HTMLButtonElement).style.color =
+              'var(--color-danger)';
           }}
           onMouseLeave={(e) => {
-            e.currentTarget.style.background = 'transparent';
-            e.currentTarget.style.borderColor = 'var(--color-border)';
-            e.currentTarget.style.color = 'var(--color-muted)';
+            (e.currentTarget as HTMLButtonElement).style.background =
+              'var(--color-surface-2)';
+            (e.currentTarget as HTMLButtonElement).style.borderColor =
+              'var(--color-border)';
+            (e.currentTarget as HTMLButtonElement).style.color =
+              'var(--color-text-secondary)';
           }}
         >
           Remove
-        </button>
+        </Button>
       )}
     </div>
   );

@@ -5,12 +5,14 @@ import React, { useEffect, useState } from 'react';
 import FeedbackButton from './components/FeedbackButton';
 import MovieDeck from './components/MovieDeck';
 import MovieFilters from './components/MovieFilters';
-import MovieModal from './components/MovieModal';
 import MoviePicker from './components/MoviePicker';
 import MyList from './components/MyList';
 import SupportButton from './components/SupportButton';
 import TMDBAttribution from './components/TMDBAttribution';
 import TonightsPick from './components/TonightsPick';
+import Button from './components/ui/Button';
+import MovieModal from './components/ui/MovieModal';
+import SectionLabel from './components/ui/SectionLabel';
 import type { FilterOptions, Movie } from './types';
 import { exportWatchlistCSV, filterMovies } from './utils';
 import { enrichAllMovies } from './utils/tmdb';
@@ -162,8 +164,9 @@ const App: React.FC = () => {
           <h1
             style={{
               fontFamily: 'var(--font-display)',
-              fontSize: '2.5rem',
-              fontWeight: 800,
+              fontSize: 'var(--text-display)',
+              fontWeight:
+                'var(--weight-display)' as React.CSSProperties['fontWeight'],
               color: 'var(--color-text)',
               lineHeight: 1.05,
               letterSpacing: '-0.04em',
@@ -173,10 +176,11 @@ const App: React.FC = () => {
           </h1>
           <p
             style={{
-              fontSize: '0.9rem',
+              fontSize: 'var(--text-base)',
               color: 'var(--color-text-secondary)',
               marginTop: '6px',
-              fontWeight: 500,
+              fontWeight:
+                'var(--weight-medium)' as React.CSSProperties['fontWeight'],
             }}
           >
             From your watchlist to tonight's pick
@@ -196,15 +200,16 @@ const App: React.FC = () => {
               {movies.length > 0 && (
                 <span
                   style={{
-                    fontSize: '0.7rem',
-                    fontWeight: 700,
+                    fontSize: 'var(--text-xs)',
+                    fontWeight:
+                      'var(--weight-bold)' as React.CSSProperties['fontWeight'],
                     color:
                       activeTab === 'list'
                         ? 'var(--color-accent)'
                         : 'var(--color-muted)',
                     background: 'var(--color-surface-2)',
                     border: '1px solid var(--color-border)',
-                    borderRadius: '10px',
+                    borderRadius: 'var(--radius-pill)',
                     padding: '1px 7px',
                     transition: 'color 0.15s',
                   }}
@@ -260,13 +265,18 @@ const App: React.FC = () => {
                   padding: '60px 0',
                 }}
               >
-                <span style={{ fontSize: '2.5rem', opacity: 0.35 }}>🎬</span>
+                <span
+                  style={{ fontSize: 'var(--text-display)', opacity: 0.35 }}
+                >
+                  🎬
+                </span>
 
                 <div>
                   <p
                     style={{
-                      fontSize: '1rem',
-                      fontWeight: 700,
+                      fontSize: 'var(--text-md)',
+                      fontWeight:
+                        'var(--weight-bold)' as React.CSSProperties['fontWeight'],
                       color: 'var(--color-text)',
                     }}
                   >
@@ -275,9 +285,10 @@ const App: React.FC = () => {
 
                   <p
                     style={{
-                      fontSize: '0.875rem',
+                      fontSize: 'var(--text-base)',
                       color: 'var(--color-text-secondary)',
-                      fontWeight: 500,
+                      fontWeight:
+                        'var(--weight-medium)' as React.CSSProperties['fontWeight'],
                       marginTop: '4px',
                     }}
                   >
@@ -285,23 +296,14 @@ const App: React.FC = () => {
                   </p>
                 </div>
 
-                <button
+                <Button
+                  variant="secondary"
+                  size="md"
                   onClick={() => setActiveTab('list')}
-                  style={{
-                    padding: '10px 24px',
-                    background: 'transparent',
-                    border: '1px solid var(--color-accent)',
-                    borderRadius: '10px',
-                    color: 'var(--color-accent)',
-                    fontSize: '0.875rem',
-                    fontWeight: 700,
-                    fontFamily: 'var(--font-body)',
-                    cursor: 'pointer',
-                    marginTop: '4px',
-                  }}
+                  style={{ marginTop: '4px' }}
                 >
                   Go to My List
-                </button>
+                </Button>
               </div>
             ) : (
               <>
@@ -318,15 +320,17 @@ const App: React.FC = () => {
                     <SectionLabel noMargin>Filters</SectionLabel>
                     <span
                       style={{
-                        fontSize: '0.875rem',
+                        fontSize: 'var(--text-base)',
                         color: 'var(--color-text-secondary)',
-                        fontWeight: 500,
+                        fontWeight:
+                          'var(--weight-medium)' as React.CSSProperties['fontWeight'],
                       }}
                     >
                       <span
                         style={{
                           color: 'var(--color-text)',
-                          fontWeight: 700,
+                          fontWeight:
+                            'var(--weight-bold)' as React.CSSProperties['fontWeight'],
                         }}
                       >
                         {filteredMovies.length}
@@ -450,9 +454,10 @@ const App: React.FC = () => {
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
           <p
             style={{
-              fontSize: '0.8rem',
+              fontSize: 'var(--text-sm)',
               color: 'var(--color-muted)',
-              fontWeight: 500,
+              fontWeight:
+                'var(--weight-medium)' as React.CSSProperties['fontWeight'],
             }}
           >
             © 2026 CueMovie · v{APP_VERSION}
@@ -492,8 +497,10 @@ const TabButton: React.FC<{
         ? '2px solid var(--color-accent)'
         : '2px solid transparent',
       color: active ? 'var(--color-text)' : 'var(--color-muted)',
-      fontSize: '0.875rem',
-      fontWeight: active ? 700 : 500,
+      fontSize: 'var(--text-base)',
+      fontWeight: active
+        ? ('var(--weight-bold)' as React.CSSProperties['fontWeight'])
+        : ('var(--weight-medium)' as React.CSSProperties['fontWeight']),
       fontFamily: 'var(--font-body)',
       cursor: 'pointer',
       transition: 'color 0.15s',
@@ -508,25 +515,6 @@ const TabButton: React.FC<{
   >
     {children}
   </button>
-);
-
-/* Section heading */
-const SectionLabel: React.FC<{
-  children: React.ReactNode;
-  noMargin?: boolean;
-}> = ({ children, noMargin }) => (
-  <h2
-    style={{
-      fontSize: '0.8rem',
-      fontWeight: 700,
-      letterSpacing: '0.12em',
-      textTransform: 'uppercase',
-      color: 'var(--color-accent)',
-      marginBottom: noMargin ? 0 : '18px',
-    }}
-  >
-    {children}
-  </h2>
 );
 
 /* Deck mode toggle knob and label */
@@ -544,8 +532,8 @@ const DeckToggle: React.FC<{ enabled: boolean; onToggle: () => void }> = ({
       border: 'none',
       background: 'transparent',
       color: enabled ? 'var(--color-accent)' : 'var(--color-muted)',
-      fontSize: '0.8rem',
-      fontWeight: 700,
+      fontSize: 'var(--text-sm)',
+      fontWeight: 'var(--weight-bold)' as React.CSSProperties['fontWeight'],
       fontFamily: 'var(--font-body)',
       cursor: 'pointer',
       letterSpacing: '0.05em',

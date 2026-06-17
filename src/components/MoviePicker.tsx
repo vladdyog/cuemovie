@@ -2,8 +2,9 @@ import { AnimatePresence, motion } from 'framer-motion';
 import React, { useState } from 'react';
 
 import type { Movie } from '../types';
-import MovieModal from './MovieModal';
 import TonightsPick from './TonightsPick';
+import Button from './ui/Button';
+import MovieModal from './ui/MovieModal';
 
 type Props = {
   movies: Movie[];
@@ -42,6 +43,8 @@ const MoviePicker: React.FC<Props> = ({
       ? 'Pick Again'
       : 'Pick a Movie';
 
+  const isDisabled = deckEnabled && deckFull;
+
   return (
     <div
       style={{
@@ -55,8 +58,9 @@ const MoviePicker: React.FC<Props> = ({
         <div style={{ textAlign: 'center', padding: '24px 0' }}>
           <p
             style={{
-              fontSize: '0.95rem',
-              fontWeight: 600,
+              fontSize: 'var(--text-md)',
+              fontWeight:
+                'var(--weight-medium)' as React.CSSProperties['fontWeight'],
               color: 'var(--color-text-secondary)',
             }}
           >
@@ -64,10 +68,11 @@ const MoviePicker: React.FC<Props> = ({
           </p>
           <p
             style={{
-              fontSize: '0.85rem',
+              fontSize: 'var(--text-base)',
               color: 'var(--color-muted)',
               marginTop: '4px',
-              fontWeight: 500,
+              fontWeight:
+                'var(--weight-medium)' as React.CSSProperties['fontWeight'],
             }}
           >
             Try adjusting or resetting the filters above
@@ -75,36 +80,30 @@ const MoviePicker: React.FC<Props> = ({
         </div>
       ) : (
         !shuffleActive && (
-          <motion.button
-            onClick={pickRandom}
-            disabled={deckEnabled && deckFull}
-            whileHover={!deckFull ? { scale: 1.04 } : {}}
-            whileTap={!deckFull ? { scale: 0.96 } : {}}
+          <motion.div
+            whileHover={!isDisabled ? { scale: 1.04 } : {}}
+            whileTap={!isDisabled ? { scale: 0.96 } : {}}
             transition={{ type: 'spring', stiffness: 380, damping: 22 }}
-            style={{
-              padding: deckEnabled ? '13px 32px' : '17px 56px',
-              borderRadius: '50px',
-              border: 'none',
-              background: deckEnabled
-                ? deckFull
-                  ? 'var(--color-surface-2)'
-                  : 'linear-gradient(135deg, var(--color-accent) 0%, var(--color-accent-hover) 100%)'
-                : 'linear-gradient(135deg, var(--color-accent) 0%, var(--color-accent-hover) 100%)',
-              color: deckEnabled && deckFull ? 'var(--color-muted)' : 'white',
-              fontSize: deckEnabled ? '0.9rem' : '1.1rem',
-              fontWeight: 700,
-              fontFamily: 'var(--font-body)',
-              cursor: deckEnabled && deckFull ? 'default' : 'pointer',
-              letterSpacing: '-0.01em',
-              boxShadow: deckEnabled
-                ? deckFull
-                  ? 'none'
-                  : '0 0 24px rgba(255,128,0,0.25), 0 4px 16px rgba(255,128,0,0.15)'
-                : '0 0 40px rgba(255,128,0,0.3), 0 8px 24px rgba(255,128,0,0.2)',
-            }}
           >
-            {label}
-          </motion.button>
+            <Button
+              variant={isDisabled ? 'surface' : 'primary'}
+              size="lg"
+              onClick={pickRandom}
+              disabled={isDisabled}
+              style={{
+                borderRadius: 'var(--radius-pill)',
+                fontSize: deckEnabled ? 'var(--text-base)' : 'var(--text-md)',
+                padding: deckEnabled ? '13px 32px' : '17px 56px',
+                boxShadow: isDisabled
+                  ? 'none'
+                  : deckEnabled
+                    ? '0 0 24px rgba(255,128,0,0.25), 0 4px 16px rgba(255,128,0,0.15)'
+                    : '0 0 40px rgba(255,128,0,0.3), 0 8px 24px rgba(255,128,0,0.2)',
+              }}
+            >
+              {label}
+            </Button>
+          </motion.div>
         )
       )}
 

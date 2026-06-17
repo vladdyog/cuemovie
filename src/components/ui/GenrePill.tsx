@@ -28,7 +28,6 @@ function hexToRgb(hex: string): string {
   return `${r},${g},${b}`;
 }
 
-// Lightens a hex color by mixing it toward white by `amount` (0–1).
 function lighten(hex: string, amount: number): string {
   const r = parseInt(hex.slice(1, 3), 16);
   const g = parseInt(hex.slice(3, 5), 16);
@@ -46,13 +45,13 @@ const GenrePill: React.FC<{ genre: string }> = ({ genre }) => {
     <span
       style={{
         display: 'inline-block',
-        fontSize: '0.68rem',
-        fontWeight: 600,
+        fontSize: 'var(--text-xs)',
+        fontWeight: 'var(--weight-medium)' as React.CSSProperties['fontWeight'],
         color: textColor,
         background: `rgba(${rgb},0.12)`,
         border: `1px solid rgba(${rgb},0.4)`,
-        borderRadius: '20px',
-        padding: '2px 8px',
+        borderRadius: 'var(--radius-pill)',
+        padding: '1px 7px',
         whiteSpace: 'nowrap',
         letterSpacing: '0.01em',
       }}

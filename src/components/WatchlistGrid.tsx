@@ -38,20 +38,16 @@ const PosterCard: React.FC<{
     <div
       style={{
         position: 'relative',
-        borderRadius: '8px',
+        borderRadius: 'var(--radius-md)',
         overflow: 'hidden',
         cursor: 'pointer',
         aspectRatio: '2/3',
         background: 'var(--color-surface-2)',
         border: '1px solid',
-        borderColor: selected
-          ? 'var(--color-accent)'
-          : hovered
-            ? 'var(--color-accent)'
-            : 'var(--color-border)',
-        boxShadow: selected
-          ? '0 0 0 1px var(--color-accent), 0 4px 24px rgba(255,128,0,0.2)'
-          : hovered
+        borderColor:
+          selected || hovered ? 'var(--color-accent)' : 'var(--color-border)',
+        boxShadow:
+          selected || hovered
             ? '0 0 0 1px var(--color-accent), 0 4px 24px rgba(255,128,0,0.18)'
             : 'none',
         transition: 'border-color 0.18s, box-shadow 0.18s',
@@ -91,8 +87,9 @@ const PosterCard: React.FC<{
           <span style={{ fontSize: '1.6rem', opacity: 0.4 }}>🎬</span>
           <p
             style={{
-              fontSize: '0.7rem',
-              fontWeight: 600,
+              fontSize: 'var(--text-xs)',
+              fontWeight:
+                'var(--weight-medium)' as React.CSSProperties['fontWeight'],
               textAlign: 'center',
               color: 'var(--color-text-secondary)',
               lineHeight: 1.3,
@@ -126,8 +123,9 @@ const PosterCard: React.FC<{
       >
         <p
           style={{
-            fontSize: '0.68rem',
-            fontWeight: 700,
+            fontSize: 'var(--text-xs)',
+            fontWeight:
+              'var(--weight-bold)' as React.CSSProperties['fontWeight'],
             color: 'white',
             lineHeight: 1.25,
             display: '-webkit-box',
@@ -141,9 +139,10 @@ const PosterCard: React.FC<{
         {movie.year && (
           <p
             style={{
-              fontSize: '0.62rem',
+              fontSize: 'var(--text-xs)',
               color: 'rgba(255,255,255,0.55)',
-              fontWeight: 500,
+              fontWeight:
+                'var(--weight-medium)' as React.CSSProperties['fontWeight'],
               marginTop: '2px',
             }}
           >
@@ -152,7 +151,7 @@ const PosterCard: React.FC<{
         )}
       </div>
 
-      {/* Checkbox — top-left, visible in select mode or on hover */}
+      {/* Checkbox — top-left, visible in select mode */}
       {selectMode && (
         <div
           onClick={(e) => {
@@ -165,7 +164,7 @@ const PosterCard: React.FC<{
             left: '6px',
             width: '20px',
             height: '20px',
-            borderRadius: '5px',
+            borderRadius: 'var(--radius-sm)',
             border: `2px solid ${selected ? 'var(--color-accent)' : 'rgba(255,255,255,0.6)'}`,
             background: selected ? 'var(--color-accent)' : 'rgba(0,0,0,0.45)',
             display: 'flex',
@@ -205,7 +204,7 @@ const PosterCard: React.FC<{
             background: 'rgba(0,0,0,0.65)',
             border: '1px solid rgba(255,255,255,0.12)',
             color: 'rgba(255,255,255,0.75)',
-            fontSize: '0.65rem',
+            fontSize: 'var(--text-xs)',
             cursor: 'pointer',
             display: 'flex',
             alignItems: 'center',

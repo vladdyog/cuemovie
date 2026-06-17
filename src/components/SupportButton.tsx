@@ -3,6 +3,8 @@ import React, { useEffect, useState } from 'react';
 
 import logo from '/CueMovie_transparent.png';
 
+import CloseButton from './ui/CloseButton';
+
 const BMAC_URL = 'https://buymeacoffee.com/cuemovie';
 
 const COLOR_TRANSITION =
@@ -30,12 +32,13 @@ const SupportButton: React.FC = () => {
           alignItems: 'center',
           gap: '7px',
           padding: '6px 14px',
-          borderRadius: '999px',
+          borderRadius: 'var(--radius-pill)',
           background: 'var(--color-surface)',
           border: '1px solid var(--color-border-light)',
           color: 'var(--color-text-secondary)',
-          fontSize: '0.8rem',
-          fontWeight: 600,
+          fontSize: 'var(--text-sm)',
+          fontWeight:
+            'var(--weight-medium)' as React.CSSProperties['fontWeight'],
           fontFamily: 'var(--font-body)',
           cursor: 'pointer',
           transition: COLOR_TRANSITION,
@@ -95,7 +98,7 @@ const SupportButton: React.FC = () => {
                 maxWidth: '400px',
                 background: 'var(--color-surface)',
                 border: '1px solid var(--color-border-light)',
-                borderRadius: '20px',
+                borderRadius: 'var(--radius-lg)',
                 padding: '32px 28px 28px',
                 boxShadow: '0 24px 64px rgba(0,0,0,0.6)',
                 display: 'flex',
@@ -110,40 +113,7 @@ const SupportButton: React.FC = () => {
               transition={{ duration: 0.25, ease: [0.34, 1.2, 0.64, 1] }}
             >
               {/* Close */}
-              <button
-                onClick={() => setOpen(false)}
-                aria-label="Close"
-                style={{
-                  position: 'absolute',
-                  top: '14px',
-                  right: '14px',
-                  width: '28px',
-                  height: '28px',
-                  borderRadius: '50%',
-                  background: 'var(--color-surface-2)',
-                  border: '1px solid var(--color-border)',
-                  color: 'var(--color-text-secondary)',
-                  fontSize: '0.75rem',
-                  cursor: 'pointer',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  fontFamily: 'var(--font-body)',
-                  transition: COLOR_TRANSITION,
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.background = 'var(--color-danger)';
-                  e.currentTarget.style.color = 'white';
-                  e.currentTarget.style.borderColor = 'var(--color-danger)';
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.background = 'var(--color-surface-2)';
-                  e.currentTarget.style.color = 'var(--color-text-secondary)';
-                  e.currentTarget.style.borderColor = 'var(--color-border)';
-                }}
-              >
-                ✕
-              </button>
+              <CloseButton onClick={() => setOpen(false)} />
 
               {/* Logo */}
               <img
@@ -162,8 +132,9 @@ const SupportButton: React.FC = () => {
               >
                 <p
                   style={{
-                    fontSize: '1.15rem',
-                    fontWeight: 800,
+                    fontSize: 'var(--text-lg)',
+                    fontWeight:
+                      'var(--weight-display)' as React.CSSProperties['fontWeight'],
                     color: 'var(--color-text)',
                     lineHeight: 1.2,
                   }}
@@ -172,10 +143,11 @@ const SupportButton: React.FC = () => {
                 </p>
                 <p
                   style={{
-                    fontSize: '0.88rem',
+                    fontSize: 'var(--text-base)',
                     lineHeight: 1.7,
                     color: 'var(--color-text-secondary)',
-                    fontWeight: 500,
+                    fontWeight:
+                      'var(--weight-medium)' as React.CSSProperties['fontWeight'],
                   }}
                 >
                   If we've helped you pick a movie or two, please consider
@@ -194,7 +166,7 @@ const SupportButton: React.FC = () => {
                 }}
               />
 
-              {/* CTA - solid blue, brightens on hover */}
+              {/* CTA */}
               <a
                 href={BMAC_URL}
                 target="_blank"
@@ -206,25 +178,26 @@ const SupportButton: React.FC = () => {
                   width: '100%',
                   justifyContent: 'center',
                   padding: '13px',
-                  borderRadius: '10px',
-                  background: 'rgba(64,188,244,0.15)',
+                  borderRadius: 'var(--radius-md)',
+                  background: 'var(--color-blue-subtle)',
                   border: '1px solid rgba(64,188,244,0.4)',
                   color: 'var(--color-blue)',
-                  fontSize: '0.95rem',
-                  fontWeight: 700,
+                  fontSize: 'var(--text-md)',
+                  fontWeight:
+                    'var(--weight-bold)' as React.CSSProperties['fontWeight'],
                   fontFamily: 'var(--font-body)',
                   textDecoration: 'none',
                   letterSpacing: '-0.01em',
                   transition: COLOR_TRANSITION,
                 }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.background = 'rgba(64,188,244,0.25)';
+                  e.currentTarget.style.background = 'rgba(64,188,244,0.22)';
                   e.currentTarget.style.borderColor = 'var(--color-blue)';
                   e.currentTarget.style.boxShadow =
                     '0 0 24px rgba(64,188,244,0.2)';
                 }}
                 onMouseLeave={(e) => {
-                  e.currentTarget.style.background = 'rgba(64,188,244,0.15)';
+                  e.currentTarget.style.background = 'var(--color-blue-subtle)';
                   e.currentTarget.style.borderColor = 'rgba(64,188,244,0.4)';
                   e.currentTarget.style.boxShadow = 'none';
                 }}
@@ -234,9 +207,10 @@ const SupportButton: React.FC = () => {
 
               <p
                 style={{
-                  fontSize: '0.75rem',
+                  fontSize: 'var(--text-xs)',
                   color: 'var(--color-muted)',
-                  fontWeight: 500,
+                  fontWeight:
+                    'var(--weight-medium)' as React.CSSProperties['fontWeight'],
                 }}
               >
                 No account needed · One-time or recurring, your choice!

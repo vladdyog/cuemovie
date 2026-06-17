@@ -2,7 +2,8 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 
 import type { Movie } from '../types';
 import { enrichSearchResult, searchMovies } from '../utils/tmdb';
-import MovieModal from './MovieModal';
+import Button from './ui/Button';
+import MovieModal from './ui/MovieModal';
 
 type SearchResult = Awaited<ReturnType<typeof searchMovies>>[number];
 
@@ -21,13 +22,10 @@ function MovieSearch({ movies, onAdd }: MovieSearchProps): React.ReactElement {
   const [previewMovie, setPreviewMovie] = useState<Movie | null>(null);
   const [previewLoading, setPreviewLoading] = useState<number | null>(null);
 
-  // Cache enriched results so preview + add doesn't cost two detail calls
   const enrichedCache = useRef<Map<number, Movie>>(new Map());
-
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  // Unfocus when clicking outside — but not when the preview modal is open
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
       if (previewMovie) return;
@@ -71,7 +69,6 @@ function MovieSearch({ movies, onAdd }: MovieSearchProps): React.ReactElement {
     [movies],
   );
 
-  // Fetch full details for a result, using cache to avoid duplicate calls
   const getEnriched = async (result: SearchResult): Promise<Movie> => {
     const cached = enrichedCache.current.get(result.tmdbId);
     if (cached) return cached;
@@ -133,7 +130,9 @@ function MovieSearch({ movies, onAdd }: MovieSearchProps): React.ReactElement {
             padding: '12px 14px',
             background: 'var(--color-surface)',
             border: '1px solid var(--color-border)',
-            borderRadius: showDropdown ? '12px 12px 0 0' : '12px',
+            borderRadius: showDropdown
+              ? 'var(--radius-lg) var(--radius-lg) 0 0'
+              : 'var(--radius-lg)',
             transition: 'border-radius 0.15s',
           }}
         >
@@ -166,8 +165,9 @@ function MovieSearch({ movies, onAdd }: MovieSearchProps): React.ReactElement {
               border: 'none',
               outline: 'none',
               color: 'var(--color-text)',
-              fontSize: '0.875rem',
-              fontWeight: 500,
+              fontSize: 'var(--text-base)',
+              fontWeight:
+                'var(--weight-medium)' as React.CSSProperties['fontWeight'],
               fontFamily: 'var(--font-body)',
             }}
           />
@@ -184,7 +184,7 @@ function MovieSearch({ movies, onAdd }: MovieSearchProps): React.ReactElement {
               background: 'var(--color-surface)',
               border: '1px solid var(--color-border)',
               borderTop: 'none',
-              borderRadius: '0 0 12px 12px',
+              borderRadius: '0 0 var(--radius-lg) var(--radius-lg)',
               overflow: 'hidden',
               zIndex: 20,
               boxShadow: '0 8px 32px rgba(0,0,0,0.35)',
@@ -194,9 +194,10 @@ function MovieSearch({ movies, onAdd }: MovieSearchProps): React.ReactElement {
               <p
                 style={{
                   padding: '14px 16px',
-                  fontSize: '0.825rem',
+                  fontSize: 'var(--text-sm)',
                   color: 'var(--color-muted)',
-                  fontWeight: 500,
+                  fontWeight:
+                    'var(--weight-medium)' as React.CSSProperties['fontWeight'],
                   textAlign: 'center',
                 }}
               >
@@ -208,9 +209,10 @@ function MovieSearch({ movies, onAdd }: MovieSearchProps): React.ReactElement {
               <p
                 style={{
                   padding: '14px 16px',
-                  fontSize: '0.825rem',
+                  fontSize: 'var(--text-sm)',
                   color: 'var(--color-muted)',
-                  fontWeight: 500,
+                  fontWeight:
+                    'var(--weight-medium)' as React.CSSProperties['fontWeight'],
                   textAlign: 'center',
                 }}
               >
@@ -250,7 +252,7 @@ function MovieSearch({ movies, onAdd }: MovieSearchProps): React.ReactElement {
                         'transparent')
                     }
                   >
-                    {/* Poster + info — click to preview */}
+                    {/* Poster + info */}
                     <div
                       onClick={() => handlePreview(result)}
                       style={{
@@ -269,7 +271,7 @@ function MovieSearch({ movies, onAdd }: MovieSearchProps): React.ReactElement {
                           width: 34,
                           height: 51,
                           flexShrink: 0,
-                          borderRadius: '4px',
+                          borderRadius: 'var(--radius-sm)',
                           overflow: 'hidden',
                           background: 'var(--color-surface-2)',
                           border: '1px solid var(--color-border)',
@@ -294,7 +296,7 @@ function MovieSearch({ movies, onAdd }: MovieSearchProps): React.ReactElement {
                               display: 'flex',
                               alignItems: 'center',
                               justifyContent: 'center',
-                              fontSize: '0.8rem',
+                              fontSize: 'var(--text-sm)',
                               opacity: 0.4,
                             }}
                           >
@@ -305,8 +307,9 @@ function MovieSearch({ movies, onAdd }: MovieSearchProps): React.ReactElement {
                       <div style={{ minWidth: 0 }}>
                         <p
                           style={{
-                            fontSize: '0.85rem',
-                            fontWeight: 700,
+                            fontSize: 'var(--text-base)',
+                            fontWeight:
+                              'var(--weight-bold)' as React.CSSProperties['fontWeight'],
                             color: 'var(--color-text)',
                             overflow: 'hidden',
                             textOverflow: 'ellipsis',
@@ -317,9 +320,10 @@ function MovieSearch({ movies, onAdd }: MovieSearchProps): React.ReactElement {
                         </p>
                         <p
                           style={{
-                            fontSize: '0.75rem',
+                            fontSize: 'var(--text-xs)',
                             color: 'var(--color-text-secondary)',
-                            fontWeight: 500,
+                            fontWeight:
+                              'var(--weight-medium)' as React.CSSProperties['fontWeight'],
                             marginTop: '2px',
                           }}
                         >
@@ -332,50 +336,22 @@ function MovieSearch({ movies, onAdd }: MovieSearchProps): React.ReactElement {
                     </div>
 
                     {/* Add button */}
-                    <button
+                    <Button
+                      variant={done ? 'surface' : 'secondary'}
+                      size="sm"
                       onClick={(e) => {
                         e.stopPropagation();
                         handleAdd(result);
                       }}
                       disabled={done || isAdding}
-                      style={{
-                        padding: '5px 12px',
-                        borderRadius: '6px',
-                        border: '1px solid',
-                        fontSize: '0.75rem',
-                        fontWeight: 700,
-                        fontFamily: 'var(--font-body)',
-                        cursor: done || isAdding ? 'default' : 'pointer',
-                        flexShrink: 0,
-                        transition: 'all 0.15s',
-                        letterSpacing: '0.01em',
-                        ...(done
+                      style={
+                        done
                           ? {
-                              borderColor: 'var(--color-border)',
-                              background: 'transparent',
                               color: 'var(--color-muted)',
+                              borderColor: 'var(--color-border)',
                             }
-                          : isAdding
-                            ? {
-                                borderColor: 'var(--color-border)',
-                                background: 'transparent',
-                                color: 'var(--color-muted)',
-                              }
-                            : {
-                                borderColor: 'var(--color-accent)',
-                                background: 'transparent',
-                                color: 'var(--color-accent)',
-                              }),
-                      }}
-                      onMouseEnter={(e) => {
-                        if (!done && !isAdding)
-                          e.currentTarget.style.background =
-                            'rgba(255,128,0,0.08)';
-                      }}
-                      onMouseLeave={(e) => {
-                        if (!done && !isAdding)
-                          e.currentTarget.style.background = 'transparent';
-                      }}
+                          : {}
+                      }
                     >
                       {isAdding
                         ? '…'
@@ -384,7 +360,7 @@ function MovieSearch({ movies, onAdd }: MovieSearchProps): React.ReactElement {
                           : inList
                             ? 'In list'
                             : '+ Add'}
-                    </button>
+                    </Button>
                   </div>
                 );
               })}

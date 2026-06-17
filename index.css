@@ -20,6 +20,32 @@
 
   --font-body: 'Plus Jakarta Sans', system-ui, sans-serif;
   --font-display: 'Plus Jakarta Sans', system-ui, sans-serif;
+
+  /* Type scale */
+  --text-xs: 0.72rem; /* 10.8px — labels, badges, captions */
+  --text-sm: 0.8rem; /* 12px  — secondary info, metadata */
+  --text-base: 0.875rem; /* 13.1px — default body / UI text */
+  --text-md: 1rem; /* 15px  — slightly elevated body */
+  --text-lg: 1.25rem; /* 18.75px — subheadings, card titles */
+  --text-display: 2.5rem; /* 37.5px — app title only */
+
+  /* Font weights */
+  --weight-normal: 400;
+  --weight-medium: 600;
+  --weight-bold: 700;
+  --weight-display: 800; /* app title only */
+
+  /* Border radius */
+  --radius-sm: 4px; /* checkboxes, tiny chips */
+  --radius-md: 8px; /* buttons, inputs, small cards */
+  --radius-lg: 12px; /* panels, modals, large cards */
+  --radius-pill: 999px; /* tags, badges, toggle tracks */
+
+  /* Subtle tinted surfaces (for status/context backgrounds) */
+  --color-accent-subtle: rgba(255, 128, 0, 0.08);
+  --color-blue-subtle: rgba(64, 188, 244, 0.1);
+  --color-danger-subtle: rgba(229, 83, 83, 0.08);
+  --color-green-subtle: rgba(0, 224, 84, 0.08);
 }
 
 * {

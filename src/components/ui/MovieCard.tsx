@@ -1,6 +1,6 @@
 import React from 'react';
 
-import type { Movie } from '../types';
+import type { Movie } from '../../types';
 import GenrePill from './GenrePill';
 
 type Props = {
@@ -33,8 +33,8 @@ const RatingBadge: React.FC<{ rating: number }> = ({ rating }) => (
       alignItems: 'center',
       gap: '3px',
       color: 'var(--color-green)',
-      fontWeight: 700,
-      fontSize: '0.875rem',
+      fontWeight: 'var(--weight-bold)' as React.CSSProperties['fontWeight'],
+      fontSize: 'var(--text-base)',
     }}
   >
     ★ {rating.toFixed(1)}
@@ -49,7 +49,7 @@ const MovieCard: React.FC<Props> = ({ movie, compact = false }) => {
           display: 'flex',
           gap: '16px',
           padding: '14px',
-          borderRadius: '12px',
+          borderRadius: 'var(--radius-lg)',
           border: '1px solid var(--color-border)',
           background: 'var(--color-surface)',
           transition: 'border-color 0.15s ease, box-shadow 0.15s ease',
@@ -70,7 +70,7 @@ const MovieCard: React.FC<Props> = ({ movie, compact = false }) => {
             flexShrink: 0,
             width: '56px',
             height: '80px',
-            borderRadius: '8px',
+            borderRadius: 'var(--radius-md)',
             overflow: 'hidden',
             border: '1px solid var(--color-border)',
           }}
@@ -98,8 +98,9 @@ const MovieCard: React.FC<Props> = ({ movie, compact = false }) => {
         >
           <p
             style={{
-              fontSize: '1rem',
-              fontWeight: 700,
+              fontSize: 'var(--text-md)',
+              fontWeight:
+                'var(--weight-bold)' as React.CSSProperties['fontWeight'],
               color: 'var(--color-text)',
               lineHeight: 1.3,
             }}
@@ -117,9 +118,10 @@ const MovieCard: React.FC<Props> = ({ movie, compact = false }) => {
             {movie.year && (
               <span
                 style={{
-                  fontSize: '0.8rem',
+                  fontSize: 'var(--text-sm)',
                   color: 'var(--color-text-secondary)',
-                  fontWeight: 500,
+                  fontWeight:
+                    'var(--weight-medium)' as React.CSSProperties['fontWeight'],
                 }}
               >
                 {movie.year}
@@ -128,9 +130,10 @@ const MovieCard: React.FC<Props> = ({ movie, compact = false }) => {
             {movie.runtime && (
               <span
                 style={{
-                  fontSize: '0.8rem',
+                  fontSize: 'var(--text-sm)',
                   color: 'var(--color-text-secondary)',
-                  fontWeight: 500,
+                  fontWeight:
+                    'var(--weight-medium)' as React.CSSProperties['fontWeight'],
                 }}
               >
                 {movie.runtime} min
@@ -153,7 +156,7 @@ const MovieCard: React.FC<Props> = ({ movie, compact = false }) => {
   return (
     <div
       style={{
-        borderRadius: '14px',
+        borderRadius: 'var(--radius-lg)',
         border: '1px solid var(--color-border)',
         background: 'var(--color-surface)',
         overflow: 'hidden',
@@ -203,8 +206,9 @@ const MovieCard: React.FC<Props> = ({ movie, compact = false }) => {
       >
         <p
           style={{
-            fontSize: '1.25rem',
-            fontWeight: 800,
+            fontSize: 'var(--text-lg)',
+            fontWeight:
+              'var(--weight-display)' as React.CSSProperties['fontWeight'],
             color: 'var(--color-text)',
             lineHeight: 1.25,
             letterSpacing: '-0.01em',
@@ -225,8 +229,9 @@ const MovieCard: React.FC<Props> = ({ movie, compact = false }) => {
           {movie.year && (
             <span
               style={{
-                fontSize: '0.9rem',
-                fontWeight: 600,
+                fontSize: 'var(--text-base)',
+                fontWeight:
+                  'var(--weight-medium)' as React.CSSProperties['fontWeight'],
                 color: 'var(--color-text-secondary)',
               }}
             >
@@ -236,10 +241,10 @@ const MovieCard: React.FC<Props> = ({ movie, compact = false }) => {
           {movie.runtime && (
             <span
               style={{
-                fontSize: '0.85rem',
-                fontWeight: 500,
+                fontSize: 'var(--text-base)',
+                fontWeight:
+                  'var(--weight-medium)' as React.CSSProperties['fontWeight'],
                 color: 'var(--color-text-secondary)',
-                paddingLeft: movie.year ? '0' : '0',
               }}
             >
               {movie.runtime} min
@@ -261,10 +266,11 @@ const MovieCard: React.FC<Props> = ({ movie, compact = false }) => {
         {movie.overview && (
           <p
             style={{
-              fontSize: '0.9rem',
+              fontSize: 'var(--text-base)',
               lineHeight: 1.65,
               color: 'var(--color-text-secondary)',
-              fontWeight: 400,
+              fontWeight:
+                'var(--weight-normal)' as React.CSSProperties['fontWeight'],
               marginTop: '4px',
             }}
           >

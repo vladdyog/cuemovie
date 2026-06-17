@@ -1,7 +1,8 @@
 import { AnimatePresence, motion } from 'framer-motion';
 import React, { useEffect } from 'react';
 
-import type { Movie } from '../types';
+import type { Movie } from '../../types';
+import CloseButton from './CloseButton';
 import MovieCard from './MovieCard';
 
 type Props = {
@@ -58,43 +59,10 @@ const MovieModal: React.FC<Props> = ({ movie, onClose }) => {
           onClick={(e) => e.stopPropagation()}
         >
           {/* Close button */}
-          <button
-            onClick={onClose}
-            style={{
-              position: 'absolute',
-              top: '-14px',
-              right: '-14px',
-              zIndex: 10,
-              width: '36px',
-              height: '36px',
-              borderRadius: '50%',
-              background: 'var(--color-surface-2)',
-              border: '1px solid var(--color-border-light)',
-              color: 'var(--color-text-secondary)',
-              fontSize: '0.875rem',
-              cursor: 'pointer',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              fontFamily: 'var(--font-body)',
-              transition: 'all 0.15s',
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.background = 'var(--color-danger)';
-              e.currentTarget.style.color = 'white';
-              e.currentTarget.style.borderColor = 'var(--color-danger)';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.background = 'var(--color-surface-2)';
-              e.currentTarget.style.color = 'var(--color-text-secondary)';
-              e.currentTarget.style.borderColor = 'var(--color-border-light)';
-            }}
-          >
-            ✕
-          </button>
+          <CloseButton onClick={onClose} variant="floating" />
 
           {/* Card */}
-          <div style={{ overflowY: 'auto', borderRadius: '14px' }}>
+          <div style={{ overflowY: 'auto', borderRadius: 'var(--radius-lg)' }}>
             <MovieCard movie={movie} />
           </div>
 
@@ -102,10 +70,11 @@ const MovieModal: React.FC<Props> = ({ movie, onClose }) => {
           <p
             style={{
               textAlign: 'center',
-              fontSize: '0.78rem',
+              fontSize: 'var(--text-sm)',
               color: 'var(--color-muted)',
               marginTop: '14px',
-              fontWeight: 500,
+              fontWeight:
+                'var(--weight-medium)' as React.CSSProperties['fontWeight'],
               flexShrink: 0,
             }}
           >
@@ -115,8 +84,8 @@ const MovieModal: React.FC<Props> = ({ movie, onClose }) => {
                 padding: '2px 7px',
                 background: 'var(--color-surface-2)',
                 border: '1px solid var(--color-border-light)',
-                borderRadius: '5px',
-                fontSize: '0.75rem',
+                borderRadius: 'var(--radius-sm)',
+                fontSize: 'var(--text-xs)',
                 color: 'var(--color-text-secondary)',
                 fontFamily: 'var(--font-body)',
               }}

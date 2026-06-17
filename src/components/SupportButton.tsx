@@ -222,7 +222,7 @@ const SupportButton: React.FC = () => {
                   transition: COLOR_TRANSITION,
                 }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.background = 'rgba(64,188,244,0.25)';
+                  e.currentTarget.style.background = 'rgba(64,188,244,0.22)';
                   e.currentTarget.style.borderColor = 'var(--color-blue)';
                   e.currentTarget.style.boxShadow =
                     '0 0 24px rgba(64,188,244,0.2)';

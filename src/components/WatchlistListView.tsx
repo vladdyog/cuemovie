@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 
 import type { Movie } from '../types';
-import Button from './Button';
-import GenrePill from './GenrePill';
+import Button from './ui/Button';
+import GenrePill from './ui/GenrePill';
 
 type Props = {
   movies: Movie[];

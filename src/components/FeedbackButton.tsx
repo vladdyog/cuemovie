@@ -3,7 +3,7 @@ import React, { useEffect, useRef, useState } from 'react';
 
 import logo from '/CueMovie_transparent.png';
 
-import Button from './Button';
+import Button from './ui/Button';
 
 type Category = 'Bug Report' | 'Feature Idea' | 'General';
 type Status = 'idle' | 'submitting' | 'success' | 'error';

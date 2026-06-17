@@ -2,8 +2,8 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 
 import type { Movie } from '../types';
 import { enrichSearchResult, searchMovies } from '../utils/tmdb';
-import Button from './Button';
-import MovieModal from './MovieModal';
+import Button from './ui/Button';
+import MovieModal from './ui/MovieModal';
 
 type SearchResult = Awaited<ReturnType<typeof searchMovies>>[number];
 

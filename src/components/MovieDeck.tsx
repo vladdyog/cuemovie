@@ -2,9 +2,9 @@ import { AnimatePresence, motion } from 'framer-motion';
 import React, { useEffect, useRef, useState } from 'react';
 
 import type { Movie } from '../types';
-import Button from './Button';
-import MovieCard from './MovieCard';
-import MovieModal from './MovieModal';
+import Button from './ui/Button';
+import MovieCard from './ui/MovieCard';
+import MovieModal from './ui/MovieModal';
 
 type Props = {
   movies: Movie[];

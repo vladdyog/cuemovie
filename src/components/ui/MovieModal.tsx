@@ -1,7 +1,7 @@
 import { AnimatePresence, motion } from 'framer-motion';
 import React, { useEffect } from 'react';
 
-import type { Movie } from '../types';
+import type { Movie } from '../../types';
 import MovieCard from './MovieCard';
 
 type Props = {

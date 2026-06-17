@@ -2,8 +2,8 @@ import { motion } from 'framer-motion';
 import React from 'react';
 
 import type { Movie } from '../types';
-import Button from './Button';
-import MovieCard from './MovieCard';
+import Button from './ui/Button';
+import MovieCard from './ui/MovieCard';
 
 type Props = {
   movie: Movie;

@@ -1,7 +1,7 @@
 import React from 'react';
 
 import type { FilterOptions, Movie } from '../types';
-import Button from './Button';
+import Button from './ui/Button';
 
 type ExtendedFilters = FilterOptions & { excludedGenres?: string[] };
 

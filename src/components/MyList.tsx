@@ -2,10 +2,10 @@ import { AnimatePresence, motion } from 'framer-motion';
 import React, { useEffect, useRef, useState } from 'react';
 
 import type { Movie } from '../types';
-import Button from './Button';
 import CSVUpload from './CSVUpload';
-import MovieModal from './MovieModal';
 import MovieSearch from './MovieSearch';
+import Button from './ui/Button';
+import MovieModal from './ui/MovieModal';
 import WatchlistGrid from './WatchlistGrid';
 import WatchlistListView from './WatchlistListView';
 
@@ -208,7 +208,7 @@ const IconBtn: React.FC<{
       background: active ? 'var(--color-surface-2)' : 'transparent',
       border: '1px solid',
       borderColor: active ? 'var(--color-border-light)' : 'transparent',
-      borderRadius: '6px',
+      borderRadius: 'var(--radius-md)',
       cursor: 'pointer',
       transition: 'background 0.15s, border-color 0.15s',
     }}

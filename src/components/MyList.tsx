@@ -190,45 +190,6 @@ const ListIcon: React.FC<{ active: boolean }> = ({ active }) => (
   </svg>
 );
 
-const IconBtn: React.FC<{
-  onClick: () => void;
-  active?: boolean;
-  title: string;
-  children: React.ReactNode;
-}> = ({ onClick, active, title, children }) => (
-  <button
-    onClick={onClick}
-    title={title}
-    style={{
-      width: 32,
-      height: 32,
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      background: active ? 'var(--color-surface-2)' : 'transparent',
-      border: '1px solid',
-      borderColor: active ? 'var(--color-border-light)' : 'transparent',
-      borderRadius: 'var(--radius-md)',
-      cursor: 'pointer',
-      transition: 'background 0.15s, border-color 0.15s',
-    }}
-    onMouseEnter={(e) => {
-      if (!active) {
-        e.currentTarget.style.background = 'var(--color-surface-2)';
-        e.currentTarget.style.borderColor = 'var(--color-border)';
-      }
-    }}
-    onMouseLeave={(e) => {
-      if (!active) {
-        e.currentTarget.style.background = 'transparent';
-        e.currentTarget.style.borderColor = 'transparent';
-      }
-    }}
-  >
-    {children}
-  </button>
-);
-
 // ── Pagination ────────────────────────────────────────────────────────────────
 
 function getPageSlots(current: number, total: number): (number | '…')[] {
@@ -293,15 +254,14 @@ const Pagination: React.FC<{
             key={slot}
             variant="surface"
             size="sm"
+            active={slot === page}
             onClick={() => changePage(slot as number)}
-            disabled={slot === page}
             style={
               slot === page
                 ? {
                     borderColor: 'var(--color-accent)',
                     color: 'var(--color-accent)',
                     background: 'var(--color-accent-subtle)',
-                    cursor: 'default',
                   }
                 : {}
             }
@@ -621,22 +581,24 @@ const MyList: React.FC<Props> = ({
       {/* ── Loaded state ── */}
       {movies.length > 0 && (
         <>
-          {/* Toolbar grid: 2 columns on row 1, search bar spans full width on row 2 */}
+          {/* Toolbar: left side actions, right side display controls — wraps as a whole row when needed */}
           <div
             style={{
-              display: 'grid',
-              gridTemplateColumns: '1fr auto',
-              gap: '16px',
+              display: 'flex',
               alignItems: 'center',
+              justifyContent: 'space-between',
+              gap: '12px',
+              flexWrap: 'wrap',
+              rowGap: '8px',
             }}
           >
-            {/* Row 1, Col 1 — count + actions */}
+            {/* Left — count + actions */}
             <div
               style={{
                 display: 'flex',
                 alignItems: 'center',
                 gap: '8px',
-                flexWrap: 'wrap',
+                flexShrink: 0,
               }}
             >
               {selectMode ? (
@@ -716,14 +678,14 @@ const MyList: React.FC<Props> = ({
               )}
             </div>
 
-            {/* Row 1, Col 2 — display controls */}
+            {/* Right — display controls */}
             <div
               style={{
                 display: 'flex',
                 alignItems: 'center',
                 gap: '4px',
-                flexWrap: 'wrap',
                 justifyContent: 'flex-end',
+                flexShrink: 0,
               }}
             >
               <span
@@ -738,28 +700,24 @@ const MyList: React.FC<Props> = ({
               >
                 Per page
               </span>
-              {PAGE_SIZE_OPTIONS.map((n) => (
-                <Button
-                  key={n}
-                  variant="surface"
-                  size="sm"
-                  onClick={() => {
-                    setPageSize(n);
-                    setPage(1);
-                  }}
-                  style={
-                    n === pageSize
-                      ? {
-                          borderColor: 'var(--color-accent)',
-                          color: 'var(--color-accent)',
-                          background: 'var(--color-accent-subtle)',
-                        }
-                      : {}
-                  }
-                >
-                  {n}
-                </Button>
-              ))}
+              {PAGE_SIZE_OPTIONS.map((n) => {
+                const isActive = n === pageSize;
+                return (
+                  <Button
+                    key={n}
+                    variant="toggle"
+                    size="sm"
+                    active={isActive}
+                    onClick={() => {
+                      setPageSize(n);
+                      setPage(1);
+                    }}
+                    style={{ padding: '7px 8px' }}
+                  >
+                    {n}
+                  </Button>
+                );
+              })}
               <div
                 style={{
                   width: '1px',
@@ -768,20 +726,24 @@ const MyList: React.FC<Props> = ({
                   margin: '0 4px',
                 }}
               />
-              <IconBtn
-                onClick={() => setViewMode('grid')}
+              <Button
+                variant="toggle"
+                size="icon"
                 active={viewMode === 'grid'}
+                onClick={() => setViewMode('grid')}
                 title="Grid view"
               >
                 <GridIcon active={viewMode === 'grid'} />
-              </IconBtn>
-              <IconBtn
-                onClick={() => setViewMode('list')}
+              </Button>
+              <Button
+                variant="toggle"
+                size="icon"
                 active={viewMode === 'list'}
+                onClick={() => setViewMode('list')}
                 title="List view"
               >
                 <ListIcon active={viewMode === 'list'} />
-              </IconBtn>
+              </Button>
             </div>
           </div>
 

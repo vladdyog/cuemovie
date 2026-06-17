@@ -51,7 +51,7 @@ const GenrePill: React.FC<{ genre: string }> = ({ genre }) => {
         background: `rgba(${rgb},0.12)`,
         border: `1px solid rgba(${rgb},0.4)`,
         borderRadius: 'var(--radius-pill)',
-        padding: '2px 8px',
+        padding: '1px 7px',
         whiteSpace: 'nowrap',
         letterSpacing: '0.01em',
       }}

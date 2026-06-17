@@ -13,9 +13,9 @@ interface SectionLabelProps {
 const SectionLabel: React.FC<SectionLabelProps> = ({ children, noMargin }) => (
   <h2
     style={{
-      fontSize: 'var(--text-sm)',
+      fontSize: 'var(--text-base)',
       fontWeight: 'var(--weight-bold)' as React.CSSProperties['fontWeight'],
-      letterSpacing: '0.12em',
+      letterSpacing: '0.1em',
       textTransform: 'uppercase',
       color: 'var(--color-accent)',
       marginBottom: noMargin ? 0 : '18px',

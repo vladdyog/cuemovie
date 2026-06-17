@@ -177,9 +177,9 @@ const MovieRow: React.FC<{
             <span
               style={{
                 fontSize: 'var(--text-xs)',
-                color: 'var(--color-text-secondary)',
+                color: 'var(--color-green)',
                 fontWeight:
-                  'var(--weight-medium)' as React.CSSProperties['fontWeight'],
+                  'var(--weight-bold)' as React.CSSProperties['fontWeight'],
               }}
             >
               ★ {movie.rating.toFixed(1)}

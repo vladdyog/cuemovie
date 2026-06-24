@@ -3,8 +3,8 @@ import React from 'react';
 interface CloseButtonProps {
   onClick: () => void;
   /**
-   * 'inset'   — sits inside the panel, top-right corner (default)
-   * 'floating' — positioned outside/above the panel edge (e.g. MovieModal)
+   * 'inset'   - sits inside the panel, top-right corner (default)
+   * 'floating' - positioned outside/above the panel edge (e.g. MovieModal)
    */
   variant?: 'inset' | 'floating';
 }

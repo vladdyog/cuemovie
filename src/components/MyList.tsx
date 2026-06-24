@@ -531,7 +531,7 @@ const MyList: React.FC<Props> = ({
         </div>
       )}
 
-      {/* ── Search bar — hidden in select mode and while import panel is open ── */}
+      {/* ── Search bar - hidden in select mode and while import panel is open ── */}
       {!selectMode && !importOpen && !isEnriching && (
         <MovieSearch movies={movies} onAdd={onAddMovie} />
       )}
@@ -581,7 +581,7 @@ const MyList: React.FC<Props> = ({
       {/* ── Loaded state ── */}
       {movies.length > 0 && (
         <>
-          {/* Toolbar: left side actions, right side display controls — wraps as a whole row when needed */}
+          {/* Toolbar: left side actions, right side display controls - wraps as a whole row when needed */}
           <div
             style={{
               display: 'flex',
@@ -592,7 +592,7 @@ const MyList: React.FC<Props> = ({
               rowGap: '8px',
             }}
           >
-            {/* Left — count + actions */}
+            {/* Left - count + actions */}
             <div
               style={{
                 display: 'flex',
@@ -678,7 +678,7 @@ const MyList: React.FC<Props> = ({
               )}
             </div>
 
-            {/* Right — display controls */}
+            {/* Right - display controls */}
             <div
               style={{
                 display: 'flex',

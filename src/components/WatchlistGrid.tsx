@@ -151,7 +151,7 @@ const PosterCard: React.FC<{
         )}
       </div>
 
-      {/* Checkbox — top-left, visible in select mode */}
+      {/* Checkbox - top-left, visible in select mode */}
       {selectMode && (
         <div
           onClick={(e) => {
@@ -187,7 +187,7 @@ const PosterCard: React.FC<{
         </div>
       )}
 
-      {/* X remove button — only in non-select mode */}
+      {/* X remove button - only in non-select mode */}
       {!selectMode && (
         <button
           onClick={(e) => {

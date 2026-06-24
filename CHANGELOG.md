@@ -6,11 +6,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ---
- 
+
 ## [v0.8.2] - 2026-06-24
- 
+
 ### Additions
- 
+
 - **MyList tab** - a dedicated tab to view and manage your watchlist without leaving the app.
   Supports grid and list view modes, pagination, single and bulk removal with confirmation,
   and a select mode for managing multiple entries at once.
@@ -27,7 +27,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   dark background color.
 
 ### Changes
- 
+
 - **Basic Design system** - full token-based refactor across all components: unified `--text-*`
   type scale, `--radius-*` radius scale, `--weight-*` font weight tokens, and tint tokens.
   Codebase reorganised with a `components/ui/` subfolder for primitives.
@@ -37,7 +37,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   and `GenrePill`. All major components migrated to the new token system.
 
 ### Improvements
- 
+
 - `sitemap.xml` `lastmod` updated to reflect the current release date.
 
 ---

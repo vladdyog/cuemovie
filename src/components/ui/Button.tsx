@@ -16,31 +16,31 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 const styles: Record<ButtonVariant, React.CSSProperties> = {
-  // Filled orange — one per section max, highest-priority action
+  // Filled orange - one per section max, highest-priority action
   primary: {
     background: 'var(--color-accent)',
     color: '#ffffff',
     border: '1px solid transparent',
   },
-  // Ghost outline — important but non-primary actions
+  // Ghost outline - important but non-primary actions
   secondary: {
     background: 'transparent',
     color: 'var(--color-accent)',
     border: '1px solid var(--color-accent)',
   },
-  // Low-key controls — view toggles, pagination, sort
+  // Low-key controls - view toggles, pagination, sort
   surface: {
     background: 'var(--color-surface-2)',
     color: 'var(--color-text-secondary)',
     border: '1px solid var(--color-border)',
   },
-  // Destructive actions only — remove, clear, delete
+  // Destructive actions only - remove, clear, delete
   danger: {
     background: 'transparent',
     color: 'var(--color-danger)',
     border: '1px solid var(--color-danger)',
   },
-  // Transparent by default, border+bg appear on hover, filled when active — matches IconBtn
+  // Transparent by default, border+bg appear on hover, filled when active - matches IconBtn
   toggle: {
     background: 'transparent',
     color: 'var(--color-text-secondary)',

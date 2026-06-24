@@ -60,7 +60,7 @@ const MovieRow: React.FC<{
       onMouseLeave={() => setHovered(false)}
       onClick={handleClick}
     >
-      {/* Checkbox — visible in select mode */}
+      {/* Checkbox - visible in select mode */}
       {selectMode && (
         <div
           onClick={(e) => {
@@ -214,7 +214,7 @@ const MovieRow: React.FC<{
         )}
       </div>
 
-      {/* Remove button — only in non-select mode */}
+      {/* Remove button - only in non-select mode */}
       {!selectMode && (
         <Button
           variant="surface"

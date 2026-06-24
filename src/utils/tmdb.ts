@@ -175,7 +175,7 @@ export async function enrichAllMovies(
 // Search & manual add
 //
 // Append this block to the bottom of your existing src/utils/tmdb.ts.
-// Do not replace the file — only add these exports.
+// Do not replace the file - only add these exports.
 // ---------------------------------------------------------------------------
 
 export type MovieSearchResult = {
@@ -196,7 +196,7 @@ type TMDbSearchRaw = {
   vote_average: number;
 };
 
-// Returns up to 5 lightweight candidates. No detail calls — those happen
+// Returns up to 5 lightweight candidates. No detail calls - those happen
 // on demand when the user clicks preview or add.
 export async function searchMovies(
   query: string,
@@ -225,7 +225,7 @@ export async function searchMovies(
 }
 
 // Fetches full details for a result and returns a Movie ready to append.
-// Called both when the user clicks Add and when they click to preview —
+// Called both when the user clicks Add and when they click to preview -
 // result is cached in the component to avoid a second call if they do both.
 export async function enrichSearchResult(
   result: MovieSearchResult,

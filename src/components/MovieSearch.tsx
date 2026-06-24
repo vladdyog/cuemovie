@@ -327,7 +327,7 @@ function MovieSearch({ movies, onAdd }: MovieSearchProps): React.ReactElement {
                             marginTop: '2px',
                           }}
                         >
-                          {result.year ?? '—'}
+                          {result.year ?? '-'}
                           {result.rating
                             ? ` · ★ ${result.rating.toFixed(1)}`
                             : ''}
